@@ -13,32 +13,105 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test2()
+            test3()
+            test3_2()
+            test3_3()
+            test3_4()
+            test3_5()
+            test3_6()
+            test3_7()
         }
 
     }
+
     var s = S()
     private fun test1() {
-        var array : IntArray = intArrayOf(1,1,2,2,2,3,3,3,4,5,6,7,8)
+        var array: IntArray = intArrayOf(1, 1, 2, 2, 2, 3, 3, 3, 4, 5, 6, 7, 8)
 //        var array : IntArray = intArrayOf(1,1,1,1,1,1,1,1)
-       var ret =  s.removeDuplicates1(array)
-        for (element in array){
+        var ret = s.removeDuplicates1(array)
+        for (element in array) {
             Thread.sleep(30)
-            Log.d(S.TAG,"${element}")
+            Log.d(S.TAG, "${element}")
         }
-        Log.d(S.TAG,"ret: ${ret}")
+        Log.d(S.TAG, "ret: ${ret}")
 
     }
+
     private fun test2() {
-        var array : IntArray = intArrayOf(2,1,1,2,3,3,3,4,5,2,6,7,8)
-       var ret =  s.removeElement(array,2)
-        for (element in array){
+        var array: IntArray = intArrayOf(2, 1, 1, 2, 3, 3, 3, 4, 5, 2, 6, 7, 8)
+        var ret = s.removeElement(array, 2)
+        for (element in array) {
             Thread.sleep(30)
-            Log.d(S.TAG,"${element}")
+            Log.d(S.TAG, "${element}")
         }
-        Log.d(S.TAG,"ret: ${ret}")
+        Log.d(S.TAG, "ret: ${ret}")
 
     }
+    private fun test3() {
+//        var s1 = "mississippi"
+//        var s2 = "issip"
+//        var s1 = "aaa"
+//        var s2 = "aaaa"
+//        var s1 = "aabaabbbaabbbbabaaab"
+//        var s2 = "abaa"
+
+        var s1 = "a"
+        var s2 = "a"
+        var ret = s.strStr(s1,s2)
+        Log.d(S.TAG, "ret: ${ret}")
+
+    }
+    private fun test3_2() {
+//        var s1 = "mississippi"
+//        var s2 = "issip"
+//        var s1 = "aaa"
+//        var s2 = "aaaa"
+//        var s1 = "aabaabbbaabbbbabaaab"
+//        var s2 = "abaa"
+
+        var s1 = "a"
+        var s2 = "a"
+        var ret = s.strStr(s1,s2)
+        Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
+
+    }
+    private fun test3_3() {
+        var s1 = "aaa"
+        var s2 = "aaaa"
+
+        var ret = s.strStr(s1,s2)
+        Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
+
+    }
+    private fun test3_4() {
+        var s1 = "aabaabbbaabbbbabaaab"
+        var s2 = "abaa"
+        var ret = s.strStr(s1,s2)
+        Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
+
+    }
+    private fun test3_5() {
+        var s1 = "mississippi"
+        var s2 = "issip"
+
+        var ret = s.strStr(s1,s2)
+        Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
+    }
+    private fun test3_6() {
+        var s1 = "aaaaa"
+        var s2 = "bba"
+
+        var ret = s.strStr(s1,s2)
+        Log.d(S.TAG, "s1:$s1,  s2:$s2,  ret: ${ret}")
+    }
+    private fun test3_7() {
+        var s1 = "abc"
+        var s2 = "c"
+
+        var ret = s.strStr(s1,s2)
+        Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
+    }
+
     private fun test() {
         var n1_1 = ListNode(1)
         var n1_2 = ListNode(3)
