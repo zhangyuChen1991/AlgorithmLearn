@@ -2,6 +2,9 @@ package com.example.myapplication
 
 import android.util.Log
 import org.w3c.dom.Node
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.math.min
 
 /**
@@ -150,5 +153,177 @@ class S {
             }
         }
         return  -1
+    }
+
+    /**
+     * 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+
+    请必须使用时间复杂度为 O(log n) 的算法。
+
+    nums 为 无重复元素 的 升序 排列数组
+     */
+    fun searchInsert(nums: IntArray, target: Int): Int {
+        if (nums.isEmpty()) return 0
+        if (target > nums[nums.size - 1]) return nums.size
+        if (target < nums[0]) return 0
+
+        var startIndex = 0
+        var endIndex = nums.size
+        while (true) {
+            var middleIndex = (startIndex + endIndex) / 2
+
+            if (target > nums[middleIndex] && target < nums[middleIndex + 1]) {
+                return middleIndex + 1
+            }
+            if (target < nums[middleIndex] && target > nums[middleIndex - 1]) {
+                return middleIndex
+            }
+            if (target == nums[middleIndex]) {
+                return middleIndex
+            }
+
+            if (target > nums[middleIndex]) {
+                startIndex = middleIndex
+            }
+
+            if (target < nums[middleIndex]) {
+                endIndex = middleIndex
+            }
+        }
+    }
+
+
+    /**
+     * 给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。
+    回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+    例如，121 是回文，而 123 不是。
+     */
+    fun isPalindrome(x: Int): Boolean {
+        var array = ArrayList<Int>()
+        var x1 = x
+        while (x1 > 0) {
+            var r = x1 % 10
+            array.add(r)
+            x1 /= 10
+        }
+
+        var valueRevert = 0
+        var d = 1
+        for (i in array.size - 1 downTo 0) {
+            valueRevert += array[i] * d
+            d *= 10
+        }
+
+        return valueRevert == x
+    }
+
+
+    /**
+     * 编写一个函数来查找字符串数组中的最长公共前缀。
+    如果不存在公共前缀，返回空字符串""。
+
+    示例 1：
+    输入：strs = ["flower","flow","flight"]
+    输出："fl"
+    示例 2：
+    输入：strs = ["dog","racecar","car"]
+    输出：""
+    解释：输入不存在公共前缀。
+     */
+    fun longestCommonPrefix(strs: Array<String>): String {
+
+        if (strs.isEmpty()) return ""
+        var commonPrefix = ""
+        var currentCommonPrefix = strs[0]
+        for (i in 1 until strs.size) {
+            currentCommonPrefix = commonPreFix(currentCommonPrefix,strs[i])
+            if ("" == currentCommonPrefix){
+                break
+            }
+        }
+
+        return currentCommonPrefix
+    }
+
+    fun commonPreFix(s1: String, s2: String): String {
+        var minLength = Math.min(s1.length,s2.length)
+        var targetIndex = 0
+        for (i in 0 until minLength){
+            if (s1[i] != s2[i]){
+                targetIndex = i
+                break
+            }
+            if (i == s1.length - 1){
+                return s1
+            }
+            if (i == s2.length - 1){
+                return s2
+            }
+        }
+        if (targetIndex >= 0){
+            return s1.substring(0,targetIndex)
+        }else{
+            return ""
+        }
+    }
+
+    /**
+     *  有效的括号
+     *
+    给定一个只包括 '('，')'，'{'，'}'，'['，']'的字符串 s ，判断字符串是否有效。
+
+    有效字符串需满足：
+
+    左括号必须用相同类型的右括号闭合。
+    左括号必须以正确的顺序闭合。
+    示例 1：
+
+    输入：s = "()"
+    输出：true
+    示例2：
+
+    输入：s = "()[]{}"
+    输出：true
+    示例3：
+
+    输入：s = "(]"
+    输出：false
+    示例4：
+
+    输入：s = "([)]"
+    输出：false
+    示例5：
+
+    输入：s = "{[]}"
+    输出：true
+
+     */
+    fun isValid(s: String): Boolean {
+
+        if (s.length % 2 == 1) return false
+        var map  = HashMap<Char,Char>()
+        map['('] = ')'
+        map['['] = ']'
+        map['{'] = '}'
+        //左括号 入栈，右括号依次与栈顶对比，能匹配上就继续往下遍历，匹配不上返回false
+        var leftStack = Stack<Char>()
+        for (i in s.indices){
+            var char = s[i]
+            if (char === '(' || char === '[' || char === '{'){
+                leftStack.push(char)
+            }else{
+                if (leftStack.empty()){
+                    return false
+                }
+                if (char === map[leftStack.pop()]){
+                    continue
+                }else{
+                    return false
+                }
+            }
+        }
+
+        //遍历完毕，最后栈空了，就说明全部匹配完毕，否则说明有左括号没匹配上，返回false
+        return leftStack.empty()
     }
 }

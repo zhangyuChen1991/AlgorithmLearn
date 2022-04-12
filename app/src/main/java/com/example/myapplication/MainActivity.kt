@@ -13,15 +13,8 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test3()
-            test3_2()
-            test3_3()
-            test3_4()
-            test3_5()
-            test3_6()
-            test3_7()
-        }
 
+        }
     }
 
     var s = S()
@@ -47,7 +40,18 @@ class MainActivity : AppCompatActivity() {
         Log.d(S.TAG, "ret: ${ret}")
 
     }
+
     private fun test3() {
+        test3_1()
+        test3_2()
+        test3_3()
+        test3_4()
+        test3_5()
+        test3_6()
+        test3_7()
+    }
+
+    private fun test3_1() {
 //        var s1 = "mississippi"
 //        var s2 = "issip"
 //        var s1 = "aaa"
@@ -57,10 +61,11 @@ class MainActivity : AppCompatActivity() {
 
         var s1 = "a"
         var s2 = "a"
-        var ret = s.strStr(s1,s2)
+        var ret = s.strStr(s1, s2)
         Log.d(S.TAG, "ret: ${ret}")
 
     }
+
     private fun test3_2() {
 //        var s1 = "mississippi"
 //        var s2 = "issip"
@@ -71,46 +76,76 @@ class MainActivity : AppCompatActivity() {
 
         var s1 = "a"
         var s2 = "a"
-        var ret = s.strStr(s1,s2)
+        var ret = s.strStr(s1, s2)
         Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
 
     }
+
     private fun test3_3() {
         var s1 = "aaa"
         var s2 = "aaaa"
 
-        var ret = s.strStr(s1,s2)
+        var ret = s.strStr(s1, s2)
         Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
 
     }
+
     private fun test3_4() {
         var s1 = "aabaabbbaabbbbabaaab"
         var s2 = "abaa"
-        var ret = s.strStr(s1,s2)
+        var ret = s.strStr(s1, s2)
         Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
 
     }
+
     private fun test3_5() {
         var s1 = "mississippi"
         var s2 = "issip"
 
-        var ret = s.strStr(s1,s2)
+        var ret = s.strStr(s1, s2)
         Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
     }
+
     private fun test3_6() {
         var s1 = "aaaaa"
         var s2 = "bba"
 
-        var ret = s.strStr(s1,s2)
+        var ret = s.strStr(s1, s2)
         Log.d(S.TAG, "s1:$s1,  s2:$s2,  ret: ${ret}")
     }
+
     private fun test3_7() {
         var s1 = "abc"
         var s2 = "c"
 
-        var ret = s.strStr(s1,s2)
+        var ret = s.strStr(s1, s2)
         Log.d(S.TAG, "s1:$s1, s2:$s2, ret: ${ret}")
     }
+
+    private fun test4() {
+        test4_1()
+        test4_2()
+        test4_3()
+    }
+    private fun test4_1() {
+        var array: IntArray = intArrayOf(1,3,5,6)
+        var target = 5
+        var ret = s.searchInsert(array, target)
+        Log.d(S.TAG, "array:${array.toString()},  target:$target,  ret: ${ret}")
+    }
+    private fun test4_2() {
+        var array: IntArray = intArrayOf(1,3,5,6)
+        var target = 2
+        var ret = s.searchInsert(array, target)
+        Log.d(S.TAG, "array:${array.toString()},  target:$target,  ret: ${ret}")
+    }
+    private fun test4_3() {
+        var array: IntArray = intArrayOf(1,3,5,6)
+        var target = 7
+        var ret = s.searchInsert(array, target)
+        Log.d(S.TAG, "array:${array.toString()},  target:$target,  ret: ${ret}")
+    }
+
 
     private fun test() {
         var n1_1 = ListNode(1)
