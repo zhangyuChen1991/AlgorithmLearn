@@ -1,11 +1,6 @@
 package com.example.myapplication
 
-import android.util.Log
-import org.w3c.dom.Node
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.math.min
 
 /**
  * Created by zhangyu on 2022/4/6.
@@ -156,11 +151,13 @@ class S {
     }
 
     /**
+     * 35. 搜索插入位置
      * 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
 
     请必须使用时间复杂度为 O(log n) 的算法。
 
     nums 为 无重复元素 的 升序 排列数组
+
      */
     fun searchInsert(nums: IntArray, target: Int): Int {
         if (nums.isEmpty()) return 0
@@ -192,6 +189,23 @@ class S {
         }
     }
 
+    //官方推荐解法
+    fun searchInsert1(nums: IntArray, target: Int): Int {
+        val n = nums.size
+        var left = 0
+        var right = n - 1
+        var ans = n
+        while (left <= right) {
+            val mid = (right - left shr 1) + left
+            if (target <= nums[mid]) {
+                ans = mid
+                right = mid - 1
+            } else {
+                left = mid + 1
+            }
+        }
+        return ans
+    }
 
     /**
      * 给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。
