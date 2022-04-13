@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-
+            test5()
         }
     }
 
@@ -144,6 +144,13 @@ class MainActivity : AppCompatActivity() {
         var target = 7
         var ret = s.searchInsert(array, target)
         Log.d(S.TAG, "array:${array.toString()},  target:$target,  ret: ${ret}")
+    }
+
+    private fun test5() {
+        //[-2,1,-3,4,-1,2,1,-5,4]
+        var array: IntArray = intArrayOf(-2,1,-3,4,-1,2,1,-5,4)
+        var ret = s.maxSubArray(array)
+        Log.d(S.TAG, "array:${array},   ret: ${ret}")
     }
 
 

@@ -340,4 +340,31 @@ class S {
         //遍历完毕，最后栈空了，就说明全部匹配完毕，否则说明有左括号没匹配上，返回false
         return leftStack.empty()
     }
+
+    /**
+     * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+        子数组 是数组中的一个连续部分。
+     */
+    fun maxSubArray(nums: IntArray): Int {
+        //先找以nums[0]结尾的子数组的最大值，子数组长度为1  最大值d[0] = nums[0]
+        //如果d[i]是一个负数，则i之前的连续数组可以丢弃掉，从i+1开始为新的起点往后算
+        //找以nums[1]结尾的子数组的最大值，子数组长度为2  最大值为d[0] + nums[1] 与 nums[1] 之中的最大值  记为d[1]
+        //找以nums[2]结尾的子数组的最大值，子数组长度为3  最大值为d[1] + nums[2] 与 nums[2] 之中的最大值  记为d[2]
+        //...
+        //最后找以nums[nums.size - 1]结尾的子数组的最大值，子数组长度为n  最大值为d[n - 2] + nums[n - 1] 与 nums[n - 1 之中的最大值  记为d[n - 1]
+
+        //至此就把以nums数组中每一个数结尾的子数组的最大值都找出来了
+        //d[0]到d[n - 1]之中的最大值就是要找的最大值
+        var d = arrayOfNulls<Int>(nums.size)//记录以每个数结尾的子数组的最大值
+        d[0] = nums[0]
+        var ret = d[0]!!
+        for (i in 1 until nums.size){
+            d[i] = Math.max(d[i - 1]!! + nums[i],nums[i]!!)
+            if (ret < d[i]!!){
+                ret = d[i]!!
+            }
+        }
+
+        return ret
+    }
 }
