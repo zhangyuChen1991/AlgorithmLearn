@@ -84,14 +84,14 @@ class S {
                 nums[j] = nums[i]
                 j++
             }
-           ret = j
+            ret = j
         }
         return ret
     }
 
     /**
      * 移除元素
-     * 
+     *
      * 给你一个数组 nums和一个值 val，你需要 原地 移除所有数值等于val的元素，并返回移除后数组的新长度。
 
     不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。
@@ -102,7 +102,7 @@ class S {
         //用快慢指针，解法跟 升序数组 nums，原地删除重复出现的元素的解法一样
         var ret = 0
         var j = 0
-        for (i in nums.indices){
+        for (i in nums.indices) {
             if (nums[i] != value) {
                 nums[j] = nums[i]
                 j++
@@ -122,14 +122,14 @@ class S {
     当needle是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。
     对于本题而言，当needle是空字符串时我们应当返回 0 。这与 C 语言的strstr()以及 Java 的indexOf()定义相符。
 
-    */
+     */
     fun strStr(haystack: String, needle: String): Int {
         if (null == needle) return 0
         var startIndex = 0
         while (true) {
             var k = 0
             for (i in startIndex..(startIndex + needle.length)) {
-                if (i == haystack.length){
+                if (i == haystack.length) {
                     return -1
                 }
                 if (haystack[i] == needle[k]) {
@@ -143,11 +143,11 @@ class S {
                 }
             }
 
-            if (startIndex == haystack.length - needle.length + 1){
+            if (startIndex == haystack.length - needle.length + 1) {
                 break
             }
         }
-        return  -1
+        return -1
     }
 
     /**
@@ -250,8 +250,8 @@ class S {
         var commonPrefix = ""
         var currentCommonPrefix = strs[0]
         for (i in 1 until strs.size) {
-            currentCommonPrefix = commonPreFix(currentCommonPrefix,strs[i])
-            if ("" == currentCommonPrefix){
+            currentCommonPrefix = commonPreFix(currentCommonPrefix, strs[i])
+            if ("" == currentCommonPrefix) {
                 break
             }
         }
@@ -260,23 +260,23 @@ class S {
     }
 
     fun commonPreFix(s1: String, s2: String): String {
-        var minLength = Math.min(s1.length,s2.length)
+        var minLength = Math.min(s1.length, s2.length)
         var targetIndex = 0
-        for (i in 0 until minLength){
-            if (s1[i] != s2[i]){
+        for (i in 0 until minLength) {
+            if (s1[i] != s2[i]) {
                 targetIndex = i
                 break
             }
-            if (i == s1.length - 1){
+            if (i == s1.length - 1) {
                 return s1
             }
-            if (i == s2.length - 1){
+            if (i == s2.length - 1) {
                 return s2
             }
         }
-        if (targetIndex >= 0){
-            return s1.substring(0,targetIndex)
-        }else{
+        if (targetIndex >= 0) {
+            return s1.substring(0, targetIndex)
+        } else {
             return ""
         }
     }
@@ -315,23 +315,23 @@ class S {
     fun isValid(s: String): Boolean {
 
         if (s.length % 2 == 1) return false
-        var map  = HashMap<Char,Char>()
+        var map = HashMap<Char, Char>()
         map['('] = ')'
         map['['] = ']'
         map['{'] = '}'
         //左括号 入栈，右括号依次与栈顶对比，能匹配上就继续往下遍历，匹配不上返回false
         var leftStack = Stack<Char>()
-        for (i in s.indices){
+        for (i in s.indices) {
             var char = s[i]
-            if (char === '(' || char === '[' || char === '{'){
+            if (char === '(' || char === '[' || char === '{') {
                 leftStack.push(char)
-            }else{
-                if (leftStack.empty()){
+            } else {
+                if (leftStack.empty()) {
                     return false
                 }
-                if (char === map[leftStack.pop()]){
+                if (char === map[leftStack.pop()]) {
                     continue
-                }else{
+                } else {
                     return false
                 }
             }
@@ -342,8 +342,9 @@ class S {
     }
 
     /**
+     * 53. 最大子数组和
      * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
-        子数组 是数组中的一个连续部分。
+    子数组 是数组中的一个连续部分。
      */
     fun maxSubArray(nums: IntArray): Int {
         //先找以nums[0]结尾的子数组的最大值，子数组长度为1  最大值d[0] = nums[0]
@@ -358,9 +359,9 @@ class S {
         var d = arrayOfNulls<Int>(nums.size)//记录以每个数结尾的子数组的最大值
         d[0] = nums[0]
         var ret = d[0]!!
-        for (i in 1 until nums.size){
-            d[i] = Math.max(d[i - 1]!! + nums[i],nums[i]!!)
-            if (ret < d[i]!!){
+        for (i in 1 until nums.size) {
+            d[i] = Math.max(d[i - 1]!! + nums[i], nums[i]!!)
+            if (ret < d[i]!!) {
                 ret = d[i]!!
             }
         }
@@ -368,5 +369,48 @@ class S {
         return ret
     }
 
-    //todo 分治法，待看
+    /**
+     * 分治法，看 {@Link com.example.myapplication.Solution maxCrossingSum}方法
+     */
+
+
+    /**
+     * 70. 爬楼梯
+     *
+     * 这个递归思路是对的，就是会运行超时。当n==45的时候，运行了40秒才出结果。思路对但是不能这么写。
+     * n > 2的时候，有两种选择，否则，只有一种选择；两种选择下，分别执行走一步和走两步，剩下的阶梯数的下一步，继续判断，于是f(x) = f(x - 1) + f(x - 2),直到x小于等于1
+     *
+     *
+     */
+    fun climbStair1(n: Int): Int {
+        if (n <= 1) return 1
+        return climbStair1(n - 1) + climbStair1(n - 2)
+    }
+
+    /**
+     * 递归不行，把f(x) = f(x - 1) + f(x - 2)倒过来看，先算f(0) f(1) 就有了f(2);有了f(1)和f(2),就有了f(3);依次滚动下去，就有了f(n)
+     *
+     *  x      y     ret
+     * f(0) + f(1) = f(2)
+     * f(1) + f(2) = f(3)
+     * f(2) + f(3) = f(4)
+     * ...
+     * f(n - 2) + f(n - 1) = f(n)
+     *
+     * 滚动起来，从第一行到第二行, x = y; y = ret; ret = x + y
+     * f(2)执行上面的代码1次；f(n) 执行上面的代码n - 1次；最后滚动出来的值就是返回值
+     */
+    fun climbStairs(n: Int): Int {
+        if (n <= 1) return 1
+        var ret = 0
+        var x = 1
+        var y = 1
+        for (i in 1 until n){//f(n) 执行n - 1次滚动
+            ret = x + y
+            x = y
+            y = ret
+        }
+        return ret
+    }
+
 }
