@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-
+            test5()
         }
     }
 
@@ -127,20 +127,23 @@ class MainActivity : AppCompatActivity() {
         test4_2()
         test4_3()
     }
+
     private fun test4_1() {
-        var array: IntArray = intArrayOf(1,3,5,6)
+        var array: IntArray = intArrayOf(1, 3, 5, 6)
         var target = 5
         var ret = s.searchInsert(array, target)
         Log.d(S.TAG, "array:${array.toString()},  target:$target,  ret: ${ret}")
     }
+
     private fun test4_2() {
-        var array: IntArray = intArrayOf(1,3,5,6)
+        var array: IntArray = intArrayOf(1, 3, 5, 6)
         var target = 2
         var ret = s.searchInsert(array, target)
         Log.d(S.TAG, "array:${array.toString()},  target:$target,  ret: ${ret}")
     }
+
     private fun test4_3() {
-        var array: IntArray = intArrayOf(1,3,5,6)
+        var array: IntArray = intArrayOf(1, 3, 5, 6)
         var target = 7
         var ret = s.searchInsert(array, target)
         Log.d(S.TAG, "array:${array.toString()},  target:$target,  ret: ${ret}")
@@ -168,6 +171,15 @@ class MainActivity : AppCompatActivity() {
         while (n?.next != null) {
             Log.d(S.TAG, "${n?.data}")
             n = n.next
+        }
+    }
+
+    fun test5() {
+        var root = S.TreeNode(5)
+        var ret = s.inorderTraversal(root)
+        for (i in ret.indices){
+            Log.d(S.TAG, "${ret[i]}, ")
+
         }
     }
 }

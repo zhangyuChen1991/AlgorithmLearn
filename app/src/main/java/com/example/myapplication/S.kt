@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by zhangyu on 2022/4/6.
@@ -84,14 +85,14 @@ class S {
                 nums[j] = nums[i]
                 j++
             }
-           ret = j
+            ret = j
         }
         return ret
     }
 
     /**
      * 移除元素
-     * 
+     *
      * 给你一个数组 nums和一个值 val，你需要 原地 移除所有数值等于val的元素，并返回移除后数组的新长度。
 
     不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。
@@ -102,7 +103,7 @@ class S {
         //用快慢指针，解法跟 升序数组 nums，原地删除重复出现的元素的解法一样
         var ret = 0
         var j = 0
-        for (i in nums.indices){
+        for (i in nums.indices) {
             if (nums[i] != value) {
                 nums[j] = nums[i]
                 j++
@@ -122,14 +123,14 @@ class S {
     当needle是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。
     对于本题而言，当needle是空字符串时我们应当返回 0 。这与 C 语言的strstr()以及 Java 的indexOf()定义相符。
 
-    */
+     */
     fun strStr(haystack: String, needle: String): Int {
         if (null == needle) return 0
         var startIndex = 0
         while (true) {
             var k = 0
             for (i in startIndex..(startIndex + needle.length)) {
-                if (i == haystack.length){
+                if (i == haystack.length) {
                     return -1
                 }
                 if (haystack[i] == needle[k]) {
@@ -143,11 +144,11 @@ class S {
                 }
             }
 
-            if (startIndex == haystack.length - needle.length + 1){
+            if (startIndex == haystack.length - needle.length + 1) {
                 break
             }
         }
-        return  -1
+        return -1
     }
 
     /**
@@ -250,8 +251,8 @@ class S {
         var commonPrefix = ""
         var currentCommonPrefix = strs[0]
         for (i in 1 until strs.size) {
-            currentCommonPrefix = commonPreFix(currentCommonPrefix,strs[i])
-            if ("" == currentCommonPrefix){
+            currentCommonPrefix = commonPreFix(currentCommonPrefix, strs[i])
+            if ("" == currentCommonPrefix) {
                 break
             }
         }
@@ -260,23 +261,23 @@ class S {
     }
 
     fun commonPreFix(s1: String, s2: String): String {
-        var minLength = Math.min(s1.length,s2.length)
+        var minLength = Math.min(s1.length, s2.length)
         var targetIndex = 0
-        for (i in 0 until minLength){
-            if (s1[i] != s2[i]){
+        for (i in 0 until minLength) {
+            if (s1[i] != s2[i]) {
                 targetIndex = i
                 break
             }
-            if (i == s1.length - 1){
+            if (i == s1.length - 1) {
                 return s1
             }
-            if (i == s2.length - 1){
+            if (i == s2.length - 1) {
                 return s2
             }
         }
-        if (targetIndex >= 0){
-            return s1.substring(0,targetIndex)
-        }else{
+        if (targetIndex >= 0) {
+            return s1.substring(0, targetIndex)
+        } else {
             return ""
         }
     }
@@ -315,23 +316,23 @@ class S {
     fun isValid(s: String): Boolean {
 
         if (s.length % 2 == 1) return false
-        var map  = HashMap<Char,Char>()
+        var map = HashMap<Char, Char>()
         map['('] = ')'
         map['['] = ']'
         map['{'] = '}'
         //左括号 入栈，右括号依次与栈顶对比，能匹配上就继续往下遍历，匹配不上返回false
         var leftStack = Stack<Char>()
-        for (i in s.indices){
+        for (i in s.indices) {
             var char = s[i]
-            if (char === '(' || char === '[' || char === '{'){
+            if (char === '(' || char === '[' || char === '{') {
                 leftStack.push(char)
-            }else{
-                if (leftStack.empty()){
+            } else {
+                if (leftStack.empty()) {
                     return false
                 }
-                if (char === map[leftStack.pop()]){
+                if (char === map[leftStack.pop()]) {
                     continue
-                }else{
+                } else {
                     return false
                 }
             }
@@ -339,5 +340,34 @@ class S {
 
         //遍历完毕，最后栈空了，就说明全部匹配完毕，否则说明有左括号没匹配上，返回false
         return leftStack.empty()
+    }
+
+    class TreeNode(var value: Int) {
+        var left: TreeNode? = null
+        var right: TreeNode? = null
+    }
+
+    /**
+     * 94. 二叉树的中序遍历
+     * 中序遍历，就是根节点在中间，顺序为左、中、右。只要一个节点有左节点，就先打印左节点，没有左节点或者打印完了左节点再打印中节点，然后如果有右节点在打印右节点
+     */
+    fun inorderTraversal(root: TreeNode?): List<Int> {
+        var list: ArrayList<Int> = ArrayList()
+        inorderTraversal(root, list)
+        return list
+    }
+
+    private fun inorderTraversal(root: TreeNode?, list: ArrayList<Int>) {
+        root?.let {
+            if (null != it.left) {
+                inorderTraversal(it.left, list)
+            }
+            list.add(it.value)
+
+            if (null != it.right) {
+                inorderTraversal(it.right, list)
+            }
+        }
+
     }
 }
