@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test5()
+            test6()
         }
     }
 
@@ -149,6 +149,21 @@ class MainActivity : AppCompatActivity() {
         Log.d(S.TAG, "array:${array.toString()},  target:$target,  ret: ${ret}")
     }
 
+    private fun test5() {
+        //[-2,1,-3,4,-1,2,1,-5,4]
+        var array: IntArray = intArrayOf(-2,1,-3,4,-1,2,1,-5,4)
+        var ret = s.maxSubArray(array)
+        Log.d(S.TAG, "array:${array},   ret: ${ret}")
+    }
+
+    private fun test6() {
+        var array: IntArray = intArrayOf(1,2,3,4,5,6,7,8,9,45)
+        for (i in array.indices) {
+            var ret = s.climbStair1(array[i])
+            Log.d(S.TAG, "n: ${array[i]},   ret: ${ret}")
+        }
+    }
+
 
     private fun test() {
         var n1_1 = ListNode(1)
@@ -174,7 +189,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun test5() {
+    fun test7() {
         var root = S.TreeNode(5)
         var ret = s.inorderTraversal(root)
         for (i in ret.indices){

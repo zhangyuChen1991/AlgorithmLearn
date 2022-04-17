@@ -370,4 +370,76 @@ class S {
         }
 
     }
+    /**
+     * 53. 最大子数组和
+     * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+    子数组 是数组中的一个连续部分。
+     */
+    fun maxSubArray(nums: IntArray): Int {
+        //先找以nums[0]结尾的子数组的最大值，子数组长度为1  最大值d[0] = nums[0]
+        //如果d[i]是一个负数，则i之前的连续数组可以丢弃掉，从i+1开始为新的起点往后算
+        //找以nums[1]结尾的子数组的最大值，子数组长度为2  最大值为d[0] + nums[1] 与 nums[1] 之中的最大值  记为d[1]
+        //找以nums[2]结尾的子数组的最大值，子数组长度为3  最大值为d[1] + nums[2] 与 nums[2] 之中的最大值  记为d[2]
+        //...
+        //最后找以nums[nums.size - 1]结尾的子数组的最大值，子数组长度为n  最大值为d[n - 2] + nums[n - 1] 与 nums[n - 1 之中的最大值  记为d[n - 1]
+
+        //至此就把以nums数组中每一个数结尾的子数组的最大值都找出来了
+        //d[0]到d[n - 1]之中的最大值就是要找的最大值
+        var d = arrayOfNulls<Int>(nums.size)//记录以每个数结尾的子数组的最大值
+        d[0] = nums[0]
+        var ret = d[0]!!
+        for (i in 1 until nums.size) {
+            d[i] = Math.max(d[i - 1]!! + nums[i], nums[i]!!)
+            if (ret < d[i]!!) {
+                ret = d[i]!!
+            }
+        }
+
+        return ret
+    }
+
+    /**
+     * 分治法，看 {@Link com.example.myapplication.Solution maxCrossingSum}方法
+     */
+
+
+    /**
+     * 70. 爬楼梯
+     *
+     * 这个递归思路是对的，就是会运行超时。当n==45的时候，运行了40秒才出结果。思路对但是不能这么写。
+     * n > 2的时候，有两种选择，否则，只有一种选择；两种选择下，分别执行走一步和走两步，剩下的阶梯数的下一步，继续判断，于是f(x) = f(x - 1) + f(x - 2),直到x小于等于1
+     *
+     *
+     */
+    fun climbStair1(n: Int): Int {
+        if (n <= 1) return 1
+        return climbStair1(n - 1) + climbStair1(n - 2)
+    }
+
+    /**
+     * 递归不行，把f(x) = f(x - 1) + f(x - 2)倒过来看，先算f(0) f(1) 就有了f(2);有了f(1)和f(2),就有了f(3);依次滚动下去，就有了f(n)
+     *
+     *  x      y     ret
+     * f(0) + f(1) = f(2)
+     * f(1) + f(2) = f(3)
+     * f(2) + f(3) = f(4)
+     * ...
+     * f(n - 2) + f(n - 1) = f(n)
+     *
+     * 滚动起来，从第一行到第二行, x = y; y = ret; ret = x + y
+     * f(2)执行上面的代码1次；f(n) 执行上面的代码n - 1次；最后滚动出来的值就是返回值
+     */
+    fun climbStairs(n: Int): Int {
+        if (n <= 1) return 1
+        var ret = 0
+        var x = 1
+        var y = 1
+        for (i in 1 until n){//f(n) 执行n - 1次滚动
+            ret = x + y
+            x = y
+            y = ret
+        }
+        return ret
+    }
+
 }
