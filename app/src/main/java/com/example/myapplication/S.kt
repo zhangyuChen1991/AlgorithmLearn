@@ -448,6 +448,7 @@ class S {
     }
 
     /**
+     * 21.合并两个有序数组
      * 递归
         两节点对比，【返回较小的节点】，较小的节点指向下一次两个对比的节点中【较小的那个】(较小的这个即是递归函数的返回值)
      */
@@ -462,6 +463,15 @@ class S {
             list2.next = mergeTwoLists(list1, list2.next)
             return list2
         }
+    }
+
+    /**
+     * 58. 最后一个单词的长度
+     */
+    fun lengthOfLastWord(s: String): Int {
+        var trimStr = s.trim()
+        var indexOfLastSpace = trimStr.lastIndexOf(" ")
+        return trimStr.length - indexOfLastSpace - 1
     }
 
 }

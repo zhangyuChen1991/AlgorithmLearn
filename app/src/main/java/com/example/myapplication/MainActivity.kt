@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test6()
+            test58()
         }
     }
 
@@ -165,29 +165,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun test() {
-        var n1_1 = ListNode(1)
-        var n1_2 = ListNode(3)
-        var n1_3 = ListNode(5)
-        var n1_4 = ListNode(7)
-        n1_1.next = n1_2
-        n1_2.next = n1_3
-        n1_3.next = n1_4
-
-        var n2_1 = ListNode(2)
-        var n2_2 = ListNode(3)
-        var n2_3 = ListNode(6)
-        var n2_4 = ListNode(8)
-        n2_1.next = n2_2
-        n2_2.next = n2_3
-        n2_3.next = n2_4
-
-        var n = s.mergeTwoLists(n1_1, n2_1)
-        while (n?.next != null) {
-            Log.d(S.TAG, "${n?.`val`}")
-            n = n.next
-        }
-    }
 
     fun test7() {
         var root = S.TreeNode(5)
@@ -196,5 +173,13 @@ class MainActivity : AppCompatActivity() {
             Log.d(S.TAG, "${ret[i]}, ")
 
         }
+    }
+
+    fun test58() {
+//        var str = "abc cdf bfbf"
+        var str = "   fly me   to   the moon  "
+        var ret = s.lengthOfLastWord(str)
+        Log.d(S.TAG, "lengthOfLastWord, $str, ret = ${ret}, ")
+
     }
 }
