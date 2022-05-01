@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test66()
+            test67()
         }
     }
 
@@ -152,13 +152,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun test5() {
         //[-2,1,-3,4,-1,2,1,-5,4]
-        var array: IntArray = intArrayOf(-2,1,-3,4,-1,2,1,-5,4)
+        var array: IntArray = intArrayOf(-2, 1, -3, 4, -1, 2, 1, -5, 4)
         var ret = s.maxSubArray(array)
         Log.d(S.TAG, "array:${array},   ret: ${ret}")
     }
 
     private fun test6() {
-        var array: IntArray = intArrayOf(1,2,3,4,5,6,7,8,9,45)
+        var array: IntArray = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 45)
         for (i in array.indices) {
             var ret = s.climbStair1(array[i])
             Log.d(S.TAG, "n: ${array[i]},   ret: ${ret}")
@@ -166,11 +166,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     fun test7() {
         var root = S.TreeNode(5)
         var ret = s.inorderTraversal(root)
-        for (i in ret.indices){
+        for (i in ret.indices) {
             Log.d(S.TAG, "${ret[i]}, ")
 
         }
@@ -183,18 +182,26 @@ class MainActivity : AppCompatActivity() {
         Log.d(S.TAG, "lengthOfLastWord, $str, ret = ${ret}, ")
 
     }
-    fun test66() {
-        var retArray = intArrayOf(9,9,9,9)
-        var retArray1 = intArrayOf(1,6,7,9)
-        var retArray2 = intArrayOf(1,6,7,3)
-        var a = arrayOf(retArray,retArray1,retArray2)
 
-        for (i in a.indices){
+    fun test66() {
+        var retArray = intArrayOf(9, 9, 9, 9)
+        var retArray1 = intArrayOf(1, 6, 7, 9)
+        var retArray2 = intArrayOf(1, 6, 7, 3)
+        var a = arrayOf(retArray, retArray1, retArray2)
+
+        for (i in a.indices) {
             var ret = s.plusOne(a[i])
             var printStr = Arrays.toString(ret)
             Log.d(S.TAG, "plusOne, ret = ${printStr}, ")
         }
 
 
+    }
+
+    fun test67() {
+        var s1 = "1111"
+        var s2 = "1111"
+        var ret = s.addBinary(s1, s2)
+        Log.d(S.TAG, "addBinary, ret = ${ret}, ")
     }
 }

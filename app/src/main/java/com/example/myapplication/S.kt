@@ -507,4 +507,67 @@ class S {
         digits[currentIndex] = currentNum + 1
         return digits
     }
+
+    /**
+     * 67. 二进制求和
+     *
+     * 思路就是模拟二进制竖式相加在草稿纸上计算的过程
+     * 从末尾开始每一位相加，a + b + 进位，注意头部不足的位数补0.
+     * 相加结果为0，记录此位为0，进位为0；相加结果为1，记录此位为1，进位为0；结果为2、3依此类推。每位结果都由StringBuffer记录下来(sb.append(result))
+     * 最后StringBuffer记录的结果反转一下，就是最后加出来的最终结果。
+     *
+     * 注意点，计算的时候下标要判断准，犯了一个错，补0的时候补到了尾部而不是头部。从0开始遍历，index是length - i- 1，这样才是尾部对齐。
+     * 从max开始遍历到0，这样容易算晕，还容易搞成是头部对齐来计算，结果是错的
+     */
+    fun addBinary(a: String, b: String): String {
+
+        var sb   = StringBuffer()
+        var upper = 0
+        var maxLength = a.length.coerceAtLeast(b.length)
+        for (i in 0 until maxLength){
+            var resultNum = 0
+
+            var aValue = 0
+            var aIndex = a.length - i - 1;
+            aValue = if (aIndex < 0){
+                0
+            }else{
+                a[aIndex] - '0'
+            }
+
+            var bValue = 0
+            var bIndex = b.length - i - 1;
+            bValue = if (bIndex < 0){
+                0
+            }else{
+                b[bIndex] - '0'
+            }
+
+            resultNum = aValue + bValue + upper
+            when(resultNum){
+                0 -> {
+                    upper = 0
+                    sb.append('0')
+                }
+                1 -> {
+                    upper = 0
+                    sb.append('1')
+                }
+                2 -> {
+                    upper = 1
+                    sb.append('0')
+                }
+                3 -> {
+                    upper = 1
+                    sb.append('1')
+                }
+            }
+        }
+
+        if (upper == 1){
+            sb.append('1')//如果最一位也进位了，再补一个1
+        }
+
+        return sb.toString().reversed()
+    }
 }
