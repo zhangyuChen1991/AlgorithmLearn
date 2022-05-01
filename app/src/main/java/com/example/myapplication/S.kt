@@ -450,7 +450,7 @@ class S {
     /**
      * 21.合并两个有序数组
      * 递归
-        两节点对比，【返回较小的节点】，较小的节点指向下一次两个对比的节点中【较小的那个】(较小的这个即是递归函数的返回值)
+    两节点对比，【返回较小的节点】，较小的节点指向下一次两个对比的节点中【较小的那个】(较小的这个即是递归函数的返回值)
      */
     fun mergeTwoLists(list1: ListNode?, list2: ListNode?): ListNode? {
         if (null == list1 && null == list2) return null
@@ -474,4 +474,37 @@ class S {
         return trimStr.length - indexOfLastSpace - 1
     }
 
+    /**
+     * 66. 加一
+     *
+     * 给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
+    最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+    你可以假设除了整数 0 之外，这个整数不会以零开头。
+     */
+    fun plusOne(digits: IntArray): IntArray {
+        //所有的数字都是9，最后返回扩容后的数组，数组长度加1
+        var allIsNine = true
+        for (i in digits.indices) {
+            if (digits[i] != 9) {
+                allIsNine = false
+                break
+            }
+        }
+        if (allIsNine) {
+            var retArray = IntArray(digits.size + 1)
+            retArray[0] = 1
+            return retArray
+        }
+
+        //并非所有的数字都是9，返回的数组位数不变
+        var currentIndex = digits.size - 1
+        var currentNum = digits[currentIndex]
+        while (currentNum == 9) {
+            digits[currentIndex] = 0
+            currentIndex--
+            currentNum = digits[currentIndex]
+        }
+        digits[currentIndex] = currentNum + 1
+        return digits
+    }
 }

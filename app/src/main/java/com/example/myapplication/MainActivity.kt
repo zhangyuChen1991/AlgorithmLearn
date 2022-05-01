@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test58()
+            test66()
         }
     }
 
@@ -180,6 +181,20 @@ class MainActivity : AppCompatActivity() {
         var str = "   fly me   to   the moon  "
         var ret = s.lengthOfLastWord(str)
         Log.d(S.TAG, "lengthOfLastWord, $str, ret = ${ret}, ")
+
+    }
+    fun test66() {
+        var retArray = intArrayOf(9,9,9,9)
+        var retArray1 = intArrayOf(1,6,7,9)
+        var retArray2 = intArrayOf(1,6,7,3)
+        var a = arrayOf(retArray,retArray1,retArray2)
+
+        for (i in a.indices){
+            var ret = s.plusOne(a[i])
+            var printStr = Arrays.toString(ret)
+            Log.d(S.TAG, "plusOne, ret = ${printStr}, ")
+        }
+
 
     }
 }
