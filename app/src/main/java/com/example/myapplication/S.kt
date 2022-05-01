@@ -11,7 +11,7 @@ class S {
         const val TAG = "Solution"
     }
 
-    fun mergeTwoLists(list1: ListNode?, list2: ListNode?): ListNode? {
+    fun mergeTwoLists1(list1: ListNode?, list2: ListNode?): ListNode? {
         return if (null == list1 && null == list2) {
             null
         } else if (null == list1) {
@@ -21,7 +21,7 @@ class S {
         } else {
             //每个节点的next都等于 下一次比较的两个节点中较小的那个，依此递归
             // 最终返回的不是list的头节点就是list2的头节点
-            if (list1.data < list2!!.data) {
+            if (list1.`val` < list2!!.`val`) {
                 list1.next = mergeTwoLists(list1.next, list2)
                 list1
             } else {
@@ -370,6 +370,7 @@ class S {
         }
 
     }
+
     /**
      * 53. 最大子数组和
      * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
@@ -434,12 +435,33 @@ class S {
         var ret = 0
         var x = 1
         var y = 1
-        for (i in 1 until n){//f(n) 执行n - 1次滚动
+        for (i in 1 until n) {//f(n) 执行n - 1次滚动
             ret = x + y
             x = y
             y = ret
         }
         return ret
+    }
+
+    class ListNode(var `val`: Int) {
+        var next: ListNode? = null
+    }
+
+    /**
+     * 递归
+        两节点对比，【返回较小的节点】，较小的节点指向下一次两个对比的节点中【较小的那个】(较小的这个即是递归函数的返回值)
+     */
+    fun mergeTwoLists(list1: ListNode?, list2: ListNode?): ListNode? {
+        if (null == list1 && null == list2) return null
+        if (null == list1) return list2
+        if (null == list2) return list1
+        if (list1.`val` < list2.`val`) {
+            list1.next = mergeTwoLists(list2, list1.next)
+            return list1
+        } else {
+            list2.next = mergeTwoLists(list1, list2.next)
+            return list2
+        }
     }
 
 }

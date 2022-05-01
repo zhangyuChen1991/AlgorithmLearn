@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
         var n = s.mergeTwoLists(n1_1, n2_1)
         while (n?.next != null) {
-            Log.d(S.TAG, "${n?.data}")
+            Log.d(S.TAG, "${n?.`val`}")
             n = n.next
         }
     }
