@@ -204,4 +204,10 @@ class MainActivity : AppCompatActivity() {
         var ret = s.addBinary(s1, s2)
         Log.d(S.TAG, "addBinary, ret = ${ret}, ")
     }
+    fun test101() {
+        var s1 = "1111"
+        var s2 = "1111"
+        var ret = s.addBinary(s1, s2)
+        Log.d(S.TAG, "addBinary, ret = ${ret}, ")
+    }
 }

@@ -342,7 +342,7 @@ class S {
         return leftStack.empty()
     }
 
-    class TreeNode(var value: Int) {
+    class TreeNode(var `val`: Int) {
         var left: TreeNode? = null
         var right: TreeNode? = null
     }
@@ -362,7 +362,7 @@ class S {
             if (null != it.left) {
                 inorderTraversal(it.left, list)
             }
-            list.add(it.value)
+            list.add(it.`val`)
 
             if (null != it.right) {
                 inorderTraversal(it.right, list)
@@ -569,5 +569,26 @@ class S {
         }
 
         return sb.toString().reversed()
+    }
+
+
+    /**
+     * 101.对称二叉树
+     *
+     * 对比两个节点的值是否相等，再对比左节点的左节点与右节点的右节点、左节点的右节点与右节点的左节点值是否相同(对着图看)，递归对比
+     */
+    fun isSymmetric(root: TreeNode?): Boolean {
+        return isSymmetric(root?.left,root?.right)
+    }
+
+    fun isSymmetric(left: TreeNode?,right: TreeNode?): Boolean {
+        if (null == left && null == right) return true
+        if (null == left) return false
+        if (null == right) return false
+
+        if (left.`val` != right.`val`) return false
+        else{
+            return isSymmetric(left.left,right.right) && isSymmetric(left.right,right.left)
+        }
     }
 }
