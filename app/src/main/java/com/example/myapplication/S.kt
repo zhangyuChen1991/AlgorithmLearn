@@ -448,7 +448,7 @@ class S {
     }
 
     /**
-     * 21.合并两个有序数组
+     * 21.合并两个有序链表
      * 递归
     两节点对比，【返回较小的节点】，较小的节点指向下一次两个对比的节点中【较小的那个】(较小的这个即是递归函数的返回值)
      */
@@ -591,4 +591,32 @@ class S {
             return isSymmetric(left.left,right.right) && isSymmetric(left.right,right.left)
         }
     }
+
+
+    /**
+     * 104. 二叉树的最大深度
+     *
+     * 给定一个二叉树，找出其最大深度。
+        二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+        说明: 叶子节点是指没有子节点的节点。
+     */
+    fun maxDepth(root: TreeNode?): Int {
+        if (null == root) return 0
+        return maxDepth(root,1)
+    }
+
+    fun maxDepth(treeNode: TreeNode?, currentDepth:Int): Int {
+        if (null == treeNode) return currentDepth
+
+        if (null != treeNode?.left && null != treeNode?.right){//左节点和右节点都不为空，返回两者中深度较大的一个
+            return Math.max(maxDepth(treeNode?.left ,currentDepth + 1),maxDepth(treeNode?.right ,currentDepth + 1))
+        }else if(null != treeNode?.left){//左节点不为空，右节点为空，左节点所在的深度
+            return maxDepth(treeNode?.left ,currentDepth + 1)
+        }else if(null != treeNode?.right){//右节点不为空，左节点为空，右节点所在的深度
+            return maxDepth(treeNode?.right ,currentDepth + 1)
+        }else{//左右节点都为空，本节点就是当前分支的最底部
+            return currentDepth
+        }
+    }
+
 }
