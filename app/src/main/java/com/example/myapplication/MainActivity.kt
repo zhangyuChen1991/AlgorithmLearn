@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test67()
+            test121()
         }
     }
 
@@ -204,10 +204,38 @@ class MainActivity : AppCompatActivity() {
         var ret = s.addBinary(s1, s2)
         Log.d(S.TAG, "addBinary, ret = ${ret}, ")
     }
+
     fun test101() {
         var s1 = "1111"
         var s2 = "1111"
         var ret = s.addBinary(s1, s2)
         Log.d(S.TAG, "addBinary, ret = ${ret}, ")
+    }
+
+    fun test136() {
+//        var s1 = 4
+//        var s2 = 5
+//        var s3 = 4
+//        var ret = s1 xor s2
+//        var ret1 = s1 xor s3
+//        Log.d(S.TAG, "异或, ret = ${ret},ret1 = $ret1 ")
+
+        var array : IntArray = intArrayOf(4,1,2,1,2)
+        var ret = s.singleNumber(array)
+        Log.d(S.TAG,"ret: $ret")
+
+    }
+    fun test121() {
+
+        var retArray = intArrayOf(7,1,5,3,6,4)
+        var retArray1 = intArrayOf(10, 20, 1, 7,9,5)
+        var retArray2 = intArrayOf(1,2,3,4,5,6,7,8,9)
+        var a = arrayOf(retArray, retArray1, retArray2)
+
+        for (i in a.indices) {
+            var ret = s.maxProfit(a[i])
+            Log.d(S.TAG, "maxProfit, ret = ${ret}, ")
+        }
+
     }
 }

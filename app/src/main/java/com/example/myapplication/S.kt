@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import android.util.Log
+import com.example.Constants
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -617,6 +619,71 @@ class S {
         }else{//左右节点都为空，本节点就是当前分支的最底部
             return currentDepth
         }
+    }
+
+    /**
+     * 136. 只出现一次的数字
+     * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+        说明：
+        你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
+
+
+     使用异或运算。异或运算时，将数字转换为二进制数字做位运算，每一位上相同为0，不同为1,就像下面的竖式
+      1111
+      1011
+     ------
+      0100
+
+     异或运算满足三个定律：
+        任何数和0异或，结果为原来的数；
+        自身和自身异或，结果为0；
+        异或运算满足交换律和结合律:  4 xor 1 xor 2 xor 1 xor 2 = 4 xor (1 xor 1) xor (2 xor 2) = 4
+                                                                      0            0
+        所以把数组中的数挨个做一次异或运算，就把单独的那个数找出来了
+
+     */
+    fun singleNumber(nums: IntArray): Int {
+        var single = 0
+        for (i in nums.indices){
+            Log.d(TAG,"single: $single, nums: ${nums[i]}")
+            single = single xor nums[i]
+            Log.d(TAG,"异或计算结果，single: $single")
+        }
+
+        return single
+    }
+
+    /**
+     * 121. 买卖股票的最佳时机
+     * 给定一个数组 prices ，它的第i 个元素prices[i] 表示一支给定股票第 i 天的价格。
+    你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+    返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+
+
+       暴力解法就是两次循环，找到每两个元素之间的差值，返回其中最大的那个差值。
+       但是其实不用所有的都找完，最大利润肯定是后边价格的减去前面的发现的已知最小价格
+
+     想象自己在画一条股票曲线，从第一天开始画，如果是上升段，那么目前的最大利润就是现在的价格减去当前最小的价格；
+    如果是下降段，那么判断，如果产生了更小的最低价格，后续更大的利润肯定是减去这个更低的价格来产生的，所以，更新最小价格，继续往后画，
+     如果发现画到哪一天产生的更大的利润，就更新这个值。
+     所以只需要一次遍历，记录两个值就可以了，一个值是到目前为止的最小价格，往后看，如果产生更大的额利润一定是在这个价格的基础上；另一个值是到目前为止的最大利润。
+     */
+    fun maxProfit(prices: IntArray): Int {
+        //遍历数组，记录当前的价格最小值，如果有更小的，就更新这个值，因为往后看 如果有更大的利润，肯定是在减去更小的价格的时候产生的
+        //同时记录最大利润，如果当前的价格减去之前最小的价格利润更大了，就更新利润
+        var currentMinPrice = Int.MAX_VALUE
+        var currentMaxProfit = 0
+        for (i in prices.indices){
+            var price = prices[i]
+            if (price  < currentMinPrice){
+                currentMinPrice = price
+            }else{
+                if (price - currentMinPrice > currentMaxProfit){
+                    currentMaxProfit = price - currentMinPrice
+                }
+            }
+        }
+        return currentMaxProfit
     }
 
 }
