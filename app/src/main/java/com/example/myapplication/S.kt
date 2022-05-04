@@ -2,8 +2,10 @@ package com.example.myapplication
 
 import android.util.Log
 import com.example.Constants
+import org.w3c.dom.Node
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Created by zhangyu on 2022/4/6.
@@ -686,4 +688,43 @@ class S {
         return currentMaxProfit
     }
 
+    /**
+     * 141. 环形链表
+     * 给你一个链表的头节点 head ，判断链表中是否有环。
+     *
+     * 常规解法，遍历链表，map存遍历过的节点，判断当前节点的next节点是否在map中，是 则存在环
+     */
+    fun hasCycle(head: ListNode?): Boolean {
+        if ((head?.next == null)) return false
+        var map = HashMap<ListNode,Int>()
+        var currentNode = head
+        while (currentNode?.next != null){
+            map[currentNode!!] = 1
+            currentNode = currentNode?.next
+            if (map.containsKey(currentNode)){
+                return true
+            }
+        }
+
+        return false
+    }
+
+    /**
+     * 141. 环形链表
+     * 快慢指针 ，快指针一次走两步，慢指针一次走一步，如果存在环，快指针会被慢指针追上，快慢指针相等 则说明存在环形
+     * 疑问：这里快指针追上慢指针一定是两个值一样吗，快指针会不会总是直接跳过慢指针，两者永远不相等?这个能追上的理论基础是什么?
+     * 自己试了一下，不管环上的节点是奇数个还是偶数个，确实最终两者能相遇。但是写不出数学公式来给这个判断提供理论基础
+     */
+    fun hasCycle1(head: ListNode?): Boolean {
+        if ((head?.next == null)) return false
+        var fastNode = head.next
+        var slowNode = head
+        while (fastNode?.next != null){
+            if (fastNode == slowNode) return true
+            fastNode = fastNode.next?.next
+            slowNode = slowNode?.next
+        }
+
+        return false
+    }
 }
