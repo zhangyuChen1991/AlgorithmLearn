@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test121()
+            test169()
         }
     }
 
@@ -235,6 +235,19 @@ class MainActivity : AppCompatActivity() {
         for (i in a.indices) {
             var ret = s.maxProfit(a[i])
             Log.d(S.TAG, "maxProfit, ret = ${ret}, ")
+        }
+
+    }
+    fun test169() {
+
+        var retArray = intArrayOf(1,3,3,2,1,3,3)
+        var retArray1 = intArrayOf(1,1,1,2,2,2,2)
+        var retArray2 = intArrayOf(1,2,3,2,1,2,5,2)
+        var a = arrayOf(retArray, retArray1, retArray2)
+
+        for (i in a.indices) {
+            var ret = s.majorityElement(a[i])
+            Log.d(S.TAG, "majorityElement, ret = ${ret}, ")
         }
 
     }

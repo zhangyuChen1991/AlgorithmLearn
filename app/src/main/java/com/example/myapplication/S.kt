@@ -728,4 +728,35 @@ class S {
         return false
     }
 
+    /**
+     * 169. 多数元素
+     * 给定一个大小为 n 的数组nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于⌊ n/2 ⌋的元素。
+    你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+     
+     解题思路关键点是 目标数字出现的次数大于n/2
+     普通解法 用一个hashmap存次数就行了
+     但是利用上面那个关键点，有两个思路。1是进行排序，因为它次数大于n/2，排序之后中间的那个数一定是目标数字，但是快排的时间复杂度也是O(n*logn)
+     最优解，摩尔投票
+     初始候选人为nums[0] count = 1
+     当投到相同的数时 count+1，投到不同的数时，count-1，count为0时更换候选人并重置count = 1.最后留下了的候选人就是目标数，而且它的count一定时大于1的，
+     因为它出现的次数比其他数加起来都多
+     */
+    fun majorityElement(nums: IntArray): Int {
+        //摩尔投票解法
+        var ret = nums[0]
+        var count = 1
+        for (i in nums.indices){
+            var b = nums[i]
+            if (b == ret){
+                count++
+            }else{
+                count--
+                if (count == 0){
+                    ret = b
+                    count = 1
+                }
+            }
+        }
+        return ret
+    }
 }
