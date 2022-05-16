@@ -759,4 +759,80 @@ class S {
         }
         return ret
     }
+
+    /**
+     * 160. 相交链表
+     *
+     *
+    给你两个单链表的头节点headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
+
+    题目数据 保证 整个链式结构中不存在环。
+
+     解法：
+     普通解法就是遍历两个链表，用一个hashMap存其中一个链表遍历过的节点，另一个链表遍历每个节点的时候都去检查map里有没有这个节点，有就找到了。时间复杂度O(N)；空间复杂度O(N);
+     降低空间复杂度的办法是：抓住一个关键点，非相交部分链表A的长度a + 相交部分链表长度c + 非相交部分链表B的长度b = 非相交部分链表B的长度b+ 相交部分链表长度c + 非相交部分链表A的长度a
+     如下图：
+    链表A从a1开始遍历，遍历到c2，然后挪到b1开始继续往下遍历，走到c1时，走过的长度为a+c+b;
+    链表B从b1开始遍历，遍历到c2，然后挪到a1开始继续往下遍历，走到c1时，走过的长度为b+c+a;
+    a+c+b和b+c+a 这两个长度是相等的，所以如果存证相交点，两个链表按照这样的遍历顺序，走同样多的步数之后，一定会同时走到相交点。所以只要按照这个顺序去遍历，对比当前两个点是否一样，就可以找到相交的点，遍历步数是a+c+b。
+    然后处理不存在的情况，当遍历到队尾时，记一个轮数，当第二次遍历到队尾都还没有找到相同点，说明这两个链表不存在相交点，返回null。
+    再处理两种特殊情况，一个是有链表为null时，直接返回null；一个是两个链表头节点就相同时，直接返回头节点，不需要再遍历;
+
+
+     a1->a2->a3
+                ->c1->c2(相交公共部分)
+        b1->b2
+     */
+    fun getIntersectionNode(headA:ListNode?, headB:ListNode?):ListNode? {
+        if (null == headA || null == headB) return null
+        if (headA === headB) return headA
+        var nodeA = headA?.next
+        var nodeB = headB?.next
+        var round = 0
+        while (nodeA !== nodeB){
+            if (null == nodeA){
+                if (round > 0) return null//跑了两圈了也没找到相交的节点，判断不存在相交节点
+                round++
+                nodeA = headB
+            }else {
+                nodeA = nodeA!!.next
+            }
+
+            if (null == nodeB){
+                nodeB= headA
+            }else{
+                nodeB = nodeB?.next
+            }
+        }
+        return nodeA
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
