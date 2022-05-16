@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import com.example.Constants
+import com.example.myapplication.utils.TransformUtils
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test169()
+            test206()
         }
     }
 
@@ -248,6 +250,26 @@ class MainActivity : AppCompatActivity() {
         for (i in a.indices) {
             var ret = s.majorityElement(a[i])
             Log.d(S.TAG, "majorityElement, ret = ${ret}, ")
+        }
+
+    }
+
+    fun testTransformArrayToListNode(){
+        var array = intArrayOf(1,2,3,4,5,6,7)
+        var headNode = TransformUtils.arrayToListNode(array)
+        while (null != headNode){
+            Log.d(Constants.TAG,"${headNode.`val`}")
+            headNode = headNode.next
+        }
+    }
+
+    fun test206() {
+
+        var array = intArrayOf(1,2,3,4,5)
+        var ret = s.reverseList1(TransformUtils.arrayToListNode(array))
+        while (ret != null){
+            Log.d(S.TAG,"${ret.`val`}")
+            ret = ret.next
         }
 
     }

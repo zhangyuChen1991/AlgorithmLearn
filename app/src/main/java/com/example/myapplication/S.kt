@@ -525,30 +525,30 @@ class S {
      */
     fun addBinary(a: String, b: String): String {
 
-        var sb   = StringBuffer()
+        var sb = StringBuffer()
         var upper = 0
         var maxLength = a.length.coerceAtLeast(b.length)
-        for (i in 0 until maxLength){
+        for (i in 0 until maxLength) {
             var resultNum = 0
 
             var aValue = 0
             var aIndex = a.length - i - 1;
-            aValue = if (aIndex < 0){
+            aValue = if (aIndex < 0) {
                 0
-            }else{
+            } else {
                 a[aIndex] - '0'
             }
 
             var bValue = 0
             var bIndex = b.length - i - 1;
-            bValue = if (bIndex < 0){
+            bValue = if (bIndex < 0) {
                 0
-            }else{
+            } else {
                 b[bIndex] - '0'
             }
 
             resultNum = aValue + bValue + upper
-            when(resultNum){
+            when (resultNum) {
                 0 -> {
                     upper = 0
                     sb.append('0')
@@ -568,7 +568,7 @@ class S {
             }
         }
 
-        if (upper == 1){
+        if (upper == 1) {
             sb.append('1')//如果最一位也进位了，再补一个1
         }
 
@@ -582,17 +582,17 @@ class S {
      * 对比两个节点的值是否相等，再对比左节点的左节点与右节点的右节点、左节点的右节点与右节点的左节点值是否相同(对着图看)，递归对比
      */
     fun isSymmetric(root: TreeNode?): Boolean {
-        return isSymmetric(root?.left,root?.right)
+        return isSymmetric(root?.left, root?.right)
     }
 
-    fun isSymmetric(left: TreeNode?,right: TreeNode?): Boolean {
+    fun isSymmetric(left: TreeNode?, right: TreeNode?): Boolean {
         if (null == left && null == right) return true
         if (null == left) return false
         if (null == right) return false
 
         if (left.`val` != right.`val`) return false
-        else{
-            return isSymmetric(left.left,right.right) && isSymmetric(left.right,right.left)
+        else {
+            return isSymmetric(left.left, right.right) && isSymmetric(left.right, right.left)
         }
     }
 
@@ -601,24 +601,25 @@ class S {
      * 104. 二叉树的最大深度
      *
      * 给定一个二叉树，找出其最大深度。
-        二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
-        说明: 叶子节点是指没有子节点的节点。
+    二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+    说明: 叶子节点是指没有子节点的节点。
      */
     fun maxDepth(root: TreeNode?): Int {
         if (null == root) return 0
-        return maxDepth(root,1)
+        return maxDepth(root, 1)
     }
 
-    fun maxDepth(treeNode: TreeNode?, currentDepth:Int): Int {
+    fun maxDepth(treeNode: TreeNode?, currentDepth: Int): Int {
         if (null == treeNode) return currentDepth
 
-        if (null != treeNode?.left && null != treeNode?.right){//左节点和右节点都不为空，返回两者中深度较大的一个
-            return Math.max(maxDepth(treeNode?.left ,currentDepth + 1),maxDepth(treeNode?.right ,currentDepth + 1))
-        }else if(null != treeNode?.left){//左节点不为空，右节点为空，左节点所在的深度
-            return maxDepth(treeNode?.left ,currentDepth + 1)
-        }else if(null != treeNode?.right){//右节点不为空，左节点为空，右节点所在的深度
-            return maxDepth(treeNode?.right ,currentDepth + 1)
-        }else{//左右节点都为空，本节点就是当前分支的最底部
+        if (null != treeNode?.left && null != treeNode?.right) {//左节点和右节点都不为空，返回两者中深度较大的一个
+            return Math.max(maxDepth(treeNode?.left, currentDepth + 1),
+                maxDepth(treeNode?.right, currentDepth + 1))
+        } else if (null != treeNode?.left) {//左节点不为空，右节点为空，左节点所在的深度
+            return maxDepth(treeNode?.left, currentDepth + 1)
+        } else if (null != treeNode?.right) {//右节点不为空，左节点为空，右节点所在的深度
+            return maxDepth(treeNode?.right, currentDepth + 1)
+        } else {//左右节点都为空，本节点就是当前分支的最底部
             return currentDepth
         }
     }
@@ -626,30 +627,30 @@ class S {
     /**
      * 136. 只出现一次的数字
      * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
-        说明：
-        你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
+    说明：
+    你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
 
 
-     使用异或运算。异或运算时，将数字转换为二进制数字做位运算，每一位上相同为0，不同为1,就像下面的竖式
-      1111
-      1011
-     ------
-      0100
+    使用异或运算。异或运算时，将数字转换为二进制数字做位运算，每一位上相同为0，不同为1,就像下面的竖式
+    1111
+    1011
+    ------
+    0100
 
-     异或运算满足三个定律：
-        任何数和0异或，结果为原来的数；
-        自身和自身异或，结果为0；
-        异或运算满足交换律和结合律:  4 xor 1 xor 2 xor 1 xor 2 = 4 xor (1 xor 1) xor (2 xor 2) = 4
-                                                                      0            0
-        所以把数组中的数挨个做一次异或运算，就把单独的那个数找出来了
+    异或运算满足三个定律：
+    任何数和0异或，结果为原来的数；
+    自身和自身异或，结果为0；
+    异或运算满足交换律和结合律:  4 xor 1 xor 2 xor 1 xor 2 = 4 xor (1 xor 1) xor (2 xor 2) = 4
+    0            0
+    所以把数组中的数挨个做一次异或运算，就把单独的那个数找出来了
 
      */
     fun singleNumber(nums: IntArray): Int {
         var single = 0
-        for (i in nums.indices){
-            Log.d(TAG,"single: $single, nums: ${nums[i]}")
+        for (i in nums.indices) {
+            Log.d(TAG, "single: $single, nums: ${nums[i]}")
             single = single xor nums[i]
-            Log.d(TAG,"异或计算结果，single: $single")
+            Log.d(TAG, "异或计算结果，single: $single")
         }
 
         return single
@@ -662,25 +663,25 @@ class S {
     返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
 
 
-       暴力解法就是两次循环，找到每两个元素之间的差值，返回其中最大的那个差值。
-       但是其实不用所有的都找完，最大利润肯定是后边价格的减去前面的发现的已知最小价格
+    暴力解法就是两次循环，找到每两个元素之间的差值，返回其中最大的那个差值。
+    但是其实不用所有的都找完，最大利润肯定是后边价格的减去前面的发现的已知最小价格
 
-     想象自己在画一条股票曲线，从第一天开始画，如果是上升段，那么目前的最大利润就是现在的价格减去当前最小的价格；
+    想象自己在画一条股票曲线，从第一天开始画，如果是上升段，那么目前的最大利润就是现在的价格减去当前最小的价格；
     如果是下降段，那么判断，如果产生了更小的最低价格，后续更大的利润肯定是减去这个更低的价格来产生的，所以，更新最小价格，继续往后画，
-     如果发现画到哪一天产生的更大的利润，就更新这个值。
-     所以只需要一次遍历，记录两个值就可以了，一个值是到目前为止的最小价格，往后看，如果产生更大的额利润一定是在这个价格的基础上；另一个值是到目前为止的最大利润。
+    如果发现画到哪一天产生的更大的利润，就更新这个值。
+    所以只需要一次遍历，记录两个值就可以了，一个值是到目前为止的最小价格，往后看，如果产生更大的额利润一定是在这个价格的基础上；另一个值是到目前为止的最大利润。
      */
     fun maxProfit(prices: IntArray): Int {
         //遍历数组，记录当前的价格最小值，如果有更小的，就更新这个值，因为往后看 如果有更大的利润，肯定是在减去更小的价格的时候产生的
         //同时记录最大利润，如果当前的价格减去之前最小的价格利润更大了，就更新利润
         var currentMinPrice = Int.MAX_VALUE
         var currentMaxProfit = 0
-        for (i in prices.indices){
+        for (i in prices.indices) {
             var price = prices[i]
-            if (price  < currentMinPrice){
+            if (price < currentMinPrice) {
                 currentMinPrice = price
-            }else{
-                if (price - currentMinPrice > currentMaxProfit){
+            } else {
+                if (price - currentMinPrice > currentMaxProfit) {
                     currentMaxProfit = price - currentMinPrice
                 }
             }
@@ -696,12 +697,12 @@ class S {
      */
     fun hasCycle(head: ListNode?): Boolean {
         if ((head?.next == null)) return false
-        var map = HashMap<ListNode,Int>()
+        var map = HashMap<ListNode, Int>()
         var currentNode = head
-        while (currentNode?.next != null){
+        while (currentNode?.next != null) {
             map[currentNode!!] = 1
             currentNode = currentNode?.next
-            if (map.containsKey(currentNode)){
+            if (map.containsKey(currentNode)) {
                 return true
             }
         }
@@ -719,7 +720,7 @@ class S {
         if ((head?.next == null)) return false
         var fastNode = head.next
         var slowNode = head
-        while (fastNode?.next != null){
+        while (fastNode?.next != null) {
             if (fastNode == slowNode) return true
             fastNode = fastNode.next?.next
             slowNode = slowNode?.next
@@ -732,26 +733,26 @@ class S {
      * 169. 多数元素
      * 给定一个大小为 n 的数组nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于⌊ n/2 ⌋的元素。
     你可以假设数组是非空的，并且给定的数组总是存在多数元素。
-     
-     解题思路关键点是 目标数字出现的次数大于n/2
-     普通解法 用一个hashmap存次数就行了
-     但是利用上面那个关键点，有两个思路。1是进行排序，因为它次数大于n/2，排序之后中间的那个数一定是目标数字，但是快排的时间复杂度也是O(n*logn)
-     最优解，摩尔投票
-     初始候选人为nums[0] count = 1
-     当投到相同的数时 count+1，投到不同的数时，count-1，count为0时更换候选人并重置count = 1.最后留下了的候选人就是目标数，而且它的count一定时大于1的，
-     因为它出现的次数比其他数加起来都多
+
+    解题思路关键点是 目标数字出现的次数大于n/2
+    普通解法 用一个hashmap存次数就行了
+    但是利用上面那个关键点，有两个思路。1是进行排序，因为它次数大于n/2，排序之后中间的那个数一定是目标数字，但是快排的时间复杂度也是O(n*logn)
+    最优解，摩尔投票
+    初始候选人为nums[0] count = 1
+    当投到相同的数时 count+1，投到不同的数时，count-1，count为0时更换候选人并重置count = 1.最后留下了的候选人就是目标数，而且它的count一定时大于1的，
+    因为它出现的次数比其他数加起来都多
      */
     fun majorityElement(nums: IntArray): Int {
         //摩尔投票解法
         var ret = nums[0]
         var count = 1
-        for (i in nums.indices){
+        for (i in nums.indices) {
             var b = nums[i]
-            if (b == ret){
+            if (b == ret) {
                 count++
-            }else{
+            } else {
                 count--
-                if (count == 0){
+                if (count == 0) {
                     ret = b
                     count = 1
                 }
@@ -768,10 +769,10 @@ class S {
 
     题目数据 保证 整个链式结构中不存在环。
 
-     解法：
-     普通解法就是遍历两个链表，用一个hashMap存其中一个链表遍历过的节点，另一个链表遍历每个节点的时候都去检查map里有没有这个节点，有就找到了。时间复杂度O(N)；空间复杂度O(N);
-     降低空间复杂度的办法是：抓住一个关键点，非相交部分链表A的长度a + 相交部分链表长度c + 非相交部分链表B的长度b = 非相交部分链表B的长度b+ 相交部分链表长度c + 非相交部分链表A的长度a
-     如下图：
+    解法：
+    普通解法就是遍历两个链表，用一个hashMap存其中一个链表遍历过的节点，另一个链表遍历每个节点的时候都去检查map里有没有这个节点，有就找到了。时间复杂度O(N)；空间复杂度O(N);
+    降低空间复杂度的办法是：抓住一个关键点，非相交部分链表A的长度a + 相交部分链表长度c + 非相交部分链表B的长度b = 非相交部分链表B的长度b+ 相交部分链表长度c + 非相交部分链表A的长度a
+    如下图：
     链表A从a1开始遍历，遍历到c2，然后挪到b1开始继续往下遍历，走到c1时，走过的长度为a+c+b;
     链表B从b1开始遍历，遍历到c2，然后挪到a1开始继续往下遍历，走到c1时，走过的长度为b+c+a;
     a+c+b和b+c+a 这两个长度是相等的，所以如果存证相交点，两个链表按照这样的遍历顺序，走同样多的步数之后，一定会同时走到相交点。所以只要按照这个顺序去遍历，对比当前两个点是否一样，就可以找到相交的点，遍历步数是a+c+b。
@@ -779,32 +780,69 @@ class S {
     再处理两种特殊情况，一个是有链表为null时，直接返回null；一个是两个链表头节点就相同时，直接返回头节点，不需要再遍历;
 
 
-     a1->a2->a3
-                ->c1->c2(相交公共部分)
-        b1->b2
+    a1->a2->a3
+    ->c1->c2(相交公共部分)
+    b1->b2
      */
-    fun getIntersectionNode(headA:ListNode?, headB:ListNode?):ListNode? {
+    fun getIntersectionNode(headA: ListNode?, headB: ListNode?): ListNode? {
         if (null == headA || null == headB) return null
         if (headA === headB) return headA
         var nodeA = headA?.next
         var nodeB = headB?.next
         var round = 0
-        while (nodeA !== nodeB){
-            if (null == nodeA){
+        while (nodeA !== nodeB) {
+            if (null == nodeA) {
                 if (round > 0) return null//跑了两圈了也没找到相交的节点，判断不存在相交节点
                 round++
                 nodeA = headB
-            }else {
+            } else {
                 nodeA = nodeA!!.next
             }
 
-            if (null == nodeB){
-                nodeB= headA
-            }else{
+            if (null == nodeB) {
+                nodeB = headA
+            } else {
                 nodeB = nodeB?.next
             }
         }
         return nodeA
+    }
+
+    /**
+     * 206. 反转链表
+     *
+     * 过渡用的节点初始化不需要new一个值，直接为null作为反转后的尾节点，再往前挪.
+     */
+    fun reverseList(head: ListNode?): ListNode? {
+        if (null == head) return null
+        if (null == head.next) return head
+        var ret: ListNode? = null
+        var currNode = head
+        while (null != currNode) {
+            var next = currNode.next
+            currNode.next = ret
+            ret = currNode
+            currNode = next
+        }
+        return ret
+    }
+
+    /**
+     * 206. 反转链表
+     * 递归解法
+     * 就是传入两个相邻节点，让后一节点指向前一节点，再传入后一对相邻节点，递归调用，直到末尾
+     */
+    fun reverseList1(head: ListNode?): ListNode? {
+        if (null == head) return null
+        if (null == head.next) return head
+        return reverseList1_2(null,head)
+    }
+
+    fun reverseList1_2(currNode: ListNode?, nextNode: ListNode?): ListNode? {
+        if (null == nextNode) return currNode
+        var next = nextNode.next
+        nextNode.next = currNode
+        return reverseList1_2(nextNode, next)
     }
 }
 
