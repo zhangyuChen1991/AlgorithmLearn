@@ -844,6 +844,22 @@ class S {
         nextNode.next = currNode
         return reverseList1_2(nextNode, next)
     }
+
+    /**
+     * 226. 翻转二叉树
+     * 从上到下依次调换左右节点就行了
+     */
+    fun invertTree(root: TreeNode?): TreeNode? {
+        if (null == root) return null
+        var temp = root?.left
+        root?.left = root?.right
+        root?.right = temp
+
+        invertTree(root?.left)
+        invertTree(root?.right)
+
+        return root
+    }
 }
 
 
