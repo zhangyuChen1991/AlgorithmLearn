@@ -1,11 +1,7 @@
 package com.example.myapplication
 
 import android.util.Log
-import com.example.Constants
-import org.w3c.dom.Node
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Created by zhangyu on 2022/4/6.
@@ -835,7 +831,7 @@ class S {
     fun reverseList1(head: ListNode?): ListNode? {
         if (null == head) return null
         if (null == head.next) return head
-        return reverseList1_2(null,head)
+        return reverseList1_2(null, head)
     }
 
     fun reverseList1_2(currNode: ListNode?, nextNode: ListNode?): ListNode? {
@@ -859,6 +855,80 @@ class S {
         invertTree(root?.right)
 
         return root
+    }
+
+    /**
+     * 283. 移动零
+     * 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+    请注意 ，必须在不复制数组的情况下原地对数组进行操作。
+
+    常规做法：循环遍历，遇到0就往后挪，挪到最后，然后再循环，遇到0再挪，直到遍历完成
+    加快速度，减少遍历次数，思路：只遍历一次，遇到0就一起往后挪，相当于是批量处理了。比常规做法循环次数要少很多
+     */
+    fun moveZeroes(nums: IntArray): Unit {
+        for (i in nums.indices) {
+            var countOf0 = 0//直到当前发现的0的个数
+            var j = i
+            while (j < nums.size && nums[j] == 0) {
+                countOf0++
+                j++
+                //上面遍历完之后，从i到j都是连续的0
+            }
+            if (j == nums.size) return
+
+            //把连续的0整体往后挪
+            for (k in i until i + countOf0) {
+                if (k + countOf0 < nums.size) {
+                    var temp = nums[k]
+                    nums[k] = nums[k + countOf0]
+                    nums[k + countOf0] = temp
+                }
+            }
+        }
+    }
+
+    /**
+     * 338. 比特位计数
+     * 给你一个整数 n ，对于0 <= i <= n 中的每个 i ，计算其二进制表示中 1 的个数 ，返回一个长度为 n + 1 的数组 ans 作为答案。
+     *
+     *  示例：
+     *  输入：n = 2
+    输出：[0,1,1]
+    解释：
+    0 --> 0
+    1 --> 1
+    2 --> 10
+
+    思路：要想快，就不能每一个都去算，后面的数的答案跟前面的数的答案有关联，可以根据前面数的答案直接得出后面的数的答案，不用每个都去算就快了
+    两条规律：
+    1.奇数的二进制数末尾是1，而比他小1的偶数末尾是0，这个偶数加1就是这个奇数，只有末尾从0变成了1，其他的位置数字是不变的，所以奇数的1个数比比他小1的偶数多1
+    2.偶数的末尾是0，偶数除以2，就是右移一位，相当于把末尾的0去掉了，所以偶数n的1的个数跟n/2的个数是一样的
+    所以所有的数都可以根据前面的数得到值，不用再一一计算了
+     */
+    fun countBits(n: Int): IntArray {
+        var ret = IntArray(n + 1)
+        for (i in 0..n) {
+            if (i % 2 == 0) {
+                if (i == 0) {
+                    ret[i] = 0
+                } else {
+                    ret[i] = ret[i / 2]
+                }
+            } else {
+                ret[i] = ret[i - 1] + 1
+            }
+        }
+        return ret
+    }
+
+    fun countOnes(x: Int): Int {
+        var x = x
+        var ones = 0
+        while (x > 0) {
+            x = x and x - 1
+            ones++
+        }
+        return ones
     }
 }
 

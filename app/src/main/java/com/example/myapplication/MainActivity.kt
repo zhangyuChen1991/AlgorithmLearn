@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.TextView
 import com.example.Constants
 import com.example.myapplication.utils.TransformUtils
+import java.lang.StringBuilder
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test206()
+            test10000()
         }
     }
 
@@ -272,5 +273,18 @@ class MainActivity : AppCompatActivity() {
             ret = ret.next
         }
 
+    }
+
+    fun test283() {
+        var array = intArrayOf(0,1,0,3,10)
+        s.moveZeroes(array)
+    }
+    fun test10000() {
+        var sb = StringBuilder()
+        for (i in 0 .. 100){
+            sb.append(s.countOnes(i))
+            sb.append(", ")
+        }
+        Log.d(Constants.TAG,sb.toString())
     }
 }
