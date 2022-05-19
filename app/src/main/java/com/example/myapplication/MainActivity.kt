@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test10000()
+            test448()
         }
     }
 
@@ -279,6 +279,18 @@ class MainActivity : AppCompatActivity() {
         var array = intArrayOf(0,1,0,3,10)
         s.moveZeroes(array)
     }
+
+    fun test448() {
+        var array = intArrayOf(4,3,2,7,8,2,3,1)
+        var ret = s.findDisappearedNumbers(array)
+        var sb = StringBuilder()
+        for (i in ret.indices){
+            sb.append(ret[i])
+            sb.append(", ")
+        }
+        Log.d(S.TAG,sb.toString())
+    }
+
     fun test10000() {
         var sb = StringBuilder()
         for (i in 0 .. 100){

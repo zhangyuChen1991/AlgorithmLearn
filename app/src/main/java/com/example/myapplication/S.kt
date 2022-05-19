@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.util.Log
+import android.util.Size
 import java.util.*
 
 /**
@@ -921,14 +922,68 @@ class S {
         return ret
     }
 
+    /**
+     * 计算一个数的二进制形式里面有多少个1
+     * 最朴素的方法，把这个数的末尾一位与1做与运算，检查是否为1，然后右移一位，继续检查，直到为0
+     * 比如1101
+     *       1
+     * --------
+     *       1
+     * 右移一位... 接下来三个与运算的结果分别是0，1，1。总共3个1
+     *
+     */
     fun countOnes(x: Int): Int {
         var x = x
         var ones = 0
         while (x > 0) {
-            x = x and x - 1
-            ones++
+            if (x and 1 == 1) {
+                ones++
+            }
+            x = x shr 1//右移动一位
         }
         return ones
+    }
+
+    /**
+     * 448. 找到所有数组中消失的数字
+     * 给你一个含 n 个整数的数组 nums ，其中 nums[i] 在区间 [1, n] 内。请你找出所有在 [1, n] 范围内但没有出现在 nums 中的数字，并以数组的形式返回结果。
+
+    示例：
+    给 [1,2,1,2,5,6]
+    返回[3,4]
+    因为本来该有 1 2 3 4 5 6，只出现了1 2 5 6
+
+    常规思路，额外开一个List，长度是n，把1到n依次放进去，然后遍历数字，发现一个就从List里面去掉一个，最后剩下的就是结果。时间复杂的O(N),空间复杂的O(N)
+
+    要降低空间复杂度，就不能使用list，观察规律，题里面的关键信息是，数字是从1到n范围内的，所以可以把数字-1之后当作下标来处理，取到对应的数字，就处理对应下标的数据。
+    处理完之后，如果这个下标的数字被处理过了，就说明这个存在这个下标对应的数字 num <-> index + 1,没被处理过的下标对应的数字就是不存在的数字
+
+     */
+    fun findDisappearedNumbers(nums: IntArray): List<Int> {
+        var list = ArrayList<Int>()
+        var size = nums.size
+        for (i in nums.indices) {
+            var index = -1
+            if (nums[i] > size) {
+                //这个数被处理过了，先还原原数据，再计算下标
+                var origin = nums[i] - size
+                index = origin - 1
+            } else {
+                //这个数还没被处理过，直接计算下标
+                index = nums[i] - 1
+            }
+            if (nums[index] <= size) {
+                //下标对应的数字如果没被处理过，才给它加值
+                nums[index] += size
+            }
+        }
+        for (i in nums.indices) {
+            //被处理过的数都大于size，如果小于size，说明这个数没被处理过，其对应的下标就是缺失的数字
+            if (nums[i] <= size) {
+                list.add(i + 1)
+            }
+        }
+        return list
     }
 }
 
