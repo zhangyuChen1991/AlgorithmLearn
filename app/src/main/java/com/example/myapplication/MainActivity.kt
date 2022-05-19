@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test448()
+            test461()
         }
     }
 
@@ -223,16 +223,17 @@ class MainActivity : AppCompatActivity() {
 //        var ret1 = s1 xor s3
 //        Log.d(S.TAG, "异或, ret = ${ret},ret1 = $ret1 ")
 
-        var array : IntArray = intArrayOf(4,1,2,1,2)
+        var array: IntArray = intArrayOf(4, 1, 2, 1, 2)
         var ret = s.singleNumber(array)
-        Log.d(S.TAG,"ret: $ret")
+        Log.d(S.TAG, "ret: $ret")
 
     }
+
     fun test121() {
 
-        var retArray = intArrayOf(7,1,5,3,6,4)
-        var retArray1 = intArrayOf(10, 20, 1, 7,9,5)
-        var retArray2 = intArrayOf(1,2,3,4,5,6,7,8,9)
+        var retArray = intArrayOf(7, 1, 5, 3, 6, 4)
+        var retArray1 = intArrayOf(10, 20, 1, 7, 9, 5)
+        var retArray2 = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
         var a = arrayOf(retArray, retArray1, retArray2)
 
         for (i in a.indices) {
@@ -241,11 +242,12 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     fun test169() {
 
-        var retArray = intArrayOf(1,3,3,2,1,3,3)
-        var retArray1 = intArrayOf(1,1,1,2,2,2,2)
-        var retArray2 = intArrayOf(1,2,3,2,1,2,5,2)
+        var retArray = intArrayOf(1, 3, 3, 2, 1, 3, 3)
+        var retArray1 = intArrayOf(1, 1, 1, 2, 2, 2, 2)
+        var retArray2 = intArrayOf(1, 2, 3, 2, 1, 2, 5, 2)
         var a = arrayOf(retArray, retArray1, retArray2)
 
         for (i in a.indices) {
@@ -255,48 +257,55 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun testTransformArrayToListNode(){
-        var array = intArrayOf(1,2,3,4,5,6,7)
+    fun testTransformArrayToListNode() {
+        var array = intArrayOf(1, 2, 3, 4, 5, 6, 7)
         var headNode = TransformUtils.arrayToListNode(array)
-        while (null != headNode){
-            Log.d(Constants.TAG,"${headNode.`val`}")
+        while (null != headNode) {
+            Log.d(Constants.TAG, "${headNode.`val`}")
             headNode = headNode.next
         }
     }
 
     fun test206() {
 
-        var array = intArrayOf(1,2,3,4,5)
+        var array = intArrayOf(1, 2, 3, 4, 5)
         var ret = s.reverseList1(TransformUtils.arrayToListNode(array))
-        while (ret != null){
-            Log.d(S.TAG,"${ret.`val`}")
+        while (ret != null) {
+            Log.d(S.TAG, "${ret.`val`}")
             ret = ret.next
         }
 
     }
 
     fun test283() {
-        var array = intArrayOf(0,1,0,3,10)
+        var array = intArrayOf(0, 1, 0, 3, 10)
         s.moveZeroes(array)
     }
 
+    fun test461() {
+        var x = 1
+        var y = 4
+        var ret = s.hammingDistance(x, y)
+        Log.d(S.TAG, "$ret")
+    }
+
     fun test448() {
-        var array = intArrayOf(4,3,2,7,8,2,3,1)
+        var array = intArrayOf(4, 3, 2, 7, 8, 2, 3, 1)
         var ret = s.findDisappearedNumbers(array)
         var sb = StringBuilder()
-        for (i in ret.indices){
+        for (i in ret.indices) {
             sb.append(ret[i])
             sb.append(", ")
         }
-        Log.d(S.TAG,sb.toString())
+        Log.d(S.TAG, sb.toString())
     }
 
     fun test10000() {
         var sb = StringBuilder()
-        for (i in 0 .. 100){
+        for (i in 0..100) {
             sb.append(s.countOnes(i))
             sb.append(", ")
         }
-        Log.d(Constants.TAG,sb.toString())
+        Log.d(Constants.TAG, sb.toString())
     }
 }
