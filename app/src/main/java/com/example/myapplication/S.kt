@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.util.Log
-import android.util.Size
 import java.util.*
 
 /**
@@ -1018,6 +1017,53 @@ class S {
         }
         return count
     }
+
+    /**
+     * 543. 二叉树的直径
+     *
+     * 找任意两个子节点之间最长路径中的最大值(具体看原题，配着图看)
+     *
+     * 思路，官方解题思路是，任务拆分：
+     * 1.找当前根节点的直径，就是左节点的最大深度，加上右节点的最大深度（因为深度是节点层数，直径是节点之间的路径相交，左深度+右深度刚好是当前节点的直径）
+     * 2.找当前节点的深度，就是左节点的最大深度和右节点的最大深度中的最大值，再加1(左右节点到自己的距离)
+     * 点2可以写一个递归，求当前节点的深度,伪代码如下：
+     * deep(root){
+     *   L = deep(root.left)
+     *   R = deep(root.right)
+     *   return max(L,R) + 1
+     * }
+     * 在这个递归中，其实当前节点的直径也可以求出来，就是 L + R + 1
+     * 所以在这个递归过程中，可以顺便把每个节点的直径都找出来，然后记录下最大的值，就求出答案了，伪代码如下
+     *
+     * var ans = 0
+     * deep(root){
+     *   L = deep(root.left)
+     *   R = deep(root.right)
+     *   currNodeAns = L + R
+     *   ans = max(ans,currNodeAns)
+     *   return max(L,R) + 1
+     * }
+     *
+     * 最后，这个ans就是二叉树的直径
+     */
+    var answer543 = 0//第543题的答案
+    fun diameterOfBinaryTree(root: TreeNode?): Int {
+        deep(root)
+        return answer543
+    }
+
+    /**
+     * 求一个节点的深度
+     */
+    fun deep(node: TreeNode?) : Int{
+        if (null == node) return 0
+        var l =  deep(node.left)
+        var r =  deep(node.right)
+        var currNodeAnswer = l + r
+        answer543 = answer543.coerceAtLeast(currNodeAnswer)
+        return l.coerceAtLeast(r) + 1
+    }
+
 }
 
 
