@@ -1024,7 +1024,7 @@ class S {
      * 找任意两个子节点之间最长路径中的最大值(具体看原题，配着图看)
      *
      * 思路，官方解题思路是，任务拆分：
-     * 1.找当前根节点的直径，就是左节点的最大深度，加上右节点的最大深度（因为深度是节点层数，直径是节点之间的路径相交，左深度+右深度刚好是当前节点的直径）
+     * 1.找当前根节点的直径，就是左节点的最大深度，加上右节点的最大深度（因为深度是节点层数，直径是节点之间的路径相加，左深度+右深度刚好是当前节点的直径）
      * 2.找当前节点的深度，就是左节点的最大深度和右节点的最大深度中的最大值，再加1(左右节点到自己的距离)
      * 点2可以写一个递归，求当前节点的深度,伪代码如下：
      * deep(root){
@@ -1032,7 +1032,7 @@ class S {
      *   R = deep(root.right)
      *   return max(L,R) + 1
      * }
-     * 在这个递归中，其实当前节点的直径也可以求出来，就是 L + R + 1
+     * 在这个递归中，其实当前节点的直径也可以求出来，就是 L + R
      * 所以在这个递归过程中，可以顺便把每个节点的直径都找出来，然后记录下最大的值，就求出答案了，伪代码如下
      *
      * var ans = 0
@@ -1064,6 +1064,62 @@ class S {
         return l.coerceAtLeast(r) + 1
     }
 
+    /**
+     * 617. 合并二叉树
+     *
+     * 给你两棵二叉树： root1 和 root2 。
+        想象一下，当你将其中一棵覆盖到另一棵之上时，两棵树上的一些节点将会重叠（而另一些不会）。你需要将这两棵树合并成一棵新二叉树。合并的规则是：如果两个节点重叠，那么将这两个节点的值相加作为合并后节点的新值；否则，不为 null 的节点将直接作为新二叉树的节点。
+        返回合并后的二叉树。
+
+        具体题意上leetCode看，有图。
+
+        常规思路，递归合并，合并root1和root2，把root2的值合并到root1上，然后合并root1.left,root2.left; root1.right,root2.right,注意判空，
+        重点注意当root1左右子节点为空而root2左右字节点不为空时，要给root1的左右节点new一个值，让它可以继续往下递归合并，不然就断了
+     */
+    fun mergeTrees(root1: TreeNode?, root2: TreeNode?): TreeNode? {
+        var r1 = root1
+        var r2 = root2
+        if (null == r1 && null == r2) return null
+        if (null == r1 && null != r2){
+            r1 = TreeNode(r2.`val`)
+        }else{
+            r2?.let {
+                r1!!.`val` = r1.`val` + it.`val`
+            }
+        }
+
+        //当root1左右子节点为空而root2左右字节点不为空时，要给root1的左右节点new一个值，
+        // 让它可以继续往下递归合并
+        if (r1?.left == null && r2?.left != null){
+            r1?.left = TreeNode(0)
+        }
+
+        if (r1?.right == null && r2?.right != null){
+            r1?.right = TreeNode(0)
+        }
+
+        mergeTrees(r1?.left,r2?.left)
+        mergeTrees(r1?.right,r2?.right)
+        return r1
+    }
+
+    /**
+     * 上面的做法有冗余的操作，给root1的左右节点new值的时候，new完再继续往下合并，其实没必要，如果roo1.left为空，root2.left不为空，直接让roo1.left = root2.left，
+     * 把root2的左节点挂到root1那边对应的位置上去就行了，不需要再继续对比下面的分支，这样会少一些操作
+     *
+     * 下面这个递归处理操作了当前节点的值，还把左右节点的值也合并了，直接合并了三个节点的值，多了在root1出现空节点时直接将root2的左节点挂到root1的操作，节省步骤
+     */
+    fun mergeTrees1(root1: TreeNode?, root2: TreeNode?): TreeNode? {
+        if (null == root1 && null == root2) return null
+        if (null == root1) return root2
+        if (null == root2) return root1
+
+        root1.`val` = root1.`val` + root2.`val`
+        root1.left = mergeTrees1(root1.left,root2.left)
+        root1.right = mergeTrees1(root1.right,root2.right)
+
+        return root1
+    }
 }
 
 
