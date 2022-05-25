@@ -443,10 +443,6 @@ class S {
         return ret
     }
 
-    class ListNode(var `val`: Int) {
-        var next: ListNode? = null
-    }
-
     /**
      * 21.合并两个有序链表
      * 递归

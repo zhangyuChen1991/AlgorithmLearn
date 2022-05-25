@@ -17,11 +17,12 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test461()
+            test2()
         }
     }
 
     var s = S()
+    var sMiddle = S_Middle()
     private fun test1() {
         var array: IntArray = intArrayOf(1, 1, 2, 2, 2, 3, 3, 3, 4, 5, 6, 7, 8)
 //        var array : IntArray = intArrayOf(1,1,1,1,1,1,1,1)
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun test2() {
+    private fun test2_1() {
         var array: IntArray = intArrayOf(2, 1, 1, 2, 3, 3, 3, 4, 5, 2, 6, 7, 8)
         var ret = s.removeElement(array, 2)
         for (element in array) {
@@ -270,6 +271,19 @@ class MainActivity : AppCompatActivity() {
 
         var array = intArrayOf(1, 2, 3, 4, 5)
         var ret = s.reverseList1(TransformUtils.arrayToListNode(array))
+        while (ret != null) {
+            Log.d(S.TAG, "${ret.`val`}")
+            ret = ret.next
+        }
+
+    }
+    fun test2() {
+
+        var array = intArrayOf(2,4,3)
+        var array2 = intArrayOf(5,6,4)
+        var l1 = TransformUtils.arrayToListNode(array)
+        var l2 = TransformUtils.arrayToListNode(array2)
+        var ret = sMiddle.addTwoNumbers(l1,l2)
         while (ret != null) {
             Log.d(S.TAG, "${ret.`val`}")
             ret = ret.next
