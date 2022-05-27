@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test2()
+            test3_()
         }
     }
 
@@ -287,6 +287,18 @@ class MainActivity : AppCompatActivity() {
         while (ret != null) {
             Log.d(S.TAG, "${ret.`val`}")
             ret = ret.next
+        }
+
+    }
+    fun test3_() {
+        var a1 = "pnbw".substring(4) + 'w'
+        Log.d(S.TAG, "越界substring: $a1")
+
+
+        var a = arrayOf("abcabcbb", "bbb", "pwwkew","jbpnbwwd")
+        for (i in a.indices){
+            var ret = sMiddle.lengthOfLongestSubstring(a[i])
+            Log.d(S.TAG, "s: ${a[i]}, answer: ${ret} ")
         }
 
     }
