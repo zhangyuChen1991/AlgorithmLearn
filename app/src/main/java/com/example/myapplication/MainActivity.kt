@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test3_()
+            test5_()
         }
     }
 
@@ -298,6 +298,16 @@ class MainActivity : AppCompatActivity() {
         var a = arrayOf("abcabcbb", "bbb", "pwwkew","jbpnbwwd")
         for (i in a.indices){
             var ret = sMiddle.lengthOfLongestSubstring(a[i])
+            Log.d(S.TAG, "s: ${a[i]}, answer: ${ret} ")
+        }
+
+    }
+
+    fun test5_() {
+
+        var a = arrayOf("aba")
+        for (i in a.indices){
+            var ret = sMiddle.longestPalindrome(a[i])
             Log.d(S.TAG, "s: ${a[i]}, answer: ${ret} ")
         }
 

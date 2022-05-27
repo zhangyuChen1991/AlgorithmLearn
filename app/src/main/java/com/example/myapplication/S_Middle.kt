@@ -69,8 +69,8 @@ class S_Middle {
     解释: 因为无重复字符的最长子串是"wke"，所以其长度为 3。
     请注意，你的答案必须是 子串 的长度，"pwke"是一个子序列，不是子串。
 
-     思路：分治法，拆分任务，首先答案肯定是以某个字符来结尾的，从第一个字符开始找，以第一个字符结尾的最长子字符串就是它本身，然后看第二个，如果当前的子串包含当前的字符，就从重复的那个位置开始往后截断，
-     然后加上当前字符，就是以当前字符结尾的最长子串。找出以每个字符结尾的最长子串之后，记录下它们之中最长的那个，返回其长度，就是最终答案。跟从数组中找出和最大的连续子数组思路一样。
+    思路：分治法，拆分任务，首先答案肯定是以某个字符来结尾的，从第一个字符开始找，以第一个字符结尾的最长子字符串就是它本身，然后看第二个，如果当前的子串包含当前的字符，就从重复的那个位置开始往后截断，
+    然后加上当前字符，就是以当前字符结尾的最长子串。找出以每个字符结尾的最长子串之后，记录下它们之中最长的那个，返回其长度，就是最终答案。跟从数组中找出和最大的连续子数组思路一样。
      */
     fun lengthOfLongestSubstring(s: String): Int {
         if (s.isEmpty()) return 0
@@ -81,15 +81,66 @@ class S_Middle {
             if (currSubStr.contains(s[i])) {
                 var start = currSubStr.indexOf(s[i])
                 currSubStr = currSubStr.substring(start + 1) + s[i]
-            }else{
+            } else {
                 currSubStr += s[i]
             }
 
-            if (currentMaxSubStr.length < currSubStr.length){
+            if (currentMaxSubStr.length < currSubStr.length) {
                 currentMaxSubStr = currSubStr
             }
         }
 
         return currentMaxSubStr.length
+    }
+
+    /**
+     * 5. 最长回文子串
+     *
+     * 思路，拆分任务，最长回文子串的答案肯定是以某个字符为中心，或者以某个相同字符的子串为中心的 一个子串
+     *那就从第一个字符开始遍历，找以以个字符为中心，或者和这个字符相同的子串为中心的 回文子串
+     * 遍历时，记录下当前的最长回文子串
+     * 最后返回结果
+     */
+    fun longestPalindrome(s: String): String {
+
+        var answerStartIndex = -1
+        var answerEndIndex = -1
+        var currMaxLength = 0
+
+        var sameCharStartIndex = 0
+        var sameCharEndIndex = 0
+        var sameCharCount = 1
+        for (i in s.indices) {
+            if (sameCharCount == 1) {
+                sameCharStartIndex = i
+            }
+            if (i < s.length - 1 && s[i] == s[i + 1]) {
+                sameCharCount++
+                continue
+            }
+            sameCharEndIndex = sameCharStartIndex + sameCharCount - 1
+
+            var count = 1
+            //找出以i或者与i相同的连续字符组成的子串 为中心的最长回文子数组
+            while (sameCharStartIndex - count >= 0 && sameCharEndIndex + count < s.length) {
+                if (s[sameCharStartIndex - count] == s[sameCharEndIndex + count]) {
+                    count++
+                } else {
+                    break
+                }
+            }
+            count--
+
+            var l = count * 2 + sameCharCount
+            if (currMaxLength < l) {
+                answerStartIndex = sameCharStartIndex - count
+                answerEndIndex = sameCharEndIndex + count
+                currMaxLength = l
+            }
+
+            sameCharCount = 1
+
+        }
+        return s.substring(answerStartIndex, answerEndIndex + 1)
     }
 }
