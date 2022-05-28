@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.text.TextUtils
+import android.util.Log
 
 /**
  * 中等难度
@@ -142,5 +143,38 @@ class S_Middle {
 
         }
         return s.substring(answerStartIndex, answerEndIndex + 1)
+    }
+
+    /**
+     * 11. 盛最多水的容器
+     * 给定一个长度为 n 的整数数组height。有n条垂线，第 i 条线的两个端点是(i, 0)和(i, height[i])。
+    找出其中的两条线，使得它们与x轴共同构成的容器可以容纳最多的水。
+    返回容器可以储存的最大水量。
+     题意看不懂具体看leetCode，有图。
+
+     *
+     * 最开始想的是找前N条中最大的那个值，记录起始点，然后前N+1条里面的最大值和前n条里面的最大值建立关联关系，这样，找到f(1)就找到f(2),直到f(n)，记录最大值就行了。结果f(n)和f(n-1)之间的关系没找对，错了两次，这个思路可能是行不通。
+     * 参考的精选答案的思路，起止截点从两端往中间移动，因为面积取决于两者中的短板，所以移动长板的话，短板要么不变，要么变小，长度还减一，面积一定变小。每次都移动短的那个，向内靠，直到两指针相遇，记录最大值
+     */
+    fun maxArea(height: IntArray): Int {
+        var startIndex = 0
+        var endIndex = height.size - 1
+        var answer = areaOfTwoIndex(height,startIndex,endIndex)
+        while (startIndex < endIndex){
+            if (height[startIndex] > height[endIndex]){
+                endIndex--
+            }else{
+                startIndex++
+            }
+            answer = answer.coerceAtLeast(areaOfTwoIndex(height, startIndex, endIndex))
+            Log.d(S.TAG, "answer: ${answer}, startIndex:$startIndex, endIndex:$endIndex")
+
+        }
+        return answer
+    }
+
+
+    private fun areaOfTwoIndex(height: IntArray, p1: Int, p2: Int): Int {
+        return (p2 - p1) * height[p1].coerceAtMost(height[p2])
     }
 }

@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test5_()
+            test11()
         }
     }
 
@@ -316,6 +316,13 @@ class MainActivity : AppCompatActivity() {
     fun test283() {
         var array = intArrayOf(0, 1, 0, 3, 10)
         s.moveZeroes(array)
+    }
+
+    fun test11() {
+        var array = intArrayOf(1,8,6,2,5,4,8,3,7)
+        var ret = sMiddle.maxArea(array)
+        Log.d(S.TAG, "answer: ${ret} ")
+
     }
 
     fun test461() {
