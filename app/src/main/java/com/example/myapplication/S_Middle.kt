@@ -1,7 +1,7 @@
 package com.example.myapplication
 
-import android.text.TextUtils
 import android.util.Log
+import java.util.*
 
 /**
  * 中等难度
@@ -176,5 +176,43 @@ class S_Middle {
 
     private fun areaOfTwoIndex(height: IntArray, p1: Int, p2: Int): Int {
         return (p2 - p1) * height[p1].coerceAtMost(height[p2])
+    }
+
+    /**
+     * 15. 三数之和
+    给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
+    注意：答案中不可以包含重复的三元组。
+
+     思路： 没办法就只能暴力解，三重循环。时间复杂度O(N3)这种写出来也没鸟用...
+     先排序，再用双指针，减少一重循环，时间复杂度O(N2)
+     排序之后顺序由小到大，然后遍历，找跟第i个匹配的另外两个值。设置两个指针，在两端(i+1和N-1),两个指针处的值和n[i]求和 sum，
+    sum > 0,右指针左移；sum < 0 左指针右移；
+    sum == 0，就找到一组值，然后左指针右移，右指针左移，看还有没有别的匹配上的值，指针移动的时候要判断跟前一个数字一不一样，排除相同的答案。
+     最后遍历完，找完答案
+     注意点，遍历的时候判断i跟i-1的值一不一样，同样的数字不再重复求解
+     */
+    fun threeSum(nums: IntArray): List<List<Int>> {
+        val ans: MutableList<List<Int>> = ArrayList()
+        val len: Int = nums.size
+        if (nums == null || len < 3) return ans
+        nums.sort() // 排序
+
+        for (i in 0 until len) {
+            if (nums[i] > 0) break // 如果当前数字大于0，则三数之和一定大于0，所以结束循环
+            if (i > 0 && nums[i] === nums[i - 1]) continue  // 去重
+            var L = i + 1
+            var R = len - 1
+            while (L < R) {
+                val sum = nums[i] + nums[L] + nums[R]
+                if (sum == 0) {
+                    ans.add(listOf(nums[i], nums[L], nums[R]))
+                    while (L < R && nums[L] === nums[L + 1]) L++ // 去重
+                    while (L < R && nums[R] === nums[R - 1]) R-- // 去重
+                    L++
+                    R--
+                } else if (sum < 0) L++ else if (sum > 0) R--
+            }
+        }
+        return ans
     }
 }

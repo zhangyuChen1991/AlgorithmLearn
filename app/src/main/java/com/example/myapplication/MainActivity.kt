@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test11()
+            test15()
         }
     }
 
@@ -321,6 +321,12 @@ class MainActivity : AppCompatActivity() {
     fun test11() {
         var array = intArrayOf(1,8,6,2,5,4,8,3,7)
         var ret = sMiddle.maxArea(array)
+        Log.d(S.TAG, "answer: ${ret} ")
+
+    }
+    fun test15() {
+        var array = intArrayOf(-1,0,1,2,-1,-4)
+        var ret = sMiddle.threeSum(array)
         Log.d(S.TAG, "answer: ${ret} ")
 
     }
