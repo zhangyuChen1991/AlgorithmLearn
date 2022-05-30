@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.util.Log
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 中等难度
@@ -150,7 +151,7 @@ class S_Middle {
      * 给定一个长度为 n 的整数数组height。有n条垂线，第 i 条线的两个端点是(i, 0)和(i, height[i])。
     找出其中的两条线，使得它们与x轴共同构成的容器可以容纳最多的水。
     返回容器可以储存的最大水量。
-     题意看不懂具体看leetCode，有图。
+    题意看不懂具体看leetCode，有图。
 
      *
      * 最开始想的是找前N条中最大的那个值，记录起始点，然后前N+1条里面的最大值和前n条里面的最大值建立关联关系，这样，找到f(1)就找到f(2),直到f(n)，记录最大值就行了。结果f(n)和f(n-1)之间的关系没找对，错了两次，这个思路可能是行不通。
@@ -159,11 +160,11 @@ class S_Middle {
     fun maxArea(height: IntArray): Int {
         var startIndex = 0
         var endIndex = height.size - 1
-        var answer = areaOfTwoIndex(height,startIndex,endIndex)
-        while (startIndex < endIndex){
-            if (height[startIndex] > height[endIndex]){
+        var answer = areaOfTwoIndex(height, startIndex, endIndex)
+        while (startIndex < endIndex) {
+            if (height[startIndex] > height[endIndex]) {
                 endIndex--
-            }else{
+            } else {
                 startIndex++
             }
             answer = answer.coerceAtLeast(areaOfTwoIndex(height, startIndex, endIndex))
@@ -183,13 +184,13 @@ class S_Middle {
     给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
     注意：答案中不可以包含重复的三元组。
 
-     思路： 没办法就只能暴力解，三重循环。时间复杂度O(N3)这种写出来也没鸟用...
-     先排序，再用双指针，减少一重循环，时间复杂度O(N2)
-     排序之后顺序由小到大，然后遍历，找跟第i个匹配的另外两个值。设置两个指针，在两端(i+1和N-1),两个指针处的值和n[i]求和 sum，
+    思路： 没办法就只能暴力解，三重循环。时间复杂度O(N3)这种写出来也没鸟用...
+    先排序，再用双指针，减少一重循环，时间复杂度O(N2)
+    排序之后顺序由小到大，然后遍历，找跟第i个匹配的另外两个值。设置两个指针，在两端(i+1和N-1),两个指针处的值和n[i]求和 sum，
     sum > 0,右指针左移；sum < 0 左指针右移；
     sum == 0，就找到一组值，然后左指针右移，右指针左移，看还有没有别的匹配上的值，指针移动的时候要判断跟前一个数字一不一样，排除相同的答案。
-     最后遍历完，找完答案
-     注意点，遍历的时候判断i跟i-1的值一不一样，同样的数字不再重复求解
+    最后遍历完，找完答案
+    注意点，遍历的时候判断i跟i-1的值一不一样，同样的数字不再重复求解
      */
     fun threeSum(nums: IntArray): List<List<Int>> {
         val ans: MutableList<List<Int>> = ArrayList()
@@ -214,5 +215,79 @@ class S_Middle {
             }
         }
         return ans
+    }
+
+    /**
+     * 17. 电话号码的字母组合
+     *
+     * 给定一个仅包含数字2-9的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+      给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+     具体题意看leetcode，有图
+
+     思路是拆分任务，递归，找“2345”对应字母的所有排列组合，就是找"2" 和 “345”里面所有的组合的组合，“345”的所有组合就是找3和“45“的所有组合的组合，”45“的所有组合就是找"4"和”5的所有组合“
+     所以递归函数的返回值，是当前这组数字的所有字母组合，返回一个list<String>，当前这组数字的所有字母组合就是当前这组数字的头一个数字 和 剩下的数字的所有组合
+     递归函数的结构大致就是：
+    callSelf(digits):list<String>{
+        restList = callSelf(digits.substring(1))
+        var firstNum
+        var list
+        list 列出firstNum和restList的所有组合
+        return list
+    }
+
+     */
+    fun letterCombinations(digits: String): List<String> {
+        val letterMap = arrayOf(
+            "",  //0
+            "",  //1
+            "abc",  //2
+            "def",  //3
+            "ghi",  //4
+            "jkl",  //5
+            "mno",  //6
+            "pqrs",  //7
+            "tuv",  //8
+            "wxyz" //9
+        )
+        if (digits.isEmpty()) {
+            return ArrayList<String>()
+        }
+
+        return letterCombinations1(digits, letterMap)
+    }
+
+    private fun letterCombinations1(
+        digits: String,
+        letterMap: Array<String>,
+    ): ArrayList<String> {
+
+        var retList = ArrayList<String>()
+        if (digits.isEmpty()) return retList
+
+        if (digits.length == 1) {
+            var str = letterMap[digits[0].toString().toInt()]
+            for (i in str.indices) {
+                retList.add(str[i].toString())
+            }
+            return retList
+        }
+
+        var list = letterCombinations1(digits.substring(1),letterMap)
+
+        var firstNumber = digits[0].toString().toInt()
+        var firstNumberChars = letterMap[firstNumber]
+
+            for (element in firstNumberChars) {
+                for (j in 0 until list.size) {
+                    var sb = StringBuilder()
+                    sb.append(element)
+                    sb.append(list[j])
+                    retList.add(sb.toString())
+
+                    Log.d(S.TAG,"已添加 ${sb.toString()}")
+                }
+            }
+
+        return retList
     }
 }

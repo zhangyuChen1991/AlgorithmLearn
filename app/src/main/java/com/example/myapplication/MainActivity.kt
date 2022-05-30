@@ -10,6 +10,9 @@ import java.lang.StringBuilder
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    var s = S()
+    var sMiddle = S_Middle()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -17,12 +20,17 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test15()
+            test17()
         }
     }
 
-    var s = S()
-    var sMiddle = S_Middle()
+    fun test17() {
+        var ret = sMiddle.letterCombinations("234")
+
+        Log.d(S.TAG, "answer: ${ret} ")
+
+    }
+
     private fun test1() {
         var array: IntArray = intArrayOf(1, 1, 2, 2, 2, 3, 3, 3, 4, 5, 6, 7, 8)
 //        var array : IntArray = intArrayOf(1,1,1,1,1,1,1,1)
