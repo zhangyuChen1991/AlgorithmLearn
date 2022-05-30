@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test17()
+            test22()
         }
     }
 
@@ -28,6 +28,11 @@ class MainActivity : AppCompatActivity() {
         var ret = sMiddle.letterCombinations("234")
 
         Log.d(S.TAG, "answer: ${ret} ")
+
+    }
+    fun test22() {
+//        sMiddle.generateParenthesis(3)
+        sMiddle.generate(3)
 
     }
 
