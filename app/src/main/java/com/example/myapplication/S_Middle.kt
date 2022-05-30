@@ -1,0 +1,293 @@
+package com.example.myapplication
+
+import android.util.Log
+import java.util.*
+import kotlin.collections.ArrayList
+
+/**
+ * 中等难度
+ * Created by zhangyu on 2022/5/25.
+ */
+class S_Middle {
+
+    /**
+     * 2. 两数相加
+     * 两个非空 的链表，表示两个非负的整数。它们每位数字都是按照逆序的方式存储的，并且每个节点只能存储一位数字。
+    请你将两个数相加，并以相同形式返回一个表示和的链表。
+    你可以假设除了数字 0 之外，这两个数都不会以 0开头。
+    具体题意看leetcode，有图
+
+    好像没啥难度，就递归处理每一位，模拟竖式加法。注意最末尾进位导致多出一位的情况，还有对应位数一个为空一个不为空的情况。递归返回条件两个节点的next都为空并且没有进位(两个next都为空且有进位则处理完进位之后返回)
+     */
+    fun addTwoNumbers(l1: ListNode?, l2: ListNode?): ListNode? {
+        if (l1 == null && l2 == null) return null
+        if (null == l1) return l2
+        if (null == l2) return l1
+        addTwoNumbers(l1, l2, 0)
+        return l1
+    }
+
+    /**
+     * j是进位
+     */
+    fun addTwoNumbers(l1: ListNode, l2: ListNode, j: Int) {
+
+        var sum = l1.`val` + l2.`val` + j
+        l1.`val` = sum % 10
+        var nextJ = sum / 10
+
+        if (null == l1.next && null == l2.next) {
+            if (nextJ != 0) {
+                l1.next = ListNode(nextJ)
+            }
+            return
+        } else if (l1.next == null && l2.next != null) {
+            l1.next = ListNode(0)
+        } else if (l1.next != null && l2.next == null) {
+            l2.next = ListNode(0)
+        }
+        addTwoNumbers(l1.next!!, l2.next!!, nextJ)
+    }
+
+    /**
+     * 3. 无重复字符的最长子串
+     *
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的最长子串的长度。
+
+    示例1:
+
+    输入: s = "abcabcbb"
+    输出: 3
+    解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+    示例 2:
+
+    输入: s = "bbbbb"
+    输出: 1
+    解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+    示例 3:
+
+    输入: s = "pwwkew"
+    输出: 3
+    解释: 因为无重复字符的最长子串是"wke"，所以其长度为 3。
+    请注意，你的答案必须是 子串 的长度，"pwke"是一个子序列，不是子串。
+
+    思路：分治法，拆分任务，首先答案肯定是以某个字符来结尾的，从第一个字符开始找，以第一个字符结尾的最长子字符串就是它本身，然后看第二个，如果当前的子串包含当前的字符，就从重复的那个位置开始往后截断，
+    然后加上当前字符，就是以当前字符结尾的最长子串。找出以每个字符结尾的最长子串之后，记录下它们之中最长的那个，返回其长度，就是最终答案。跟从数组中找出和最大的连续子数组思路一样。
+     */
+    fun lengthOfLongestSubstring(s: String): Int {
+        if (s.isEmpty()) return 0
+        var currentMaxSubStr = ""
+        var currSubStr = ""
+
+        for (i in s.indices) {
+            if (currSubStr.contains(s[i])) {
+                var start = currSubStr.indexOf(s[i])
+                currSubStr = currSubStr.substring(start + 1) + s[i]
+            } else {
+                currSubStr += s[i]
+            }
+
+            if (currentMaxSubStr.length < currSubStr.length) {
+                currentMaxSubStr = currSubStr
+            }
+        }
+
+        return currentMaxSubStr.length
+    }
+
+    /**
+     * 5. 最长回文子串
+     *
+     * 思路，拆分任务，最长回文子串的答案肯定是以某个字符为中心，或者以某个相同字符的子串为中心的 一个子串
+     *那就从第一个字符开始遍历，找以以个字符为中心，或者和这个字符相同的子串为中心的 回文子串
+     * 遍历时，记录下当前的最长回文子串
+     * 最后返回结果
+     */
+    fun longestPalindrome(s: String): String {
+
+        var answerStartIndex = -1
+        var answerEndIndex = -1
+        var currMaxLength = 0
+
+        var sameCharStartIndex = 0
+        var sameCharEndIndex = 0
+        var sameCharCount = 1
+        for (i in s.indices) {
+            if (sameCharCount == 1) {
+                sameCharStartIndex = i
+            }
+            if (i < s.length - 1 && s[i] == s[i + 1]) {
+                sameCharCount++
+                continue
+            }
+            sameCharEndIndex = sameCharStartIndex + sameCharCount - 1
+
+            var count = 1
+            //找出以i或者与i相同的连续字符组成的子串 为中心的最长回文子数组
+            while (sameCharStartIndex - count >= 0 && sameCharEndIndex + count < s.length) {
+                if (s[sameCharStartIndex - count] == s[sameCharEndIndex + count]) {
+                    count++
+                } else {
+                    break
+                }
+            }
+            count--
+
+            var l = count * 2 + sameCharCount
+            if (currMaxLength < l) {
+                answerStartIndex = sameCharStartIndex - count
+                answerEndIndex = sameCharEndIndex + count
+                currMaxLength = l
+            }
+
+            sameCharCount = 1
+
+        }
+        return s.substring(answerStartIndex, answerEndIndex + 1)
+    }
+
+    /**
+     * 11. 盛最多水的容器
+     * 给定一个长度为 n 的整数数组height。有n条垂线，第 i 条线的两个端点是(i, 0)和(i, height[i])。
+    找出其中的两条线，使得它们与x轴共同构成的容器可以容纳最多的水。
+    返回容器可以储存的最大水量。
+    题意看不懂具体看leetCode，有图。
+
+     *
+     * 最开始想的是找前N条中最大的那个值，记录起始点，然后前N+1条里面的最大值和前n条里面的最大值建立关联关系，这样，找到f(1)就找到f(2),直到f(n)，记录最大值就行了。结果f(n)和f(n-1)之间的关系没找对，错了两次，这个思路可能是行不通。
+     * 参考的精选答案的思路，起止截点从两端往中间移动，因为面积取决于两者中的短板，所以移动长板的话，短板要么不变，要么变小，长度还减一，面积一定变小。每次都移动短的那个，向内靠，直到两指针相遇，记录最大值
+     */
+    fun maxArea(height: IntArray): Int {
+        var startIndex = 0
+        var endIndex = height.size - 1
+        var answer = areaOfTwoIndex(height, startIndex, endIndex)
+        while (startIndex < endIndex) {
+            if (height[startIndex] > height[endIndex]) {
+                endIndex--
+            } else {
+                startIndex++
+            }
+            answer = answer.coerceAtLeast(areaOfTwoIndex(height, startIndex, endIndex))
+            Log.d(S.TAG, "answer: ${answer}, startIndex:$startIndex, endIndex:$endIndex")
+
+        }
+        return answer
+    }
+
+
+    private fun areaOfTwoIndex(height: IntArray, p1: Int, p2: Int): Int {
+        return (p2 - p1) * height[p1].coerceAtMost(height[p2])
+    }
+
+    /**
+     * 15. 三数之和
+    给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
+    注意：答案中不可以包含重复的三元组。
+
+    思路： 没办法就只能暴力解，三重循环。时间复杂度O(N3)这种写出来也没鸟用...
+    先排序，再用双指针，减少一重循环，时间复杂度O(N2)
+    排序之后顺序由小到大，然后遍历，找跟第i个匹配的另外两个值。设置两个指针，在两端(i+1和N-1),两个指针处的值和n[i]求和 sum，
+    sum > 0,右指针左移；sum < 0 左指针右移；
+    sum == 0，就找到一组值，然后左指针右移，右指针左移，看还有没有别的匹配上的值，指针移动的时候要判断跟前一个数字一不一样，排除相同的答案。
+    最后遍历完，找完答案
+    注意点，遍历的时候判断i跟i-1的值一不一样，同样的数字不再重复求解
+     */
+    fun threeSum(nums: IntArray): List<List<Int>> {
+        val ans: MutableList<List<Int>> = ArrayList()
+        val len: Int = nums.size
+        if (nums == null || len < 3) return ans
+        nums.sort() // 排序
+
+        for (i in 0 until len) {
+            if (nums[i] > 0) break // 如果当前数字大于0，则三数之和一定大于0，所以结束循环
+            if (i > 0 && nums[i] === nums[i - 1]) continue  // 去重
+            var L = i + 1
+            var R = len - 1
+            while (L < R) {
+                val sum = nums[i] + nums[L] + nums[R]
+                if (sum == 0) {
+                    ans.add(listOf(nums[i], nums[L], nums[R]))
+                    while (L < R && nums[L] === nums[L + 1]) L++ // 去重
+                    while (L < R && nums[R] === nums[R - 1]) R-- // 去重
+                    L++
+                    R--
+                } else if (sum < 0) L++ else if (sum > 0) R--
+            }
+        }
+        return ans
+    }
+
+    /**
+     * 17. 电话号码的字母组合
+     *
+     * 给定一个仅包含数字2-9的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+      给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+     具体题意看leetcode，有图
+
+     思路是拆分任务，递归，找“2345”对应字母的所有排列组合，就是找"2" 和 “345”里面所有的组合的组合，“345”的所有组合就是找3和“45“的所有组合的组合，”45“的所有组合就是找"4"和”5的所有组合“
+     所以递归函数的返回值，是当前这组数字的所有字母组合，返回一个list<String>，当前这组数字的所有字母组合就是当前这组数字的头一个数字 和 剩下的数字的所有组合
+     递归函数的结构大致就是：
+    callSelf(digits):list<String>{
+        restList = callSelf(digits.substring(1))
+        var firstNum
+        var list
+        list 列出firstNum和restList的所有组合
+        return list
+    }
+
+     */
+    fun letterCombinations(digits: String): List<String> {
+        val letterMap = arrayOf(
+            "",  //0
+            "",  //1
+            "abc",  //2
+            "def",  //3
+            "ghi",  //4
+            "jkl",  //5
+            "mno",  //6
+            "pqrs",  //7
+            "tuv",  //8
+            "wxyz" //9
+        )
+        if (digits.isEmpty()) {
+            return ArrayList<String>()
+        }
+
+        return letterCombinations1(digits, letterMap)
+    }
+
+    private fun letterCombinations1(
+        digits: String,
+        letterMap: Array<String>,
+    ): ArrayList<String> {
+
+        var retList = ArrayList<String>()
+        if (digits.isEmpty()) return retList
+
+        if (digits.length == 1) {
+            var str = letterMap[digits[0].toString().toInt()]
+            for (i in str.indices) {
+                retList.add(str[i].toString())
+            }
+            return retList
+        }
+
+        var list = letterCombinations1(digits.substring(1),letterMap)
+
+        var firstNumber = digits[0].toString().toInt()
+        var firstNumberChars = letterMap[firstNumber]
+
+            for (element in firstNumberChars) {
+                for (j in 0 until list.size) {
+                    var sb = StringBuilder()
+                    sb.append(element)
+                    sb.append(list[j])
+                    retList.add(sb.toString())
+
+                    Log.d(S.TAG,"已添加 ${sb.toString()}")
+                }
+            }
+
+        return retList
+    }
+}
