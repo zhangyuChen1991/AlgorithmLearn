@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.util.Log
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.min
 
 /**
  * 中等难度
@@ -359,4 +360,66 @@ class S_Middle {
     //这种写法，递归一般都是在for循环的条件里面的
     //括号那道题稍微复杂一点，因为f(n)和f(n-1)的关系比键盘那道题难找，但是这种题型只要找到了f(n)和f(n-1)的关系，后面的
     //套路都是一样的，都是for循环遍历n与f(n-1)的排列组合，f(n-1)的值通过递归来获得。
+
+
+    /**
+     * 31. 下一个排列
+     *
+     * 这个题的意思大概就是给几个数字，它们随意拼成一个数n，用这个几个数拼出下一个数，它的大小比刚好比n大，但是比其他比n大的数都小
+     * 比如给个123,比123大又比其他比123大的数都小，就是132
+     * 123456,就是123465,其他不管是213456还是123645等等都比123465大。就是贴着边找到刚好比这个数大的数
+     *
+     *
+     * 找规律容易想漏，最开始想的是给了一个数，从右往左找，比左边大就略过，比左边小就把这一位i与i-1的值互换。
+     * 两个漏洞，
+     * 漏洞1.不应该是i与i-1互换，而应该是i-1后面比i-1大的最小的那个数跟i-1互换，比如 123465，不是4跟6互换，而是4跟5互换
+     * 漏洞2.互换之后并不是就结束了，还要将i-1后边的数字从小到大排序才行，比如123465，5跟4换了，是123564，但是答案应该是123546.
+     * 最后还有找不到i比i-1大的位置，说明这个数字是倒序的，比如54321这种，倒叙一遍就行了。
+     *
+     * 最后代码就是落实上面的思路，感觉没右什么算法技巧在里面，就是考验思维的缜密。这题两个漏洞是看了精选答案之后才意识到的，面试要是现做这个题是做不过的。
+     */
+    fun nextPermutation(nums: IntArray): Unit {
+
+        for (i in nums.size - 1 downTo  1){
+            //从后往前找，找[i]比[i-1]大的位置
+            if (nums[i] > nums[i-1]){
+                //找i后面最小的数，跟i交换
+                var minIndex = i
+                for (j in i + 1 .. nums.size - 1){
+                    if (nums[j] < nums[minIndex] && nums[j] > nums[i - 1]){
+                        minIndex = j
+                    }
+                }
+                var temp = nums[i - 1]
+                nums[i - 1] =  nums[minIndex]
+                nums[minIndex] = temp
+
+                //将i-1位置之后的数从小到大排序
+                for (p in i .. nums.size - 1){
+                    for (q in p + 1 .. nums.size - 1){
+                        if (nums[p] > nums[q]){
+                            var temp = nums[p]
+                            nums[p] =  nums[q]
+                            nums[q] = temp
+                        }
+                    }
+                }
+                printArray(nums)
+                return
+            }
+        }
+
+        //如果没有找到[i]比[i-1]大的位置,说明这个序列时从大到小排列的，进行倒序
+        for (k in 0 until  nums.size /2){
+            var temp = nums[k]
+            nums[k] =  nums[nums.size - k - 1]
+            nums[nums.size - k - 1] = temp
+        }
+    }
+
+    fun printArray(nums: IntArray){
+        for (element in nums) {
+            Log.d(S.TAG, "${element}")
+        }
+    }
 }
