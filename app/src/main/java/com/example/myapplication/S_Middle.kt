@@ -383,7 +383,7 @@ class S_Middle {
         for (i in nums.size - 1 downTo  1){
             //从后往前找，找[i]比[i-1]大的位置
             if (nums[i] > nums[i-1]){
-                //找i后面最小的数，跟i交换
+                //找i后面比[i]大的最小的数，跟i交换
                 var minIndex = i
                 for (j in i + 1 .. nums.size - 1){
                     if (nums[j] < nums[minIndex] && nums[j] > nums[i - 1]){
@@ -421,5 +421,87 @@ class S_Middle {
         for (element in nums) {
             Log.d(S.TAG, "${element}")
         }
+    }
+
+    /**
+     * 33. 搜索旋转排序数组
+     *
+     *整数数组 nums 按升序排列，数组中的值 互不相同 。
+    在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为[4,5,6,7,0,1,2] 。
+    给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回-1。
+
+    示例 1：
+    输入：nums = [4,5,6,7,0,1,2], target = 0
+    输出：4
+
+     这个题是在二分查找法上面的变换，把升序数组分成了两截：
+    左半段
+       /
+      /
+     /
+           /
+          /
+         /
+      右半段
+     这样子纯靠middle的值和target比大小就没法知道该移动起点还是移动终点了。
+
+     最开始想的时候，想到了关键点，就是这样旋转之后，右半段最大值也是比左半段小的。所以通过对nums[0]和target的值就知道答案在左半段还是右半段，同样也可以判断出middle是在左半段还是右半段。
+     后面就弄晕了，没有一个清晰的思路。其实这里只要分情况处理一下就好了，如果middle 和target都在同一段，那就按照正常的二分查找来对比、移动start或者end就行了，
+     特殊情况是，target在左半段，middle在右半段，这种就把end移动到middle - 1
+     还有 target在右半段，middle在左半段，这种就把start移动到middle + 1
+     就这四种情况，两种情况是middle和target都在同一段，常规处理，两种情况是middle和target分别在左右两段，分别判断应该移start还是移end
+
+     这里要夯实一下二分查找的基本功，写的时候错了好几次。
+     定律：
+     1.偶数个的数组，middle命中 中间两个的偏左那一个。    [0,1,2,3]就命中 1；   [0,1]就命中 0
+     2.start和end移动的时候，一定要middle + 1或者middle - 1,否则，当target在右边界的时候，可能会找不到，因为只剩两个的时候，middle永远命中左边那个。
+     3.循环的条件是start <= end，一定要加等号，两个相等的时候，就是去找最后一个数的时候，去掉等号，最后一个数就会找漏
+     4.按上面那样做，middle最后一定会命中target，除非没有值，就会start > end跳出循环
+     *
+     */
+    fun search(nums: IntArray, target: Int): Int {
+        var start = 0
+        var end = nums.size  - 1
+        while (start <= end){
+            var middle = (start + end) / 2
+            if (nums[middle] == target){
+                return middle
+            }
+
+            if (target > nums[0]){
+                //答案在左半段
+                if (nums[middle] < nums[0]){
+                    //如果middle在右半段，end
+                    end = middle - 1
+                }else {
+                    //如果middle在左半段。正常二分法
+                    if (nums[middle] <target){
+                        start = middle + 1
+                    }else{
+                        end = middle - 1
+                    }
+                }
+
+
+            }else if(target < nums[0]){
+                //答案在右半段
+                if (nums[middle] >= nums[0]){
+                    //如果middle在左半段，start往右移动
+                    start = middle + 1
+                }else {
+                    //如果middle在右半段。正常二分法
+                    if (nums[middle] <target){
+                        start = middle + 1
+                    }else{
+                        end = middle - 1
+                    }
+                }
+
+            }else{
+                return 0
+            }
+        }
+
+        return -1
     }
 }
