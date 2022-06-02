@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test33()
+            test34()
         }
     }
 
@@ -39,6 +39,14 @@ class MainActivity : AppCompatActivity() {
     private fun test31() {
         var array: IntArray = intArrayOf(2,3,1)
         var ret = sMiddle.nextPermutation(array)
+    }
+
+    private fun test34() {
+        var array: IntArray = intArrayOf(1)
+//        var array: IntArray = intArrayOf(4,5,6,7,0,1,2)
+//        var array: IntArray = intArrayOf(5,5,6,6,6,7,7,8,8,8,9)
+        var ret = sMiddle.searchRange(array,0)
+        sMiddle.printArray(ret)
     }
 
     private fun test33() {

@@ -418,8 +418,10 @@ class S_Middle {
     }
 
     fun printArray(nums: IntArray){
+        var sb = java.lang.StringBuilder()
         for (element in nums) {
-            Log.d(S.TAG, "${element}")
+            sb.append(", $element ")
+            Log.d(S.TAG, sb.toString())
         }
     }
 
@@ -503,5 +505,51 @@ class S_Middle {
         }
 
         return -1
+    }
+
+    /**
+     * 34. 在排序数组中查找元素的第一个和最后一个位置
+     * 
+     * 给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+    如果数组中不存在目标值 target，返回[-1, -1]。
+
+    进阶：
+    你可以设计并实现时间复杂度为O(log n)的算法解决此问题吗？
+
+    示例 1：
+    输入：nums = [5,7,7,8,8,10], target = 8
+    输出：[3,4]
+
+     */
+    fun searchRange(nums: IntArray, target: Int): IntArray {
+        var start = 0
+        var end = nums.size - 1
+        while (start <= end){
+            var middle = (start + end) / 2
+            if (nums[middle] == target){
+                var preIndex = middle - 1
+                var afterIndex = middle + 1
+
+                while (preIndex >= 0 && nums[preIndex] == target){
+                    preIndex--
+                }
+                while (afterIndex < nums.size && nums[afterIndex] == target){
+                    afterIndex++
+                }
+
+                preIndex++
+                afterIndex--
+
+                return intArrayOf(preIndex,afterIndex)
+            }
+
+            if (nums[middle] > target){
+                end = middle - 1
+            }
+            if (nums[middle] < target){
+                start = middle + 1
+            }
+        }
+        return intArrayOf(-1,-1)
     }
 }
