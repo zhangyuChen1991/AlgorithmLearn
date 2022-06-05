@@ -2,8 +2,6 @@ package com.example.myapplication
 
 import android.util.Log
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.math.min
 
 /**
  * 中等难度
@@ -222,18 +220,18 @@ class S_Middle {
      * 17. 电话号码的字母组合
      *
      * 给定一个仅包含数字2-9的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
-      给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
-     具体题意看leetcode，有图
+    给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+    具体题意看leetcode，有图
 
-     思路是拆分任务，递归，找“2345”对应字母的所有排列组合，就是找"2" 和 “345”里面所有的组合的组合，“345”的所有组合就是找3和“45“的所有组合的组合，”45“的所有组合就是找"4"和”5的所有组合“
-     所以递归函数的返回值，是当前这组数字的所有字母组合，返回一个list<String>，当前这组数字的所有字母组合就是当前这组数字的头一个数字 和 剩下的数字的所有组合
-     递归函数的结构大致就是：
+    思路是拆分任务，递归，找“2345”对应字母的所有排列组合，就是找"2" 和 “345”里面所有的组合的组合，“345”的所有组合就是找3和“45“的所有组合的组合，”45“的所有组合就是找"4"和”5的所有组合“
+    所以递归函数的返回值，是当前这组数字的所有字母组合，返回一个list<String>，当前这组数字的所有字母组合就是当前这组数字的头一个数字 和 剩下的数字的所有组合
+    递归函数的结构大致就是：
     callSelf(digits):list<String>{
-        restList = callSelf(digits.substring(1))
-        var firstNum
-        var list
-        list 列出firstNum和restList的所有组合
-        return list
+    restList = callSelf(digits.substring(1))
+    var firstNum
+    var list
+    list 列出firstNum和restList的所有组合
+    return list
     }
 
      */
@@ -273,21 +271,21 @@ class S_Middle {
             return retList
         }
 
-        var list = letterCombinations1(digits.substring(1),letterMap)
+        var list = letterCombinations1(digits.substring(1), letterMap)
 
         var firstNumber = digits[0].toString().toInt()
         var firstNumberChars = letterMap[firstNumber]
 
-            for (element in firstNumberChars) {
-                for (j in 0 until list.size) {
-                    var sb = StringBuilder()
-                    sb.append(element)
-                    sb.append(list[j])
-                    retList.add(sb.toString())
+        for (element in firstNumberChars) {
+            for (j in 0 until list.size) {
+                var sb = StringBuilder()
+                sb.append(element)
+                sb.append(list[j])
+                retList.add(sb.toString())
 
-                    Log.d(S.TAG,"已添加 ${sb.toString()}")
-                }
+                Log.d(S.TAG, "已添加 ${sb.toString()}")
             }
+        }
 
         return retList
     }
@@ -311,8 +309,8 @@ class S_Middle {
      * 一共三重循环
      *
      */
-    fun generateParenthesis(n: Int):List<String>? {
-       return generate(n)
+    fun generateParenthesis(n: Int): List<String>? {
+        return generate(n)
     }
 
     /**
@@ -344,7 +342,7 @@ class S_Middle {
             }
         }
         cache[n] = ans
-        Log.d(S.TAG,"generate n=$n, ${ans.toString()}")
+        Log.d(S.TAG, "generate n=$n, ${ans.toString()}")
 
         return ans
     }
@@ -380,26 +378,26 @@ class S_Middle {
      */
     fun nextPermutation(nums: IntArray): Unit {
 
-        for (i in nums.size - 1 downTo  1){
+        for (i in nums.size - 1 downTo 1) {
             //从后往前找，找[i]比[i-1]大的位置
-            if (nums[i] > nums[i-1]){
+            if (nums[i] > nums[i - 1]) {
                 //找i后面比[i]大的最小的数，跟i交换
                 var minIndex = i
-                for (j in i + 1 .. nums.size - 1){
-                    if (nums[j] < nums[minIndex] && nums[j] > nums[i - 1]){
+                for (j in i + 1..nums.size - 1) {
+                    if (nums[j] < nums[minIndex] && nums[j] > nums[i - 1]) {
                         minIndex = j
                     }
                 }
                 var temp = nums[i - 1]
-                nums[i - 1] =  nums[minIndex]
+                nums[i - 1] = nums[minIndex]
                 nums[minIndex] = temp
 
                 //将i-1位置之后的数从小到大排序
-                for (p in i .. nums.size - 1){
-                    for (q in p + 1 .. nums.size - 1){
-                        if (nums[p] > nums[q]){
+                for (p in i..nums.size - 1) {
+                    for (q in p + 1..nums.size - 1) {
+                        if (nums[p] > nums[q]) {
                             var temp = nums[p]
-                            nums[p] =  nums[q]
+                            nums[p] = nums[q]
                             nums[q] = temp
                         }
                     }
@@ -410,20 +408,47 @@ class S_Middle {
         }
 
         //如果没有找到[i]比[i-1]大的位置,说明这个序列时从大到小排列的，进行倒序
-        for (k in 0 until  nums.size /2){
+        for (k in 0 until nums.size / 2) {
             var temp = nums[k]
-            nums[k] =  nums[nums.size - k - 1]
+            nums[k] = nums[nums.size - k - 1]
             nums[nums.size - k - 1] = temp
         }
     }
 
-    fun printArray(nums: IntArray){
+    fun printArray(nums: IntArray) {
         var sb = java.lang.StringBuilder()
         for (element in nums) {
             sb.append(", $element ")
             Log.d(S.TAG, sb.toString())
         }
     }
+
+    fun printList(nums: ArrayList<Int>) {
+        var sb = java.lang.StringBuilder()
+        for (element in nums) {
+            sb.append(", $element ")
+            Log.d(S.TAG, sb.toString())
+        }
+    }
+
+    fun listStr(nums: ArrayList<Int>): String {
+        var sb = java.lang.StringBuilder()
+        for (i in 0 until nums.size) {
+            if (i == 0) {
+                sb.append("[")
+            }
+            sb.append("${nums[i]}")
+            if (i < nums.size - 1) {
+                sb.append(", ")
+            }
+            if (i == nums.size - 1) {
+                sb.append("]")
+            }
+
+        }
+        return sb.toString()
+    }
+
 
     /**
      * 33. 搜索旋转排序数组
@@ -436,70 +461,70 @@ class S_Middle {
     输入：nums = [4,5,6,7,0,1,2], target = 0
     输出：4
 
-     这个题是在二分查找法上面的变换，把升序数组分成了两截：
+    这个题是在二分查找法上面的变换，把升序数组分成了两截：
     左半段
-       /
-      /
-     /
-           /
-          /
-         /
-      右半段
-     这样子纯靠middle的值和target比大小就没法知道该移动起点还是移动终点了。
+    /
+    /
+    /
+    /
+    /
+    /
+    右半段
+    这样子纯靠middle的值和target比大小就没法知道该移动起点还是移动终点了。
 
-     最开始想的时候，想到了关键点，就是这样旋转之后，右半段最大值也是比左半段小的。所以通过对nums[0]和target的值就知道答案在左半段还是右半段，同样也可以判断出middle是在左半段还是右半段。
-     后面就弄晕了，没有一个清晰的思路。其实这里只要分情况处理一下就好了，如果middle 和target都在同一段，那就按照正常的二分查找来对比、移动start或者end就行了，
-     特殊情况是，target在左半段，middle在右半段，这种就把end移动到middle - 1
-     还有 target在右半段，middle在左半段，这种就把start移动到middle + 1
-     就这四种情况，两种情况是middle和target都在同一段，常规处理，两种情况是middle和target分别在左右两段，分别判断应该移start还是移end
+    最开始想的时候，想到了关键点，就是这样旋转之后，右半段最大值也是比左半段小的。所以通过对nums[0]和target的值就知道答案在左半段还是右半段，同样也可以判断出middle是在左半段还是右半段。
+    后面就弄晕了，没有一个清晰的思路。其实这里只要分情况处理一下就好了，如果middle 和target都在同一段，那就按照正常的二分查找来对比、移动start或者end就行了，
+    特殊情况是，target在左半段，middle在右半段，这种就把end移动到middle - 1
+    还有 target在右半段，middle在左半段，这种就把start移动到middle + 1
+    就这四种情况，两种情况是middle和target都在同一段，常规处理，两种情况是middle和target分别在左右两段，分别判断应该移start还是移end
 
-     这里要夯实一下二分查找的基本功，写的时候错了好几次。
-     定律：
-     1.偶数个的数组，middle命中 中间两个的偏左那一个。    [0,1,2,3]就命中 1；   [0,1]就命中 0
-     2.start和end移动的时候，一定要middle + 1或者middle - 1,否则，当target在右边界的时候，可能会找不到，因为只剩两个的时候，middle永远命中左边那个。
-     3.循环的条件是start <= end，一定要加等号，两个相等的时候，就是去找最后一个数的时候，去掉等号，最后一个数就会找漏
-     4.按上面那样做，middle最后一定会命中target，除非没有值，就会start > end跳出循环
+    这里要夯实一下二分查找的基本功，写的时候错了好几次。
+    定律：
+    1.偶数个的数组，middle命中 中间两个的偏左那一个。    [0,1,2,3]就命中 1；   [0,1]就命中 0
+    2.start和end移动的时候，一定要middle + 1或者middle - 1,否则，当target在右边界的时候，可能会找不到，因为只剩两个的时候，middle永远命中左边那个。
+    3.循环的条件是start <= end，一定要加等号，两个相等的时候，就是去找最后一个数的时候，去掉等号，最后一个数就会找漏
+    4.按上面那样做，middle最后一定会命中target，除非没有值，就会start > end跳出循环
      *
      */
     fun search(nums: IntArray, target: Int): Int {
         var start = 0
-        var end = nums.size  - 1
-        while (start <= end){
+        var end = nums.size - 1
+        while (start <= end) {
             var middle = (start + end) / 2
-            if (nums[middle] == target){
+            if (nums[middle] == target) {
                 return middle
             }
 
-            if (target > nums[0]){
+            if (target > nums[0]) {
                 //答案在左半段
-                if (nums[middle] < nums[0]){
+                if (nums[middle] < nums[0]) {
                     //如果middle在右半段，end
                     end = middle - 1
-                }else {
+                } else {
                     //如果middle在左半段。正常二分法
-                    if (nums[middle] <target){
+                    if (nums[middle] < target) {
                         start = middle + 1
-                    }else{
+                    } else {
                         end = middle - 1
                     }
                 }
 
 
-            }else if(target < nums[0]){
+            } else if (target < nums[0]) {
                 //答案在右半段
-                if (nums[middle] >= nums[0]){
+                if (nums[middle] >= nums[0]) {
                     //如果middle在左半段，start往右移动
                     start = middle + 1
-                }else {
+                } else {
                     //如果middle在右半段。正常二分法
-                    if (nums[middle] <target){
+                    if (nums[middle] < target) {
                         start = middle + 1
-                    }else{
+                    } else {
                         end = middle - 1
                     }
                 }
 
-            }else{
+            } else {
                 return 0
             }
         }
@@ -509,7 +534,7 @@ class S_Middle {
 
     /**
      * 34. 在排序数组中查找元素的第一个和最后一个位置
-     * 
+     *
      * 给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
     如果数组中不存在目标值 target，返回[-1, -1]。
 
@@ -524,32 +549,138 @@ class S_Middle {
     fun searchRange(nums: IntArray, target: Int): IntArray {
         var start = 0
         var end = nums.size - 1
-        while (start <= end){
+        while (start <= end) {
             var middle = (start + end) / 2
-            if (nums[middle] == target){
+            if (nums[middle] == target) {
                 var preIndex = middle - 1
                 var afterIndex = middle + 1
 
-                while (preIndex >= 0 && nums[preIndex] == target){
+                while (preIndex >= 0 && nums[preIndex] == target) {
                     preIndex--
                 }
-                while (afterIndex < nums.size && nums[afterIndex] == target){
+                while (afterIndex < nums.size && nums[afterIndex] == target) {
                     afterIndex++
                 }
 
                 preIndex++
                 afterIndex--
 
-                return intArrayOf(preIndex,afterIndex)
+                return intArrayOf(preIndex, afterIndex)
             }
 
-            if (nums[middle] > target){
+            if (nums[middle] > target) {
                 end = middle - 1
             }
-            if (nums[middle] < target){
+            if (nums[middle] < target) {
                 start = middle + 1
             }
         }
-        return intArrayOf(-1,-1)
+
+        return intArrayOf(-1, -1)
     }
+
+    /**
+     * 39. 组合总和
+    给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+    candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。
+    对于给定的输入，保证和为 target 的不同组合数少于 150 个。
+
+    示例 1：
+    输入：candidates = [2,3,6,7], target = 7
+    输出：[[2,2,3],[7]]
+    解释：
+    2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。
+    7 也是一个候选， 7 = 7 。
+    仅有这两种组合。
+
+    示例 2：
+    输入: candidates = [2,3,5], target = 8
+    输出: [[2,2,2,2],[2,3,3],[3,5]]
+     */
+    fun combinationSum(candidates: IntArray, target: Int): List<List<Int>> {
+
+        val len: Int = candidates.size
+        val res: List<List<Int>> = ArrayList()
+        if (len == 0) {
+            return res
+        }
+
+        val path: ArrayList<Int> = ArrayList()
+        dfs(candidates, 0, len, target, path, res as ArrayList<ArrayList<Int>>)
+//        dfs1(candidates, 0, target, path, res as ArrayList<ArrayList<Int>>)
+        return res
+
+    }
+
+    /**
+     * 精选答案的算法，for循环里面递归，直接看这个不太好理解
+     *
+     * 直接搜有道云笔记：【39. 组合总和 回溯，循环里面调用递归，总结】，有图文详细的解释和回溯算法的总结.
+     */
+    private fun dfs(
+        candidates: IntArray,
+        begin: Int,
+        len: Int,
+        target: Int,
+        path: ArrayList<Int>,
+        res: ArrayList<ArrayList<Int>>,
+    ) {
+        Log.d(S.TAG,"dfs： begin：${begin}, len ${len}, target ${target}, path ${listStr(path)}")
+
+        // target 为负数和 0 的时候不再产生新的孩子结点
+        if (target < 0) {
+            Log.i(S.TAG,"无答案： ${listStr(path)}")
+            return
+        }
+        if (target == 0) {
+            Log.w(S.TAG,"答案： ${listStr(path)}")
+            res.add(ArrayList(path))
+            return
+        }
+
+        // 重点理解这里从 begin 开始搜索的语意
+        for (i in begin until len) {
+            path.add(candidates[i])
+
+            // 注意：由于每一个元素可以重复使用，下一轮搜索的起点依然是 i，这里非常容易弄错
+            dfs(candidates, i, len, target - candidates[i], path, res)
+
+            // 状态重置
+            path.remove(path[path.size - 1])
+        }
+    }
+
+    private fun dfs1(
+        candidates: IntArray,
+        start: Int,
+        target: Int,
+        path: ArrayList<Int>,
+        res: ArrayList<ArrayList<Int>>,
+    ) {
+        Log.d(S.TAG,"dfs： start：${start}, target ${target}, path ${listStr(path)}")
+
+        if (start >= candidates.size) {
+            Log.i(S.TAG,"到末尾了，无答案： ${listStr(path)}")
+            return
+        }
+        // target 为负数和 0 的时候不再产生新的孩子结点
+        if (target < 0) {
+            Log.i(S.TAG,"target < 0, 无答案： ${listStr(path)}")
+            return
+        }
+        if (target == 0) {
+            Log.w(S.TAG,"答案： ${listStr(path)}")
+            res.add(ArrayList(path))
+            return
+        }
+
+        var nextTarget = target - candidates[start]
+        path.add(candidates[start])
+        dfs1(candidates,start,nextTarget,path,res)
+        path.removeLast()
+
+        var nextStart = start + 1
+        dfs1(candidates,nextStart,target,path,res)
+    }
+
 }

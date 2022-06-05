@@ -20,8 +20,15 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test34()
+            test39()
         }
+    }
+
+    private fun test39() {
+        var array: IntArray = intArrayOf(3,5,8)
+//        var array: IntArray = intArrayOf(2,3,5)
+//        var array: IntArray = intArrayOf(5,5,6,6,6,7,7,8,8,8,9)
+        var ret = sMiddle.combinationSum(array,11)
     }
 
     fun test17() {
