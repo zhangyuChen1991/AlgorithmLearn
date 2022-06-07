@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.util.Log
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 中等难度
@@ -431,7 +432,7 @@ class S_Middle {
         }
     }
 
-    fun listStr(nums: ArrayList<Int>): String {
+    fun listStr(nums: List<Int>): String {
         var sb = java.lang.StringBuilder()
         for (i in 0 until nums.size) {
             if (i == 0) {
@@ -625,15 +626,15 @@ class S_Middle {
         path: ArrayList<Int>,
         res: ArrayList<ArrayList<Int>>,
     ) {
-        Log.d(S.TAG,"dfs： begin：${begin}, len ${len}, target ${target}, path ${listStr(path)}")
+        Log.d(S.TAG, "dfs： begin：${begin}, len ${len}, target ${target}, path ${listStr(path)}")
 
         // target 为负数和 0 的时候不再产生新的孩子结点
         if (target < 0) {
-            Log.i(S.TAG,"无答案： ${listStr(path)}")
+            Log.i(S.TAG, "无答案： ${listStr(path)}")
             return
         }
         if (target == 0) {
-            Log.w(S.TAG,"答案： ${listStr(path)}")
+            Log.w(S.TAG, "答案： ${listStr(path)}")
             res.add(ArrayList(path))
             return
         }
@@ -657,30 +658,76 @@ class S_Middle {
         path: ArrayList<Int>,
         res: ArrayList<ArrayList<Int>>,
     ) {
-        Log.d(S.TAG,"dfs： start：${start}, target ${target}, path ${listStr(path)}")
+        Log.d(S.TAG, "dfs： start：${start}, target ${target}, path ${listStr(path)}")
 
         if (start >= candidates.size) {
-            Log.i(S.TAG,"到末尾了，无答案： ${listStr(path)}")
+            Log.i(S.TAG, "到末尾了，无答案： ${listStr(path)}")
             return
         }
         // target 为负数和 0 的时候不再产生新的孩子结点
         if (target < 0) {
-            Log.i(S.TAG,"target < 0, 无答案： ${listStr(path)}")
+            Log.i(S.TAG, "target < 0, 无答案： ${listStr(path)}")
             return
         }
         if (target == 0) {
-            Log.w(S.TAG,"答案： ${listStr(path)}")
+            Log.w(S.TAG, "答案： ${listStr(path)}")
             res.add(ArrayList(path))
             return
         }
 
         var nextTarget = target - candidates[start]
         path.add(candidates[start])
-        dfs1(candidates,start,nextTarget,path,res)
+        dfs1(candidates, start, nextTarget, path, res)
         path.removeLast()
 
         var nextStart = start + 1
-        dfs1(candidates,nextStart,target,path,res)
+        dfs1(candidates, nextStart, target, path, res)
     }
 
+    /**
+     * 46. 全排列
+     */
+    fun permute(nums: IntArray): List<List<Int>> {
+        var ret = ArrayList<ArrayList<Int>>()
+        if (nums.isEmpty()) {
+            return ret
+        }
+
+        //数组转成链表，好操作，因为后续答案list每加一个节点，就要从数据list里移除一个节点
+        var linkedList = LinkedList<Int>()
+        for (j in nums.indices) {
+            linkedList.add(nums[j])
+        }
+
+        for (i in linkedList.indices) {
+            var list = ArrayList<Int>()
+            permute(linkedList, linkedList[i], list, ret)
+        }
+        return ret
+    }
+
+    fun permute(
+        nums: LinkedList<Int>,
+        currentElement: Int,
+        list: ArrayList<Int>,
+        ret: ArrayList<ArrayList<Int>>,
+    ) {
+        list.add(currentElement)
+        var newNums = LinkedList(nums)
+        newNums.remove(currentElement)
+
+//        Log.d(S.TAG,"permute： currentElement：${currentElement}, newNums ${listStr(newNums)}, path ${listStr(list)}")
+
+        if (newNums.isEmpty()) {
+            //探寻到头了
+            ret.add(ArrayList(list))
+//            Log.w(S.TAG, "permute： 答案${listStr(list)}")
+            return
+        }
+
+        for (i in newNums.indices) {
+            permute(newNums, newNums[i], list, ret)
+            list.removeAt(list.size - 1)
+        }
+    }
 }
