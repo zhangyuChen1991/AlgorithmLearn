@@ -2,7 +2,6 @@ package com.example.myapplication
 
 import android.util.Log
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * 中等难度
@@ -420,7 +419,13 @@ class S_Middle {
         var sb = java.lang.StringBuilder()
         for (element in nums) {
             sb.append(", $element ")
-            Log.d(S.TAG, sb.toString())
+        }
+        Log.d(S.TAG, sb.toString())
+    }
+
+    fun printMatric(matric: Array<IntArray>) {
+        for (i in matric.indices) {
+            printArray(matric[i])
         }
     }
 
@@ -730,4 +735,105 @@ class S_Middle {
             list.removeAt(list.size - 1)
         }
     }
+
+    /**
+     * 48. 旋转图像
+     *
+     * 给定一个 n×n 的二维矩阵matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+    你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
+
+     1 2 3
+     4 5 6
+     7 8 9
+     转换成：
+     7 4 1
+     8 5 2
+     9 6 3
+
+     思路，就找规律，(x,y)与旋转之后的点(x1,y1), x1 = size - y - 1; y1 = x; 同时左上角的点换到右上角，右上角的点就会换到右下角，然后到左下角，左上角，四个点同时轮换
+     用一个map存起来哪些点换过了，然后下次遍历到直接跳过。
+    按这个规律两重遍历就行了。
+     打败了7%的提交.....
+     *
+     */
+    fun rotate(matrix: Array<IntArray>): Unit {
+//        printMatric(matrix)
+        if (matrix.isEmpty() || matrix.size == 1) return
+        var size = matrix.size
+        var rotateRecord = HashMap<String, Boolean>()
+        for (x in matrix.indices) {
+            var array = matrix[x]
+            for (y in array.indices) {
+                var key = "$x-$y"
+                if (rotateRecord.containsKey(key) && rotateRecord[key]!!) {
+                    continue
+                }
+
+                var x1 = size - y - 1
+                var y1 = x
+
+                var x2 = size - y1 - 1
+                var y2 = x1
+
+                var x3 = size - y2 - 1
+                var y3 = x2
+
+
+                Log.d(S.TAG, "$x-$y , $x1-$y1 , $x2-$y2 , $x3-$y3 轮换")
+
+                var temp = -1
+
+                temp = matrix[x][y]
+                matrix[x][y] = matrix[x1][y1]
+                matrix[x1][y1] = matrix[x2][y2]
+                matrix[x2][y2] = matrix[x3][y3]
+                matrix[x3][y3] = temp
+
+                rotateRecord.put("$x-$y", true)
+                rotateRecord.put("$x1-$y1", true)
+                rotateRecord.put("$x2-$y2", true)
+                rotateRecord.put("$x3-$y3", true)
+            }
+        }
+//        Log.d(S.TAG, "-----------------------------")
+//        printMatric(matrix)
+
+    }
+
+    /**
+     * 参考精选答案，在上面的基础上，去掉了map记录哪些点已经旋转过了，只旋转左上角1/4大小的方块区域就行了
+     * 优化之后，打败了12%的提交.....
+     */
+    fun rotate1(matrix: Array<IntArray>): Unit {
+        printMatric(matrix)
+        if (matrix.isEmpty() || matrix.size == 1) return
+        var size = matrix.size
+        for (x in 0 until  size / 2) {
+            for (y in 0 until  (size + 1) / 2) {
+
+                var x1 = size - y - 1
+                var y1 = x
+
+                var x2 = size - y1 - 1
+                var y2 = x1
+
+                var x3 = size - y2 - 1
+                var y3 = x2
+
+
+                Log.d(S.TAG, "$x-$y , $x1-$y1 , $x2-$y2 , $x3-$y3 轮换")
+
+                var temp = matrix[x][y]
+                matrix[x][y] = matrix[x1][y1]
+                matrix[x1][y1] = matrix[x2][y2]
+                matrix[x2][y2] = matrix[x3][y3]
+                matrix[x3][y3] = temp
+
+            }
+        }
+        Log.d(S.TAG, "-----------------------------")
+        printMatric(matrix)
+
+    }
+
 }
