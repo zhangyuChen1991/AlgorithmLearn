@@ -1,7 +1,10 @@
 package com.example.myapplication
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import java.util.*
+import java.util.stream.Collectors
 
 /**
  * 中等难度
@@ -437,13 +440,31 @@ class S_Middle {
         }
     }
 
-    fun listStr(nums: List<Int>): String {
+    fun listStr(nums: List<Any>): String {
         var sb = java.lang.StringBuilder()
         for (i in 0 until nums.size) {
             if (i == 0) {
                 sb.append("[")
             }
             sb.append("${nums[i]}")
+            if (i < nums.size - 1) {
+                sb.append(", ")
+            }
+            if (i == nums.size - 1) {
+                sb.append("]")
+            }
+
+        }
+        return sb.toString()
+    }
+
+    fun listListStr(nums: List<List<Any>>): String {
+        var sb = java.lang.StringBuilder()
+        for (i in 0 until nums.size) {
+            if (i == 0) {
+                sb.append("[")
+            }
+            sb.append("${listStr(nums[i])}")
             if (i < nums.size - 1) {
                 sb.append(", ")
             }
@@ -742,18 +763,18 @@ class S_Middle {
      * 给定一个 n×n 的二维矩阵matrix 表示一个图像。请你将图像顺时针旋转 90 度。
     你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
 
-     1 2 3
-     4 5 6
-     7 8 9
-     转换成：
-     7 4 1
-     8 5 2
-     9 6 3
+    1 2 3
+    4 5 6
+    7 8 9
+    转换成：
+    7 4 1
+    8 5 2
+    9 6 3
 
-     思路，就找规律，(x,y)与旋转之后的点(x1,y1), x1 = size - y - 1; y1 = x; 同时左上角的点换到右上角，右上角的点就会换到右下角，然后到左下角，左上角，四个点同时轮换
-     用一个map存起来哪些点换过了，然后下次遍历到直接跳过。
+    思路，就找规律，(x,y)与旋转之后的点(x1,y1), x1 = size - y - 1; y1 = x; 同时左上角的点换到右上角，右上角的点就会换到右下角，然后到左下角，左上角，四个点同时轮换
+    用一个map存起来哪些点换过了，然后下次遍历到直接跳过。
     按这个规律两重遍历就行了。
-     打败了7%的提交.....
+    打败了7%的提交.....
      *
      */
     fun rotate(matrix: Array<IntArray>): Unit {
@@ -808,8 +829,8 @@ class S_Middle {
         printMatric(matrix)
         if (matrix.isEmpty() || matrix.size == 1) return
         var size = matrix.size
-        for (x in 0 until  size / 2) {
-            for (y in 0 until  (size + 1) / 2) {
+        for (x in 0 until size / 2) {
+            for (y in 0 until (size + 1) / 2) {
 
                 var x1 = size - y - 1
                 var y1 = x
@@ -834,6 +855,138 @@ class S_Middle {
         Log.d(S.TAG, "-----------------------------")
         printMatric(matrix)
 
+    }
+
+    /**
+     * 49. 字母异位词分组
+     *
+     * 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
+    字母异位词 是由重新排列源单词的字母得到的一个新单词，所有源单词中的字母通常恰好只用一次。
+
+    示例 1:
+    输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+    输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+    下面的解法思路是：从第一个开始遍历，找到这个字符串字母的全排列(回溯+剪枝)，然后往后对比，看后面的字母是不是在这个排列里面。是就归拢到一个list里，不是就跳过。每一个被归拢过的字符串都用一个数组在对应下标做上标记，避免重复对比。
+    结果应该是对的，测试用例跑了106个都通过了，第107个用例输入了一个上千个字符串的数组，内存超出限制了。。但是这个解法应该是可以用的，在不限制内存的情况下。
+
+    精选答案的做法是把每个字符串按照字母排序，只要是字母一样而顺序不同的字符串，排完序就都一样了，排序完再归类就行了。之前做了三个用回溯找全排列类型的题，导致思维惯性把这个也用找全排列去做，绕路了。怎么就没想到先排序...
+
+    总结：先排序是数组一类的题的一个辅助解决的思路，不止一次被用到了..
+     */
+    fun groupAnagrams(strs: Array<String>): List<List<String>> {
+        var ret = ArrayList<ArrayList<String>>()
+        if (strs.isEmpty()) return ret
+
+        var record = arrayOfNulls<Int>(strs.size)
+        for (i in strs.indices) {
+            if (record[i] == 1) {//已经被添加过了
+                continue
+            }
+            var itemOfAnswer = ArrayList<String>()
+            itemOfAnswer.add(strs[i])
+            var currStrs = ArrayList<String>()
+            var stringBuilder = StringBuilder()
+            strsOfStr(strs[i], currStrs, stringBuilder)
+            Log.d(S.TAG, "${strs[i]} 的全排列： ${listStr(currStrs)}")
+
+            for (j in i + 1 until strs.size) {
+                if (record[j] == 1) {//已经被添加过了
+                    continue
+                }
+
+                for (k in currStrs.indices) {
+                    if (currStrs[k] == strs[j]) {
+                        itemOfAnswer.add(strs[j])
+                        record[j] = 1
+                    }
+                }
+            }
+            Log.d(S.TAG, "添加一组答案： ${listStr(itemOfAnswer)}")
+            ret.add(itemOfAnswer)
+        }
+        Log.d(S.TAG, "最终答案： ${listListStr(ret)}")
+
+        return ret
+    }
+
+
+    fun strsOfStr(str: String, strList: ArrayList<String>, sb: StringBuilder) {
+        if (str.isEmpty()) {
+            strList.add(sb.toString())
+            return
+        }
+        for (i in str.indices) {
+//            var firstIndex = str.indexOf(str[i])
+//            Log.d(S.TAG, "$str.indexOf(${str[i]})： $firstIndex")
+//                        Log.d(S.TAG, "$str  ${str[i]}  $i")
+
+            if (str.indexOf(str[i]) == i) {//重复排列，剪枝
+                sb.append(str[i])
+                var sb1 = StringBuilder()
+                var str1 = sb1.append(str.substring(0, i)).append(str.substring(i + 1, str.length))
+                    .toString()
+                strsOfStr(str1, strList, sb)
+                sb.deleteCharAt(sb.length - 1)
+            }
+        }
+    }
+
+    /**
+     * 49. 字母异位词分组
+     * 精选答案
+     */
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun groupAnagrams1(strs: Array<String?>?): List<List<String?>?>? {
+        return ArrayList(Arrays.stream(strs)
+            .collect(Collectors.groupingBy { str ->
+                // 返回 str 排序后的结果。
+                // 按排序后的结果来grouping by，算子类似于 sql 里的 group by。
+                val array: CharArray = str!!.toCharArray()
+                Arrays.sort(array)
+                String(array)
+            }).values)
+    }
+
+    /**
+     * 49. 字母异位词分组
+     * 精选答案的翻译版本
+     */
+    fun groupAnagrams2(strs: Array<String>): List<List<String>> {
+        var ret = ArrayList<ArrayList<String>>()
+        if (strs.isEmpty()) return ret
+
+        var sortStrs = arrayOfNulls<String>(strs.size)
+        for (i in strs.indices) {
+            val array = strs[i].toCharArray()
+            Arrays.sort(array)
+            val sortStr = String(array)
+            sortStrs[i] = sortStr
+        }
+
+        var record = arrayOfNulls<Int>(strs.size)
+        for (i in strs.indices) {
+            if (record[i] == 1) {//已经被添加过了
+                continue
+            }
+            var itemOfAnswer = ArrayList<String>()
+            itemOfAnswer.add(strs[i])
+
+            for (j in i + 1 until strs.size) {
+                if (record[j] == 1) {//已经被添加过了
+                    continue
+                }
+                if (sortStrs[i] == sortStrs[j]) {
+                    itemOfAnswer.add(strs[j])
+                    record[j] = 1
+                }
+            }
+            //Log.d(S.TAG, "添加一组答案： ${listStr(itemOfAnswer)}")
+            ret.add(itemOfAnswer)
+        }
+        //Log.d(S.TAG, "最终答案： ${listListStr(ret)}")
+
+        return ret
     }
 
 }

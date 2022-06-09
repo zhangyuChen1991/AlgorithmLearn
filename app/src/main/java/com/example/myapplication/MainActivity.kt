@@ -20,10 +20,18 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test48()
+            test49()
         }
     }
 
+    private fun test49() {
+//        var array = arrayOf("eat", "tea", "tan", "ate", "nat", "bat")
+        var array = arrayOf("hhhhu","tttti","tttit","hhhuh","hhuhh","tittt")
+        var ret = sMiddle.groupAnagrams2(array)
+//        var currStrs = ArrayList<String>()
+//        var stringBuilder = StringBuilder()
+//        sMiddle.strsOfStr("hhhhu",currStrs,stringBuilder)
+    }
     private fun test46() {
         var array: IntArray = intArrayOf(1,2,3,4)
 //        var array: IntArray = intArrayOf(2,3,5)
