@@ -989,4 +989,84 @@ class S_Middle {
         return ret
     }
 
+    /**
+     * 55. 跳跃游戏
+     * 给定一个非负整数数组nums ，你最初位于数组的 第一个下标 。
+    数组中的每个元素代表你在该位置可以跳跃的最大长度。
+    判断你是否能够到达最后一个下标。
+
+    示例1：
+    输入：nums = [2,3,1,1,4]
+    输出：true
+    解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
+
+
+     *  按照自己的思路，又开始去递归了，自己看代码，应该解法也行得通，就是内存又超出了。每一个起点startIndex，走1步，走2步，直到走nums[startIndex]步，都去递归一次，看最后有没有能到终点的，有就true，没有就false。会递归很多次。
+     *  形成这种f(n)和f(n-1)找关系，然后去递归的惯性思维了...
+     *
+     *  精选答案的思路是，从第一个开始算，算它目前能走到的最大位置maxP，再往后遍历，遍历到最大位置，看前maxP个元素里能走的最远的是哪个元素，然后再更新maxP,如果更新到最后能达到或者超过数组终点，说明可以走到终点。
+     *  因为每一步可以随意走1、2、nums[i]步，所以maxP左边的点全都是可以到达的。思路巧妙，解法写出来很简洁
+     *
+     *
+     */
+    fun canJump(nums: IntArray): Boolean {
+        if (nums.isEmpty()) {
+            return false
+        }
+        printArray(nums)
+        var maxPosition = 0
+        for (i in 0 .. maxPosition){
+            //第i个元素能够跳到的最远距离
+            var temp = nums[i] + i
+            //能到达的最远距离
+            if (temp > maxPosition){
+                maxPosition = temp
+            }
+            if (maxPosition >= nums.size - 1) return true
+        }
+        return false
+    }
+
+    /**
+     * 55. 跳跃游戏 自己的递归解法
+     * 内存超出限制了..
+     */
+    fun canJump1(nums: IntArray): Boolean {
+        printArray(nums)
+        if (nums.isEmpty()) return false
+        var resultList = ArrayList<Boolean>()
+        canJump1(0,nums,resultList)
+        return resultList.contains(true)
+    }
+
+    fun canJump1(startIndex: Int, nums: IntArray, result: ArrayList<Boolean>) {
+        Log.d(S.TAG, "startIndex： ${startIndex}")
+
+        if (startIndex >= nums.size
+            || nums[startIndex] == 0 && startIndex != nums.size - 1
+        ) {
+            Log.w(S.TAG, "startIndex： ${startIndex}, 结果，false")
+            if (!result.contains(false)) {
+                result.add(false)
+            }
+            return
+        }
+
+        if (startIndex == nums.size - 1) {
+            Log.w(S.TAG, "startIndex： ${startIndex},  currNum: ${nums[startIndex]}，  结果，true")
+            result.add(true)
+            return
+        }
+
+
+        var currNum = nums[startIndex]
+        var maxStep = currNum.coerceAtMost(nums.size - startIndex - 1)
+        for (i in 1..maxStep) {
+            var nextStartIndex = startIndex + i
+            canJump1(nextStartIndex,nums,result)
+        }
+    }
+
+
+
 }
