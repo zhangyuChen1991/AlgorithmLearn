@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import java.util.*
 import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 /**
  * 中等难度
@@ -438,6 +439,42 @@ class S_Middle {
             sb.append(", $element ")
             Log.d(S.TAG, sb.toString())
         }
+    }
+
+    fun arrayStr(nums: IntArray): String {
+        var sb = java.lang.StringBuilder()
+        for (i in 0 until nums.size) {
+            if (i == 0) {
+                sb.append("[")
+            }
+            sb.append("${nums[i]}")
+            if (i < nums.size - 1) {
+                sb.append(", ")
+            }
+            if (i == nums.size - 1) {
+                sb.append("]")
+            }
+
+        }
+        return sb.toString()
+    }
+
+    fun arrayArrayStr(nums: Array<IntArray>): String {
+        var sb = java.lang.StringBuilder()
+        for (i in 0 until nums.size) {
+            if (i == 0) {
+                sb.append("[")
+            }
+            sb.append("${arrayStr(nums[i])}")
+            if (i < nums.size - 1) {
+                sb.append(", ")
+            }
+            if (i == nums.size - 1) {
+                sb.append("]")
+            }
+
+        }
+        return sb.toString()
     }
 
     fun listStr(nums: List<Any>): String {
@@ -1015,11 +1052,11 @@ class S_Middle {
         }
         printArray(nums)
         var maxPosition = 0
-        for (i in 0 .. maxPosition){
+        for (i in 0..maxPosition) {
             //第i个元素能够跳到的最远距离
             var temp = nums[i] + i
             //能到达的最远距离
-            if (temp > maxPosition){
+            if (temp > maxPosition) {
                 maxPosition = temp
             }
             if (maxPosition >= nums.size - 1) return true
@@ -1035,7 +1072,7 @@ class S_Middle {
         printArray(nums)
         if (nums.isEmpty()) return false
         var resultList = ArrayList<Boolean>()
-        canJump1(0,nums,resultList)
+        canJump1(0, nums, resultList)
         return resultList.contains(true)
     }
 
@@ -1063,10 +1100,71 @@ class S_Middle {
         var maxStep = currNum.coerceAtMost(nums.size - startIndex - 1)
         for (i in 1..maxStep) {
             var nextStartIndex = startIndex + i
-            canJump1(nextStartIndex,nums,result)
+            canJump1(nextStartIndex, nums, result)
         }
     }
 
+    /**
+     * 56. 合并区间
+     * 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间。
+
+        示例 1：
+        输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+        输出：[[1,6],[8,10],[15,18]]
+        解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+
+     思路：没有啥特别的技巧，就是按题意去合并，踩了两个坑，还是做出来了。首先是排序，保证开头数比较小的子数组排在前面，然后比较subArray[i][1] 和 subArray[i + 1][1] 的值，去合并。
+        踩的第一个坑是，subArray[i + 1][1]的值比subArray[i][1]的值小，前面的数组整个包住了后一个数组，结尾的时候还用后一个数组的结尾值，结果就错了
+        第二个坑是subArray[i]和subArray[i+1]合并之后，不能继续往后看subArray[i+2]跟subArray[i+3]的对比，有可能subArray[i]和subArray[i+1]合并之后的数组跟subArray[i+2]还可以继续合并，也就是连续合并的情况。所以subArray[i]和subArray[i+1]合并之后
+        要把subArray[i+1]的值更新成新数组的值，然后继续跟subArray[i+2]对比，依此往后。这是想错了的一个点。
+     */
+    fun merge(intervals: Array<IntArray>): Array<IntArray> {
+
+        Log.d(S.TAG, "入参: intervals： ${arrayArrayStr(intervals)}")
+
+        if (intervals.isEmpty()) {
+            return intervals
+        }
+        var retList = ArrayList<IntArray>()
+
+        //先按子数组中的第一个数字排序
+        var sortIntervals = quickSort(intervals)
+        Log.d(S.TAG, "排序后: intervals： ${arrayArrayStr(sortIntervals)}")
+
+        var index = 0
+        while (index <= sortIntervals.size - 1) {
+            var currArray = sortIntervals[index]
+            if (index < sortIntervals.size - 1) {
+                var nextArray = sortIntervals[index + 1]
+                if (currArray[1] >= nextArray[0]) {
+                    var newArray = intArrayOf(currArray[0], nextArray[1])
+                    if (currArray[1] > nextArray[1]){
+                        newArray = intArrayOf(currArray[0], currArray[1])
+                    }
+                    sortIntervals[index + 1] = newArray
+                } else {
+                    retList.add(currArray)
+                }
+            }else{//已经到达最后一个
+                retList.add(currArray)
+            }
+            index++
+        }
+        Log.d(S.TAG, "返回值: ret： ${arrayArrayStr(retList.toTypedArray())}")
 
 
+        return retList.toTypedArray()
+    }
+
+    fun quickSort(array : Array<IntArray>): Array<IntArray>{
+        if (array.size < 2) return array
+
+        val pivot = array[array.size/2][0]
+
+        val less = array.filter { it[0] < pivot }
+        val equal = array.filter { it[0] == pivot }
+        val greater = array.filter { it[0] > pivot }
+
+        return quickSort(less.toTypedArray()) + equal + quickSort(greater.toTypedArray())
+    }
 }
