@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
 
 /**
  * 中等难度
@@ -1108,15 +1107,15 @@ class S_Middle {
      * 56. 合并区间
      * 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间。
 
-        示例 1：
-        输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
-        输出：[[1,6],[8,10],[15,18]]
-        解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+    示例 1：
+    输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+    输出：[[1,6],[8,10],[15,18]]
+    解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
 
-     思路：没有啥特别的技巧，就是按题意去合并，踩了两个坑，还是做出来了。首先是排序，保证开头数比较小的子数组排在前面，然后比较subArray[i][1] 和 subArray[i + 1][1] 的值，去合并。
-        踩的第一个坑是，subArray[i + 1][1]的值比subArray[i][1]的值小，前面的数组整个包住了后一个数组，结尾的时候还用后一个数组的结尾值，结果就错了
-        第二个坑是subArray[i]和subArray[i+1]合并之后，不能继续往后看subArray[i+2]跟subArray[i+3]的对比，有可能subArray[i]和subArray[i+1]合并之后的数组跟subArray[i+2]还可以继续合并，也就是连续合并的情况。所以subArray[i]和subArray[i+1]合并之后
-        要把subArray[i+1]的值更新成新数组的值，然后继续跟subArray[i+2]对比，依此往后。这是想错了的一个点。
+    思路：没有啥特别的技巧，就是按题意去合并，踩了两个坑，还是做出来了。首先是排序，保证开头数比较小的子数组排在前面，然后比较subArray[i][1] 和 subArray[i + 1][1] 的值，去合并。
+    踩的第一个坑是，subArray[i + 1][1]的值比subArray[i][1]的值小，前面的数组整个包住了后一个数组，结尾的时候还用后一个数组的结尾值，结果就错了
+    第二个坑是subArray[i]和subArray[i+1]合并之后，不能继续往后看subArray[i+2]跟subArray[i+3]的对比，有可能subArray[i]和subArray[i+1]合并之后的数组跟subArray[i+2]还可以继续合并，也就是连续合并的情况。所以subArray[i]和subArray[i+1]合并之后
+    要把subArray[i+1]的值更新成新数组的值，然后继续跟subArray[i+2]对比，依此往后。这是想错了的一个点。
      */
     fun merge(intervals: Array<IntArray>): Array<IntArray> {
 
@@ -1138,14 +1137,14 @@ class S_Middle {
                 var nextArray = sortIntervals[index + 1]
                 if (currArray[1] >= nextArray[0]) {
                     var newArray = intArrayOf(currArray[0], nextArray[1])
-                    if (currArray[1] > nextArray[1]){
+                    if (currArray[1] > nextArray[1]) {
                         newArray = intArrayOf(currArray[0], currArray[1])
                     }
                     sortIntervals[index + 1] = newArray
                 } else {
                     retList.add(currArray)
                 }
-            }else{//已经到达最后一个
+            } else {//已经到达最后一个
                 retList.add(currArray)
             }
             index++
@@ -1156,10 +1155,10 @@ class S_Middle {
         return retList.toTypedArray()
     }
 
-    fun quickSort(array : Array<IntArray>): Array<IntArray>{
+    fun quickSort(array: Array<IntArray>): Array<IntArray> {
         if (array.size < 2) return array
 
-        val pivot = array[array.size/2][0]
+        val pivot = array[array.size / 2][0]
 
         val less = array.filter { it[0] < pivot }
         val equal = array.filter { it[0] == pivot }
@@ -1167,4 +1166,64 @@ class S_Middle {
 
         return quickSort(less.toTypedArray()) + equal + quickSort(greater.toTypedArray())
     }
+
+    /**
+     * 62. 不同路径
+     * 
+     * 一个机器人位于一个 m x n网格的左上角 （起始点在下图中标记为 “Start” ）。
+    机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+    问总共有多少条不同的路径？
+
+     思路：规律就是f(m,n) = f(m - 1,n) + f(m, n-1)
+     跟之前上楼梯一次能走一步或者两步，一共有多少中走法一样。用递归的话一定是栈溢出。那个题是用的滚动数组，这个题是从一个格子开始推，(i,1)和(1,i)都是单条格子，只有一条路。(i,2)和(2,i)有i种走法。
+     然后知道(0,1) (1,0)就知道(1,1), 知道(1,1) (2,0) 就知道(2,1)，依次类推，从起始点开始算，把每个格子的步数都算出来，最后算出(m,n)就是答案
+     */
+    fun uniquePaths(m: Int, n: Int): Int {
+        if (m == 1 || n == 1) {
+            return 1
+        }
+        if (m == 2) {
+            return n
+        }
+        if (n == 2) {
+            return m
+        }
+
+        var d: Array<IntArray> = Array(m) { IntArray(n) }
+        for (i in 0 until m) {
+            d[i][0] = 1
+            d[i][1] = i + 1
+        }
+        for (i in 0 until n) {
+            d[0][i] = 1
+            d[1][i] = i + 1
+        }
+
+        for (i in 2 until m) {
+            for (j in 2 until n) {
+                d[i][j] = d[i - 1][j] + d[i][j - 1]
+                Log.d(S.TAG, "i: $i, j: $j, ret: ${d[i - 1][j - 1]}")
+
+            }
+        }
+        Log.d(S.TAG, "m: $m, n: $n, ret: ${d[m - 1][n - 1]}")
+
+        return d[m - 1][n - 1]
+
+//        var ret = uniquePaths(m - 1, n) + uniquePaths(m, n - 1)
+//        return ret
+    }
+
+
+//    fun uniquePaths(m: Int, n: Int): Int {
+//        val dp = Array(m) { IntArray(n) }
+//        for (i in 0 until n) dp[0][i] = 1
+//        for (i in 0 until m) dp[i][0] = 1
+//        for (i in 1 until m) {
+//            for (j in 1 until n) {
+//                dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+//            }
+//        }
+//        return dp[m - 1][n - 1]
+//    }
 }

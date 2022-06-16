@@ -20,10 +20,21 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test56()
+            test62()
         }
     }
 
+    private fun test62() {
+        Log.w(S.TAG,"起始时间${System.currentTimeMillis()}")
+        sMiddle.uniquePaths(99,99)
+        sMiddle.uniquePaths(3,7)
+        Log.w(S.TAG,"结束时间${System.currentTimeMillis()}")
+
+//        sMiddle.uniquePaths(5,4)
+//        sMiddle.uniquePaths(5,3)
+//        sMiddle.uniquePaths(2,5)
+//        sMiddle.uniquePaths(1,5)
+    }
     private fun test49() {
 //        var array = arrayOf("eat", "tea", "tan", "ate", "nat", "bat")
         var array = arrayOf("hhhhu","tttti","tttit","hhhuh","hhuhh","tittt")
