@@ -20,10 +20,25 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test62()
+            test36()
         }
     }
 
+    private fun test36() {
+//[[".",".","4",".",".",".","6","3","."],[".",".",".",".",".",".",".",".","."],[],[],[],[],[],[],[]]
+
+        var array1 = arrayOf(".",".","4",".",".",".","6","3",".")
+        var array2 = arrayOf(".",".",".",".",".",".",".",".",".")
+        var array3 = arrayOf("5",".",".",".",".",".",".","9",".")
+        var array4 = arrayOf(".",".",".","5","6",".",".",".",".")
+        var array5 = arrayOf("4",".","3",".",".",".",".",".","1")
+        var array6 = arrayOf(".",".",".","7",".",".",".",".",".")
+        var array7 = arrayOf(".",".",".","5",".",".",".",".",".")
+        var array8 = arrayOf(".",".",".",".",".",".",".",".",".")
+        var array9 = arrayOf(".",".",".",".",".",".",".",".",".")
+        var d = arrayOf(array1,array2,array3,array4,array5,array6,array7,array8,array9)
+//        sMiddle.isValidSudoku(d)
+    }
     private fun test62() {
         Log.w(S.TAG,"起始时间${System.currentTimeMillis()}")
         sMiddle.uniquePaths(99,99)
