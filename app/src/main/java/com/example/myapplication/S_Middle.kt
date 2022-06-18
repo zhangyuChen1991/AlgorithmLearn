@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import java.util.*
 import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 /**
  * 中等难度
@@ -436,8 +437,8 @@ class S_Middle {
         var sb = java.lang.StringBuilder()
         for (element in nums) {
             sb.append(", $element ")
-            Log.d(S.TAG, sb.toString())
         }
+        Log.d(S.TAG, sb.toString())
     }
 
     fun arrayStr(nums: IntArray): String {
@@ -1255,11 +1256,11 @@ class S_Middle {
     输出：true
 
 
-     思路：最开始想复杂了，以为要解出每个矩阵的答案才能知道是不是有效数独矩阵。其实题里面说明了，一个有效的数独（部分已被填充）不一定是可解的。
+    思路：最开始想复杂了，以为要解出每个矩阵的答案才能知道是不是有效数独矩阵。其实题里面说明了，一个有效的数独（部分已被填充）不一定是可解的。
     所以，解题就是在现有出现的数字中找，这个数字在该行，该列，该box里面有没有已有出现重复的数字，如果有，则说明这个数独题有误。
-     题解就是遍历每个数字，看该数字在所在行、列、box里面有没有一样的数字。
-     本来行、列、box，可以用三个Map来记录值，但是由于题目给定了是9*9的矩阵，所以可以用三个定长数组来记录.
-     下面配合注释看，应该讲明白了.
+    题解就是遍历每个数字，看该数字在所在行、列、box里面有没有一样的数字。
+    本来行、列、box，可以用三个Map来记录值，但是由于题目给定了是9*9的矩阵，所以可以用三个定长数组来记录.
+    下面配合注释看，应该讲明白了.
      */
     fun isValidSudoku(board: Array<CharArray>): Boolean {
         //记录第j行出现过的数字，出现过5就在col[i][5]计一个数，下次再出现5，找到col[i][5]发现已经有这个数，表明这个数重复出现了
@@ -1288,7 +1289,7 @@ class S_Middle {
                 }
                 var boxIndex = (i / 3) * 3 + j / 3
                 //第boxIndex个box出现过这个数字了，重复出现，返回false
-                if (box[boxIndex][num] > 0){
+                if (box[boxIndex][num] > 0) {
                     return false
                 }
 
@@ -1301,4 +1302,86 @@ class S_Middle {
 
         return true
     }
+
+    /**
+     * 64. 最小路径和
+     * 给定一个包含非负整数的 m x n 网格 grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+    说明：每次只能向下或者向右移动一步。
+
+    输入：grid = [
+    [1,3,1],
+    [1,5,1],
+    [4,2,1]]
+    输出：7
+    解释：因为路径 1→3→1→1→1 的总和最小。
+
+     思路：拿到题的思路是用递归，把每一种情况都遍历出来，然后用一个list记录每种情况步数总和，最后在list里面找最小的值。也猜到这种解法又会栈溢出，结果果然，跑到20/61个用例的时候内存超出限制了。想根据62题那样把递归转成for循环，想了一阵子又没有想到思路。
+     看精选答案果然是把递归转成for循环来处理了。
+    最开始想的是，从左上角走到右下角，不走完每一条完整的路径是不知道这条路径的值是多少的，也无法预知未来走哪一步是最小路径，所以要递归遍历完所有情况。而且按这个思路，无法转递归为for循环。
+    但是倒过来看就可以想通。右下角开始算，它的左边格子(left)的总步数和上边格子(top)的总步数里面选小的那条，就是最小路径，left和top也是同样的选法，最后选到左上角d[0][0]的格子右边d[0][1]和下面d[1][0]，
+    这两个格子的路径只有一条，就是从左上角走过来，把左上角格子的数字和它们相加，记在它们格子里，就是它们当前的最小路径的步数。然后知道了d[0][1]和d[1][0],d[1][1]的最小步数就是d[1][1]的值和d[0][1]、d[1][0]之中总步数最小的那个值相加，
+    然后依次类推，就变成跟62题一样的两重for循环了。
+
+     下面minPathSum1是自己递归的解法，内存超限
+    minPathSum是参考精选答案的思路，转成for循环的写法。
+     */
+    fun minPathSum1(grid: Array<IntArray>): Int {
+        if (grid.isEmpty()) {
+            return 0
+        }
+        var totalSteps = ArrayList<Int>()
+        minPathSum1(grid, 0, 0, 0, totalSteps)
+        var minStep = Int.MAX_VALUE
+        for (i in totalSteps.indices) {
+            if (totalSteps[i] < minStep) {
+                minStep = totalSteps[i]
+            }
+        }
+        return minStep
+    }
+
+    private fun minPathSum1(
+        grid: Array<IntArray>,
+        currI: Int,
+        currJ: Int,
+        currTotalStep: Int,
+        totalSteps: ArrayList<Int>,
+    ) {
+        Log.d(S.TAG, "i: $currI, j: $currJ, currTotalStep: ${currTotalStep}")
+
+        var totalStep = currTotalStep + grid[currI][currJ]
+        if (currI == grid.size - 1 && currJ == grid[0].size - 1) {
+            totalSteps.add(totalStep)
+            Log.d(S.TAG, "到达终点，添加totalStep:$totalStep")
+            printList(totalSteps)
+            return
+        }
+
+        if (currI < grid.size - 1) {
+            minPathSum1(grid, currI + 1, currJ, totalStep, totalSteps)
+        }
+        if (currJ < grid[0].size - 1) {
+            minPathSum1(grid, currI, currJ + 1, totalStep, totalSteps)
+        }
+
+    }
+
+    fun minPathSum(grid: Array<IntArray>): Int {
+        for (i in grid.indices){
+            for (j in grid[0].indices){
+                if (i == 0 && j == 0){
+                    continue
+                } else if (i == 0){
+                    grid[i][j] = grid[i][j - 1] + grid[i][j]
+                }else if(j == 0){
+                    grid[i][j] = grid[i - 1][j] + grid[i][j]
+                }else{
+                    grid[i][j] = grid[i - 1][j].coerceAtMost(grid[i][j - 1]) + grid[i][j]
+//                    grid[i][j] = Math.min(grid[i - 1][j],(grid[i][j - 1]))
+                }
+            }
+        }
+        return grid[grid.size - 1][grid[0].size - 1]
+    }
+
 }

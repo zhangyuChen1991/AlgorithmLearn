@@ -20,10 +20,19 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test36()
+            test64()
         }
     }
 
+    private fun test64() {
+        var array1 = intArrayOf(1,3,1)
+        var array2 = intArrayOf(1,5,1)
+        var array3 = intArrayOf(4,2,1)
+        var d = arrayOf(array1,array2,array3)
+        var ret = sMiddle.minPathSum(d)
+        Log.w(S.TAG,"ret: ${ret}")
+
+    }
     private fun test36() {
 //[[".",".","4",".",".",".","6","3","."],[".",".",".",".",".",".",".",".","."],[],[],[],[],[],[],[]]
 
