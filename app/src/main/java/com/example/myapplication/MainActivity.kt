@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test64()
+            test7()
         }
     }
 
@@ -289,11 +289,11 @@ class MainActivity : AppCompatActivity() {
 
     fun test7() {
         var root = S.TreeNode(5)
-        var ret = s.inorderTraversal(root)
-        for (i in ret.indices) {
-            Log.d(S.TAG, "${ret[i]}, ")
-
-        }
+        root.left = S.TreeNode(3)
+        root.right = S.TreeNode(9)
+        root.left!!.left = S.TreeNode(1)
+        root.left!!.right = S.TreeNode(6)
+        var ret = s.inorderTraversal1(root)
     }
 
     fun test58() {

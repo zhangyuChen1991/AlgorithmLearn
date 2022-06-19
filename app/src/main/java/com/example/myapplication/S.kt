@@ -372,6 +372,104 @@ class S {
     }
 
     /**
+     * 二叉树前序遍历非递归写法
+     */
+    fun inorderTraversal1(root: TreeNode?): List<Int> {
+        var list: ArrayList<Int> = ArrayList()
+        var stack = Stack<TreeNode>()
+        stack.push(root)
+        while (!stack.isEmpty()) {
+            var currNode = stack.pop()
+            list.add(currNode.`val`)
+
+            currNode.right?.let {
+                stack.push(it)
+            }
+            currNode.left?.let {
+                stack.push(it)
+            }
+        }
+        S_Middle().printList(list)
+        return list
+    }
+
+    /**
+     * 二叉树中序遍历非递归写法
+     */
+    fun inorderTraversal2(root: TreeNode?): List<Int> {
+        var list: ArrayList<Int> = ArrayList()
+        if (null == root) return list
+
+        var stack = Stack<TreeNode>()
+        var currNode = root
+
+        while (true) {
+            //当前节点设为root
+            // 1.从当前节点一直入栈左节点，到最左节点，然后出栈，记录值，并且把currNode设置为currNode的右节点，
+            // 2.右节点为空，继续出栈
+            // 3.右节点不为空，右节点入栈，然后查它的左节点一直查到末尾(重复1)
+
+            //遍历到当前节点的最左节点
+            while (null != currNode) {
+                stack.push(currNode)
+                currNode = currNode.left
+            }
+
+            if (stack.isEmpty()){
+                break
+            }
+
+            currNode = stack.pop()
+            list.add(currNode.`val`)
+
+            currNode = currNode!!.right
+        }
+        return list
+    }
+    /**
+     * 二叉树后序遍历非递归写法
+     */
+    fun inorderTraversal3(root: TreeNode?): List<Int> {
+        var list: ArrayList<Int> = ArrayList()
+        if (null == root) return list
+
+        var stack = Stack<TreeNode>()
+        var currNode = root
+
+        while (true) {
+            //当前节点设为root
+            // 1.从当前节点一直入栈左节点，到最左节点
+            // 2.查看栈顶元素有没有右节点
+            // 3.右节点为空，当前节点出栈，记录值，重复2
+            // 4.右节点不为空，当前节点切换为右节点(此时左节点的值已经记录过了)，然后查它的左节点一直查到末尾(重复1)
+
+            //相对于中序遍历，再出栈的过程中先取出栈顶节点判断了右节点是否存在，如果存在，就要先入栈右节点，不能直接记录当前的值
+            //需要注意的点是，从右节点开始出栈往回走时，要判断上一个记录的节点是不是当前节点的右节点，如果是，就不用管，继续出栈。
+
+            //遍历到当前节点的最左节点
+            while (null != currNode) {
+                stack.push(currNode)
+                currNode = currNode.left
+            }
+
+            if (stack.isEmpty()){
+                break
+            }
+
+            var top = stack.peek()
+            var preRecordNode : TreeNode? = null//上一个被记录的节点
+            if (top.right == null || preRecordNode == top.right){
+                currNode = stack.pop()
+                list.add(currNode.`val`)
+                preRecordNode = top
+            }else{
+                currNode = top?.right
+            }
+        }
+        return list
+    }
+
+    /**
      * 53. 最大子数组和
      * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
     子数组 是数组中的一个连续部分。
@@ -997,15 +1095,15 @@ class S {
     ↑   ↑
     上面的箭头指出了对应二进制位不同的位置。
 
-     思路：跟计算二进制数中1的个数一样，把这个数和1做与运算，判断出末尾这一位的数字，再右移
-     两个数比较，就同时做对比，再右移，直到两个数都变成0，统计不同的个数
+    思路：跟计算二进制数中1的个数一样，把这个数和1做与运算，判断出末尾这一位的数字，再右移
+    两个数比较，就同时做对比，再右移，直到两个数都变成0，统计不同的个数
      */
     fun hammingDistance(x: Int, y: Int): Int {
         var count = 0
         var x = x
         var y = y
-        while (x > 0 || y > 0){
-            if (x and 1 != y and 1){
+        while (x > 0 || y > 0) {
+            if (x and 1 != y and 1) {
                 count++
             }
             x = x shr 1
@@ -1051,10 +1149,10 @@ class S {
     /**
      * 求一个节点的深度
      */
-    fun deep(node: TreeNode?) : Int{
+    fun deep(node: TreeNode?): Int {
         if (null == node) return 0
-        var l =  deep(node.left)
-        var r =  deep(node.right)
+        var l = deep(node.left)
+        var r = deep(node.right)
         var currNodeAnswer = l + r
         answer543 = answer543.coerceAtLeast(currNodeAnswer)
         return l.coerceAtLeast(r) + 1
@@ -1064,21 +1162,21 @@ class S {
      * 617. 合并二叉树
      *
      * 给你两棵二叉树： root1 和 root2 。
-        想象一下，当你将其中一棵覆盖到另一棵之上时，两棵树上的一些节点将会重叠（而另一些不会）。你需要将这两棵树合并成一棵新二叉树。合并的规则是：如果两个节点重叠，那么将这两个节点的值相加作为合并后节点的新值；否则，不为 null 的节点将直接作为新二叉树的节点。
-        返回合并后的二叉树。
+    想象一下，当你将其中一棵覆盖到另一棵之上时，两棵树上的一些节点将会重叠（而另一些不会）。你需要将这两棵树合并成一棵新二叉树。合并的规则是：如果两个节点重叠，那么将这两个节点的值相加作为合并后节点的新值；否则，不为 null 的节点将直接作为新二叉树的节点。
+    返回合并后的二叉树。
 
-        具体题意上leetCode看，有图。
+    具体题意上leetCode看，有图。
 
-        常规思路，递归合并，合并root1和root2，把root2的值合并到root1上，然后合并root1.left,root2.left; root1.right,root2.right,注意判空，
-        重点注意当root1左右子节点为空而root2左右字节点不为空时，要给root1的左右节点new一个值，让它可以继续往下递归合并，不然就断了
+    常规思路，递归合并，合并root1和root2，把root2的值合并到root1上，然后合并root1.left,root2.left; root1.right,root2.right,注意判空，
+    重点注意当root1左右子节点为空而root2左右字节点不为空时，要给root1的左右节点new一个值，让它可以继续往下递归合并，不然就断了
      */
     fun mergeTrees(root1: TreeNode?, root2: TreeNode?): TreeNode? {
         var r1 = root1
         var r2 = root2
         if (null == r1 && null == r2) return null
-        if (null == r1 && null != r2){
+        if (null == r1 && null != r2) {
             r1 = TreeNode(r2.`val`)
-        }else{
+        } else {
             r2?.let {
                 r1!!.`val` = r1.`val` + it.`val`
             }
@@ -1086,16 +1184,16 @@ class S {
 
         //当root1左右子节点为空而root2左右字节点不为空时，要给root1的左右节点new一个值，
         // 让它可以继续往下递归合并
-        if (r1?.left == null && r2?.left != null){
+        if (r1?.left == null && r2?.left != null) {
             r1?.left = TreeNode(0)
         }
 
-        if (r1?.right == null && r2?.right != null){
+        if (r1?.right == null && r2?.right != null) {
             r1?.right = TreeNode(0)
         }
 
-        mergeTrees(r1?.left,r2?.left)
-        mergeTrees(r1?.right,r2?.right)
+        mergeTrees(r1?.left, r2?.left)
+        mergeTrees(r1?.right, r2?.right)
         return r1
     }
 
@@ -1111,8 +1209,8 @@ class S {
         if (null == root2) return root1
 
         root1.`val` = root1.`val` + root2.`val`
-        root1.left = mergeTrees1(root1.left,root2.left)
-        root1.right = mergeTrees1(root1.right,root2.right)
+        root1.left = mergeTrees1(root1.left, root2.left)
+        root1.right = mergeTrees1(root1.right, root2.right)
 
         return root1
     }
