@@ -20,10 +20,16 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test7()
+            test75()
         }
     }
 
+    private fun test75() {
+        var array1 = intArrayOf(2,0,2,1,1,0)
+        var array2 = intArrayOf(0,2,1,0,1,2,0,1,2,0,1,2,0,1,2)
+        var array3 = intArrayOf(1,0)
+        sMiddle.sortColors(array3)
+    }
     private fun test64() {
         var array1 = intArrayOf(1,3,1)
         var array2 = intArrayOf(1,5,1)

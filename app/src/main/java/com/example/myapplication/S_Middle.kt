@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
 
 /**
  * 中等难度
@@ -1315,14 +1314,14 @@ class S_Middle {
     输出：7
     解释：因为路径 1→3→1→1→1 的总和最小。
 
-     思路：拿到题的思路是用递归，把每一种情况都遍历出来，然后用一个list记录每种情况步数总和，最后在list里面找最小的值。也猜到这种解法又会栈溢出，结果果然，跑到20/61个用例的时候内存超出限制了。想根据62题那样把递归转成for循环，想了一阵子又没有想到思路。
-     看精选答案果然是把递归转成for循环来处理了。
+    思路：拿到题的思路是用递归，把每一种情况都遍历出来，然后用一个list记录每种情况步数总和，最后在list里面找最小的值。也猜到这种解法又会栈溢出，结果果然，跑到20/61个用例的时候内存超出限制了。想根据62题那样把递归转成for循环，想了一阵子又没有想到思路。
+    看精选答案果然是把递归转成for循环来处理了。
     最开始想的是，从左上角走到右下角，不走完每一条完整的路径是不知道这条路径的值是多少的，也无法预知未来走哪一步是最小路径，所以要递归遍历完所有情况。而且按这个思路，无法转递归为for循环。
     但是倒过来看就可以想通。右下角开始算，它的左边格子(left)的总步数和上边格子(top)的总步数里面选小的那条，就是最小路径，left和top也是同样的选法，最后选到左上角d[0][0]的格子右边d[0][1]和下面d[1][0]，
     这两个格子的路径只有一条，就是从左上角走过来，把左上角格子的数字和它们相加，记在它们格子里，就是它们当前的最小路径的步数。然后知道了d[0][1]和d[1][0],d[1][1]的最小步数就是d[1][1]的值和d[0][1]、d[1][0]之中总步数最小的那个值相加，
     然后依次类推，就变成跟62题一样的两重for循环了。
 
-     下面minPathSum1是自己递归的解法，内存超限
+    下面minPathSum1是自己递归的解法，内存超限
     minPathSum是参考精选答案的思路，转成for循环的写法。
      */
     fun minPathSum1(grid: Array<IntArray>): Int {
@@ -1367,15 +1366,15 @@ class S_Middle {
     }
 
     fun minPathSum(grid: Array<IntArray>): Int {
-        for (i in grid.indices){
-            for (j in grid[0].indices){
-                if (i == 0 && j == 0){
+        for (i in grid.indices) {
+            for (j in grid[0].indices) {
+                if (i == 0 && j == 0) {
                     continue
-                } else if (i == 0){
+                } else if (i == 0) {
                     grid[i][j] = grid[i][j - 1] + grid[i][j]
-                }else if(j == 0){
+                } else if (j == 0) {
                     grid[i][j] = grid[i - 1][j] + grid[i][j]
-                }else{
+                } else {
                     grid[i][j] = grid[i - 1][j].coerceAtMost(grid[i][j - 1]) + grid[i][j]
 //                    grid[i][j] = Math.min(grid[i - 1][j],(grid[i][j - 1]))
                 }
@@ -1384,4 +1383,78 @@ class S_Middle {
         return grid[grid.size - 1][grid[0].size - 1]
     }
 
+
+    /**
+     * 75. 颜色分类
+     * 给定一个包含红色、白色和蓝色、共n 个元素的数组nums，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+
+    我们使用整数 0、1 和 2 分别表示红色、白色和蓝色。
+    必须在不使用库的sort函数的情况下解决这个问题。
+
+     本来想在一次循环里面把0挪到前面，把2挪到后面，中间剩下1。结果逻辑越写越复杂，最后没写出来。
+     简洁但是慢一点的做法，先把0挪到前面，用一次循环；再把1挪到前面，用一次循环；然后结束。
+
+     下面这个代码跑到82/87用例的时候，输入[1,0]，说我输出也是[1,0]，实际跑下来明明是输出的[0,1]。已经是第二次出现这种情况了，不纠结这个问题，掌握思路了就好。
+     */
+    fun sortColors(nums: IntArray): Unit {
+        printArray(nums)
+        if (nums.size < 2) return
+        var currRedIndex = 0
+        var currWhiteIndex = 0
+        var currIndex = 0
+
+
+        while (currIndex < nums.size) {
+            if (nums[currIndex] == 0 && currRedIndex < nums.size && currIndex > currRedIndex) {
+
+                var temp = nums[currIndex]
+                nums[currIndex] = nums[currRedIndex]
+                nums[currRedIndex] = temp
+
+                currRedIndex++
+
+            } else {
+                currIndex++
+            }
+        }
+
+        currIndex = currRedIndex
+        currWhiteIndex = currRedIndex
+
+        while (currIndex < nums.size) {
+            if (nums[currIndex] == 1 && currWhiteIndex < nums.size && currIndex > currWhiteIndex) {
+
+                var temp = nums[currIndex]
+                nums[currIndex] = nums[currWhiteIndex]
+                nums[currWhiteIndex] = temp
+                currWhiteIndex++
+
+            } else {
+                currIndex++
+            }
+        }
+
+        printArray(nums)
+    }
+
+    fun sortColors1(nums: IntArray) {
+        val n = nums.size
+        var ptr = 0
+        for (i in 0 until n) {
+            if (nums[i] == 0) {
+                val temp = nums[i]
+                nums[i] = nums[ptr]
+                nums[ptr] = temp
+                ++ptr
+            }
+        }
+        for (i in ptr until n) {
+            if (nums[i] == 1) {
+                val temp = nums[i]
+                nums[i] = nums[ptr]
+                nums[ptr] = temp
+                ++ptr
+            }
+        }
+    }
 }
