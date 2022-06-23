@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import java.util.*
 import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 /**
  * 中等难度
@@ -226,7 +227,7 @@ class S_Middle {
     给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
     具体题意看leetcode，有图
 
-    思路是拆分任务，递归，找“2345”对应字母的所有排列组合，就是找"2" 和 “345”里面所有的组合的组合，“345”的所有组合就是找3和“45“的所有组合的组合，”45“的所有组合就是找"4"和”5的所有组合“
+    思路是拆分任务，递归，找“2345”对应字母的所有排列组合，就是找"2" 和 “345”里面所有的组合的组合，“345”的所有组合就是找"3"和“45“的所有组合的组合，”45“的所有组合就是找"4"和”5的所有组合“
     所以递归函数的返回值，是当前这组数字的所有字母组合，返回一个list<String>，当前这组数字的所有字母组合就是当前这组数字的头一个数字 和 剩下的数字的所有组合
     递归函数的结构大致就是：
     callSelf(digits):list<String>{
@@ -1391,10 +1392,10 @@ class S_Middle {
     我们使用整数 0、1 和 2 分别表示红色、白色和蓝色。
     必须在不使用库的sort函数的情况下解决这个问题。
 
-     本来想在一次循环里面把0挪到前面，把2挪到后面，中间剩下1。结果逻辑越写越复杂，最后没写出来。
-     简洁但是慢一点的做法，先把0挪到前面，用一次循环；再把1挪到前面，用一次循环；然后结束。
+    本来想在一次循环里面把0挪到前面，把2挪到后面，中间剩下1。结果逻辑越写越复杂，最后没写出来。
+    简洁但是慢一点的做法，先把0挪到前面，用一次循环；再把1挪到前面，用一次循环；然后结束。
 
-     下面这个代码跑到82/87用例的时候，输入[1,0]，说我输出也是[1,0]，实际跑下来明明是输出的[0,1]。已经是第二次出现这种情况了，不纠结这个问题，掌握思路了就好。
+    下面这个代码跑到82/87用例的时候，输入[1,0]，说我输出也是[1,0]，实际跑下来明明是输出的[0,1]。已经是第二次出现这种情况了，不纠结这个问题，掌握思路了就好。
      */
     fun sortColors(nums: IntArray): Unit {
         printArray(nums)
@@ -1457,4 +1458,58 @@ class S_Middle {
             }
         }
     }
+
+    /**
+     * 78. 子集
+     * 给你一个整数数组nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
+
+    解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+
+    示例 1：
+    输入：nums = [1,2,3]
+    输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+
+     思路：拆分任务，[1,2,3]的全子集，就是1和[2,3]的全子集拼起来，加上[2,3]的全子集，[2,3]的全子集就是2和[3]的全子集拼起来，加上[3]的全子集
+    [3]的全子集是[3]和[]
+     于是[2,3]的全子集就是[2,3],[2]再加上[3]和[]，即：[2,3],[2],[3],[]
+     于是[1,2,3]的全子集 就是1跟上面的子集都拼一遍，再加上上面的子集 构成的总集合
+     所以递归函数的雏形就出来了
+     就是array里面取第一个作为num，和剩下的array求全集合。递归返回的条件：array为空，返回[[]]
+     */
+    fun subsets(nums: IntArray): List<List<Int>> {
+        return subsets(0,nums)
+    }
+
+    private fun subsets(
+        startIndex:Int,
+        currNums: IntArray,
+    ) :ArrayList<ArrayList<Int>>{
+        if (startIndex == currNums.size) {
+            var ret = ArrayList<ArrayList<Int>>()
+            ret.add( ArrayList<Int>())
+            Log.w(S.TAG, "添加答案：[]")
+
+            return ret
+        }
+
+        var firstNum = currNums[startIndex]
+        var nextStartIndex = startIndex + 1
+        var restLists = subsets(nextStartIndex,currNums)
+
+        var lists = ArrayList<ArrayList<Int>>()
+        for (i in restLists.indices){
+            var item = restLists[i]
+            var newItem = ArrayList<Int>()
+            newItem.addAll(item)
+            newItem.add(firstNum)
+
+            lists.add(newItem)
+            Log.w(S.TAG, "添加答案：${listStr(newItem)}")
+        }
+        lists.addAll(restLists)
+
+        Log.d(S.TAG, "当前答案：${listListStr(lists)}")
+        return lists
+    }
+
 }
