@@ -20,8 +20,27 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test78()
+            test79()
         }
+    }
+
+    private fun test79() {
+//        var array1 = charArrayOf('A','B','C','E')
+//        var array2 = charArrayOf('S','F','C','S')
+//        var array3 = charArrayOf('A','D','E','E')
+
+        var array1 = charArrayOf('A','B','C','E')
+        var array2 = charArrayOf('S','F','C','S')
+        var array3 = charArrayOf('A','D','E','E')
+
+//        var array1 = charArrayOf('C','A','A')
+//        var array2 = charArrayOf('A','A','A')
+//        var array3 = charArrayOf('B','C','D')
+        var d = arrayOf(array1,array2,array3)
+        var ret = sMiddle.exist(d,"SEE")
+//        var ret = sMiddle.exist(d,"ABCB")
+//        var ret = sMiddle.exist(d,"AAB")
+
     }
 
     private fun test78() {

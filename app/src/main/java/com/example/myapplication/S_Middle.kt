@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * 中等难度
@@ -1469,24 +1470,24 @@ class S_Middle {
     输入：nums = [1,2,3]
     输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
 
-     思路：拆分任务，[1,2,3]的全子集，就是1和[2,3]的全子集拼起来，加上[2,3]的全子集，[2,3]的全子集就是2和[3]的全子集拼起来，加上[3]的全子集
+    思路：拆分任务，[1,2,3]的全子集，就是1和[2,3]的全子集拼起来，加上[2,3]的全子集，[2,3]的全子集就是2和[3]的全子集拼起来，加上[3]的全子集
     [3]的全子集是[3]和[]
-     于是[2,3]的全子集就是[2,3],[2]再加上[3]和[]，即：[2,3],[2],[3],[]
-     于是[1,2,3]的全子集 就是1跟上面的子集都拼一遍，再加上上面的子集 构成的总集合
-     所以递归函数的雏形就出来了
-     就是array里面取第一个作为num，和剩下的array求全集合。递归返回的条件：array为空，返回[[]]
+    于是[2,3]的全子集就是[2,3],[2]再加上[3]和[]，即：[2,3],[2],[3],[]
+    于是[1,2,3]的全子集 就是1跟上面的子集都拼一遍，再加上上面的子集 构成的总集合
+    所以递归函数的雏形就出来了
+    就是array里面取第一个作为num，和剩下的array求全集合。递归返回的条件：array为空，返回[[]]
      */
     fun subsets(nums: IntArray): List<List<Int>> {
-        return subsets(0,nums)
+        return subsets(0, nums)
     }
 
     private fun subsets(
-        startIndex:Int,
+        startIndex: Int,
         currNums: IntArray,
-    ) :ArrayList<ArrayList<Int>>{
+    ): ArrayList<ArrayList<Int>> {
         if (startIndex == currNums.size) {
             var ret = ArrayList<ArrayList<Int>>()
-            ret.add( ArrayList<Int>())
+            ret.add(ArrayList<Int>())
             Log.w(S.TAG, "添加答案：[]")
 
             return ret
@@ -1494,10 +1495,10 @@ class S_Middle {
 
         var firstNum = currNums[startIndex]
         var nextStartIndex = startIndex + 1
-        var restLists = subsets(nextStartIndex,currNums)
+        var restLists = subsets(nextStartIndex, currNums)
 
         var lists = ArrayList<ArrayList<Int>>()
-        for (i in restLists.indices){
+        for (i in restLists.indices) {
             var item = restLists[i]
             var newItem = ArrayList<Int>()
             newItem.addAll(item)
@@ -1512,4 +1513,125 @@ class S_Middle {
         return lists
     }
 
+
+    /**
+     * 79. 单词搜索
+    给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+    单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+     思路：先遍历二维数组，找第一个字母匹配的位置，找到之后找这个字母的上下左右位置是否有下一个字母，这个逻辑在递归里面做，依次递归，在四周找下一个，找到的话再下一个，直到找完整个单词，返回true；
+     如果找不完，返回false；
+     注意的点是，要标记每轮查找中已经用过的位置，不能重复使用，避免走回头路，导致错误结果。
+     精选答案也是这个思路，但是代码要简短一些。下面这个只超过了5%的用户...
+     */
+    fun exist(board: Array<CharArray>, word: String): Boolean {
+
+        var usedPosition = HashMap<String, Boolean>()
+        for (i in board.indices) {
+            var array = board[i]
+            for (j in array.indices) {
+                var c = board[i][j]
+                if (c == word[0]) {
+                    usedPosition["$i-$j"] = true
+                    var ret = hasNextChar(i, j, word, 1, board, usedPosition)
+                    Log.d(S.TAG, "i: $i, j: $j ret: $ret")
+                    if (ret) {
+                        return true
+                    } else {
+                        usedPosition["$i-$j"] = false
+                        continue
+                    }
+                }
+            }
+        }
+        return false
+    }
+
+    private fun hasNextChar(
+        i: Int,
+        j: Int,
+        word: String,
+        currIndex: Int,
+        board: Array<CharArray>,
+        usedPosition: HashMap<String, Boolean>,
+    ): Boolean {
+
+        Log.d(S.TAG, "hasNextChar：i: $i, j: $j, word: $word, currIndex: $currIndex,")
+
+        if (currIndex == word.length) {
+            return true
+        }
+        var top: Char? =
+            if (j - 1 < 0 || (usedPosition.containsKey("$i-${j - 1}") && usedPosition["$i-${j - 1}"]!!)) {
+                null
+            } else {
+                board[i][j - 1]
+
+            }
+        var left: Char? =
+            if (i - 1 < 0 || (usedPosition.containsKey("${i - 1}-${j}") && usedPosition["${i - 1}-${j}"]!!)) {
+                null
+            } else {
+                board[i - 1][j]
+            }
+        var right: Char? =
+            if (i + 1 >= board.size || (usedPosition.containsKey("${i + 1}-${j}") && usedPosition["${i + 1}-${j}"]!!)) {
+                null
+            } else {
+                board[i + 1][j]
+            }
+        var bottom: Char? =
+            if (j + 1 >= board[0].size || (usedPosition.containsKey("${i}-${j + 1}") && usedPosition["${i}-${j + 1}"]!!)) {
+                null
+            } else {
+                board[i][j + 1]
+            }
+
+        var nextIndex = currIndex + 1
+        top?.let {
+            if (it == word[currIndex]) {
+                usedPosition["$i-${j - 1}"] = true
+                var ret = hasNextChar(i, j - 1, word, nextIndex, board, usedPosition)
+                if (ret) {
+                    return true
+                } else {
+                    usedPosition["$i-${j - 1}"] = false
+                }
+            }
+        }
+        left?.let {
+            if (it == word[currIndex]) {
+                usedPosition["${i - 1}-${j}"] = true
+                var ret = hasNextChar(i - 1, j, word, nextIndex, board, usedPosition)
+                if (ret) {
+                    return true
+                } else {
+                    usedPosition["${i - 1}-${j}"] = false
+                }
+            }
+        }
+        right?.let {
+            if (it == word[currIndex]) {
+                usedPosition["${i + 1}-${j}"] = true
+                var ret = hasNextChar(i + 1, j, word, nextIndex, board, usedPosition)
+                if (ret) {
+                    return true
+                } else {
+                    usedPosition["${i + 1}-${j}"] = false
+                }
+            }
+        }
+        bottom?.let {
+            if (it == word[currIndex]) {
+                usedPosition["$i-${j + 1}"] = true
+                var ret = hasNextChar(i, j + 1, word, nextIndex, board, usedPosition)
+                if (ret) {
+                    return true
+                } else {
+                    usedPosition["$i-${j + 1}"] = false
+                }
+            }
+        }
+        return false
+    }
 }
