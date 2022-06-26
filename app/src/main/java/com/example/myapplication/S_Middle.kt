@@ -1634,4 +1634,38 @@ class S_Middle {
         }
         return false
     }
+
+    /**
+     * 96. 不同的二叉搜索树
+     *
+     * 给你一个整数 n ，求恰由 n 个节点组成且节点值从 1 到 n 互不相同的 二叉搜索树 有多少种？返回满足题意的二叉搜索树的种数。
+     *
+     * 思路：找1到n能构成的二叉树总数，就是找以1为根节点、以2为跟节点、以n为跟节点的二叉树的类型总和，以i为根节点的总类型数，等于1到n-1能构成的树作为左子数和以i+1到n能构成的数作为右子树的乘积。这就可以抽出一个递归函数，求从startNum到endNum能构成的数的总类型，
+     * 递归找出左子树总类型，再找出右子树总类型，相乘，得出结果。递归返回条件，当startNum == endNum时，返回类型总数为1。
+     */
+    fun numTrees(n: Int): Int {
+        return numTrees(1,n)
+    }
+    private fun numTrees(startNum: Int,endNum: Int): Int {
+        if (startNum == endNum) {
+            Log.d(S.TAG, "numTrees：startNum: $startNum, endNum: $endNum, totalCount: 1")
+            return 1
+        }
+        var totalCount = 0
+        for (i in startNum .. endNum){
+            var lCount = 1
+            var rCount = 1
+            var currCount = 0
+            if (i > startNum){
+                lCount = numTrees(startNum,i - 1)
+            }
+            if (i < endNum){
+                rCount = numTrees(i+1,endNum)
+            }
+            currCount = lCount * rCount
+            totalCount += currCount
+        }
+        Log.d(S.TAG, "numTrees：startNum: $startNum, endNum: $endNum, totalCount: $totalCount")
+        return totalCount
+    }
 }

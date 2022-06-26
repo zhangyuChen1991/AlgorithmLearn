@@ -20,8 +20,13 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test79()
+            test96()
         }
+    }
+
+    private fun test96() {
+        var ret = sMiddle.numTrees(3)
+        Log.w(S.TAG,"ret: ${ret}")
     }
 
     private fun test79() {
