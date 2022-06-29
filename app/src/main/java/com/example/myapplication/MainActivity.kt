@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun test98() {
-        var array = arrayOf(32,26,47,19,null,null,56,null,27)
+        var array = arrayOf(32L,26,47,19,null,null,56,null,27)
 //        var array = arrayOf(3,1,5,0,2,4,6,null,null,null,3)
         var node = Traversal().arrayToTree(array)
         var ret = sMiddle.isValidBST(node)

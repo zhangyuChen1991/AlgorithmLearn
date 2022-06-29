@@ -12,7 +12,7 @@ class Traversal {
            /   / \    \
           33  76  8   44
     */
-    class TreeNode internal constructor(var `val`: Long) {
+    class TreeNode internal constructor(var `val`: Int) {
         var left: TreeNode? = null
         var right: TreeNode? = null
 
@@ -24,7 +24,7 @@ class Traversal {
     /**
      * 数组转换成树
      */
-    public fun arrayToTree(arr: Array<Long?>):TreeNode? {
+    public fun arrayToTree(arr: Array<Int?>):TreeNode? {
         val root = generateTreeFromArray(arr, 0)
         return root
     }
@@ -34,18 +34,18 @@ class Traversal {
      */
     fun treeToArray() {
         //生成一棵树。数组没有元素情况，本例不考虑
-        val arr = arrayOf(45L, 34, 5, 12, 2, null, 3, 33, null, 76, 8, null, null, null, 44)
+        val arr = arrayOf(45, 34, 5, 12, 2, null, 3, 33, null, 76, 8, null, null, null, 44)
         val root = generateTreeFromArray(arr, 0)
         //根据depth，计算数组size
         val arraySize = Math.pow(2.0, root!!.depth.toDouble()).toInt() - 1
-        val dst = arrayOfNulls<Long>(arraySize)
+        val dst = arrayOfNulls<Int>(arraySize)
         //再将node转换成对应的数组,根据index填充
         generateArrayFromTree(dst, root)
         println(Arrays.toString(dst)) //打印验证
     }
 
     companion object {
-        private fun generateArrayFromTree(arr: Array<Long?>, node: TreeNode?) {
+        private fun generateArrayFromTree(arr: Array<Int?>, node: TreeNode?) {
             if (node == null) {
                 return
             }
@@ -54,7 +54,7 @@ class Traversal {
             generateArrayFromTree(arr, node.right)
         }
 
-        private fun generateTreeFromArray(arr: Array<Long?>, index: Int): TreeNode? {
+        private fun generateTreeFromArray(arr: Array<Int?>, index: Int): TreeNode? {
             if (index > arr.size - 1 || arr[index] == null) {
                 return null
             }

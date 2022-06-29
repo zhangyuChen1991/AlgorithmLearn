@@ -6,8 +6,6 @@ import androidx.annotation.RequiresApi
 import com.example.myapplication.utils.Traversal
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * 中等难度
@@ -1673,6 +1671,16 @@ class S_Middle {
 
     /**
      * 98. 验证二叉搜索树
+     *给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
+
+    有效 二叉搜索树定义如下：
+    节点的左子树只包含 小于 当前节点的数。
+    节点的右子树只包含 大于 当前节点的数。
+    所有左子树和右子树自身必须也是二叉搜索树。
+
+     * 最开始容易想错一个点，以为每个节点的左节点小于自己，右节点大于自己就可以了，写一个简单的回调函数挨个判断就行了。但是有个误区，二叉搜索树的左子树每个节点数字都小于自己，右子树每个节点的数据都大于自己，所以不光是判断
+     * 自己和左右节点的大小，每个节点在往下遍历的时候都有一个范围，越往左，最小值越小，节点超过了最小值就不符合条件，越往右遍历，最大值越大，节点小于最大值了也不符合条件。
+     * 所以递归函数的参数有两个值来表示当前节点的取值范围，节点值在范围内，就符合条件。范围值随着往左和往右遍历逐步变化，依次遍历到底。
      */
     fun isValidBST(root: Traversal.TreeNode?): Boolean {
         if (null == root) return true
@@ -1685,9 +1693,10 @@ class S_Middle {
         if (root.`val` <= min || root.`val` >= max)
             return false
 
-        var lRet = isValidBST(root.left, min, root.`val`)
-        var rRet = isValidBST(root.right, root.`val`, max)
+        var lRet = isValidBST(root.left, min, root.`val`.toLong())
+        var rRet = isValidBST(root.right, root.`val`.toLong(), max)
 
         return lRet && rRet
     }
+
 }
