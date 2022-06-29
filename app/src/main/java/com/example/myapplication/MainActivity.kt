@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.TextView
 import com.example.Constants
 import com.example.myapplication.utils.TransformUtils
+import com.example.myapplication.utils.Traversal
 import java.lang.StringBuilder
 import java.util.*
 
@@ -20,12 +21,20 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test96()
+            test98()
         }
     }
 
     private fun test96() {
         var ret = sMiddle.numTrees(3)
+        Log.w(S.TAG,"ret: ${ret}")
+    }
+
+    private fun test98() {
+        var array = arrayOf(32,26,47,19,null,null,56,null,27)
+//        var array = arrayOf(3,1,5,0,2,4,6,null,null,null,3)
+        var node = Traversal().arrayToTree(array)
+        var ret = sMiddle.isValidBST(node)
         Log.w(S.TAG,"ret: ${ret}")
     }
 

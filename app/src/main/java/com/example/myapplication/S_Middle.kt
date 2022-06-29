@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.example.myapplication.utils.Traversal
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.ArrayList
@@ -1519,10 +1520,10 @@ class S_Middle {
     给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
     单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
 
-     思路：先遍历二维数组，找第一个字母匹配的位置，找到之后找这个字母的上下左右位置是否有下一个字母，这个逻辑在递归里面做，依次递归，在四周找下一个，找到的话再下一个，直到找完整个单词，返回true；
-     如果找不完，返回false；
-     注意的点是，要标记每轮查找中已经用过的位置，不能重复使用，避免走回头路，导致错误结果。
-     精选答案也是这个思路，但是代码要简短一些。下面这个只超过了5%的用户...
+    思路：先遍历二维数组，找第一个字母匹配的位置，找到之后找这个字母的上下左右位置是否有下一个字母，这个逻辑在递归里面做，依次递归，在四周找下一个，找到的话再下一个，直到找完整个单词，返回true；
+    如果找不完，返回false；
+    注意的点是，要标记每轮查找中已经用过的位置，不能重复使用，避免走回头路，导致错误结果。
+    精选答案也是这个思路，但是代码要简短一些。下面这个只超过了5%的用户...
      */
     fun exist(board: Array<CharArray>, word: String): Boolean {
 
@@ -1644,28 +1645,49 @@ class S_Middle {
      * 递归找出左子树总类型，再找出右子树总类型，相乘，得出结果。递归返回条件，当startNum == endNum时，返回类型总数为1。
      */
     fun numTrees(n: Int): Int {
-        return numTrees(1,n)
+        return numTrees(1, n)
     }
-    private fun numTrees(startNum: Int,endNum: Int): Int {
+
+    private fun numTrees(startNum: Int, endNum: Int): Int {
         if (startNum == endNum) {
             Log.d(S.TAG, "numTrees：startNum: $startNum, endNum: $endNum, totalCount: 1")
             return 1
         }
         var totalCount = 0
-        for (i in startNum .. endNum){
+        for (i in startNum..endNum) {
             var lCount = 1
             var rCount = 1
             var currCount = 0
-            if (i > startNum){
-                lCount = numTrees(startNum,i - 1)
+            if (i > startNum) {
+                lCount = numTrees(startNum, i - 1)
             }
-            if (i < endNum){
-                rCount = numTrees(i+1,endNum)
+            if (i < endNum) {
+                rCount = numTrees(i + 1, endNum)
             }
             currCount = lCount * rCount
             totalCount += currCount
         }
         Log.d(S.TAG, "numTrees：startNum: $startNum, endNum: $endNum, totalCount: $totalCount")
         return totalCount
+    }
+
+    /**
+     * 98. 验证二叉搜索树
+     */
+    fun isValidBST(root: Traversal.TreeNode?): Boolean {
+        if (null == root) return true
+        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE)
+    }
+
+    fun isValidBST(root: Traversal.TreeNode?, min: Long, max: Long): Boolean {
+        if (null == root) return true
+
+        if (root.`val` <= min || root.`val` >= max)
+            return false
+
+        var lRet = isValidBST(root.left, min, root.`val`)
+        var rRet = isValidBST(root.right, root.`val`, max)
+
+        return lRet && rRet
     }
 }
