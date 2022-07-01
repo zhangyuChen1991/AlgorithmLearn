@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test98()
+            test102()
         }
     }
 
@@ -30,8 +30,16 @@ class MainActivity : AppCompatActivity() {
         Log.w(S.TAG,"ret: ${ret}")
     }
 
+    private fun test102() {
+        var array = arrayOf(3,9,20,null,null,15,7)
+//        var array = arrayOf(3,1,5,0,2,4,6,null,null,null,3)
+        var node = Traversal().arrayToTree(array)
+        var ret = sMiddle.levelOrder(node)
+        Log.w(S.TAG,"ret: ${sMiddle.listListStr(ret)}")
+    }
+
     private fun test98() {
-        var array = arrayOf(32L,26,47,19,null,null,56,null,27)
+        var array = arrayOf(32,26,47,19,null,null,56,null,27)
 //        var array = arrayOf(3,1,5,0,2,4,6,null,null,null,3)
         var node = Traversal().arrayToTree(array)
         var ret = sMiddle.isValidBST(node)

@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import com.example.myapplication.utils.Traversal
 import java.util.*
 import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 /**
  * 中等难度
@@ -1699,4 +1700,41 @@ class S_Middle {
         return lRet && rRet
     }
 
+    /**
+     * 102. 二叉树的层序遍历
+     *
+     * 输入：root = [3,9,20,null,null,15,7]
+       输出：[[3],[9,20],[15,7]]
+
+      思路：一层一层的遍历，用一个currList存当前这一层，从root开始，再用一个nextList存下一层;下一层(nextList)的值就是currList的所有左右子节点的集合，遍历之后nextList就变成currList，一轮一轮的遍历，直到currList为空。
+     */
+    fun levelOrder(root: Traversal.TreeNode?): List<List<Int>> {
+        var ret = ArrayList<ArrayList<Int>>()
+        if (null == root) return ret
+        var nextDeepthList = ArrayList<Traversal.TreeNode>()
+        var currDeepthList = ArrayList<Traversal.TreeNode>()
+        currDeepthList.add(root)
+
+        while (!currDeepthList.isEmpty()){
+            var currValues = ArrayList<Int>()
+
+            for (i in currDeepthList.indices){
+                currValues.add(currDeepthList[i].`val`)
+
+                currDeepthList[i].left?.let {
+                    nextDeepthList.add(it)
+                }
+                currDeepthList[i].right?.let {
+                    nextDeepthList.add(it)
+                }
+            }
+            ret.add(currValues)
+
+            currDeepthList.clear()
+            currDeepthList.addAll(nextDeepthList)
+            nextDeepthList.clear()
+        }
+
+        return ret
+    }
 }
