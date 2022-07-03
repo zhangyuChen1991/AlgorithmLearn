@@ -19,6 +19,10 @@ class Traversal {
         //有这个就很容易计算出数组大小了
         var depth = 0
         var index = 0
+
+        override fun toString(): String {
+            return "$`val`"
+        }
     }
 
     /**

@@ -1737,4 +1737,38 @@ class S_Middle {
 
         return ret
     }
+
+    /**
+     * 114. 二叉树展开为链表
+     *
+    给你二叉树的根结点 root ，请你将它展开为一个单链表：
+    展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+    展开后的单链表应该与二叉树 先序遍历 顺序相同。
+
+     思路: 就是先序遍历，遍历的节点都存在list里面，然后list[i]指向list[i+1]就行了
+     */
+    fun flatten(root: Traversal.TreeNode?): Unit {
+
+        var nodeList = ArrayList<Traversal.TreeNode>()
+        flatten(root,nodeList)
+        for (i in 0 until  nodeList.size - 1){
+            nodeList[i].left = null
+            nodeList[i].right = nodeList[i+1]
+        }
+        Log.w(S.TAG,"ret: ${listStr(nodeList)}")
+
+    }
+
+    fun flatten(root: Traversal.TreeNode?,nodeList:ArrayList<Traversal.TreeNode>): Unit {
+
+        if (root == null) return
+        nodeList.add(root)
+        root.left?.let {
+            flatten(it,nodeList)
+        }
+        root.right?.let {
+            flatten(it,nodeList)
+        }
+
+    }
 }
