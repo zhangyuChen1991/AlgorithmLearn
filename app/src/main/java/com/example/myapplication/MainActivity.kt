@@ -3,12 +3,14 @@ package com.example.myapplication
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import com.example.Constants
 import com.example.myapplication.utils.TransformUtils
 import com.example.myapplication.utils.Traversal
 import java.lang.StringBuilder
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     var s = S()
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test114()
+            test105()
         }
     }
 
@@ -36,6 +38,17 @@ class MainActivity : AppCompatActivity() {
         var node = Traversal().arrayToTree(array)
         var ret = sMiddle.levelOrder(node)
         Log.w(S.TAG,"ret: ${sMiddle.listListStr(ret)}")
+    }
+
+    private fun test105() {
+        //[3,9,20,15,7]
+        //[9,3,15,20,7]
+        var array = intArrayOf(3,9,20,15,7)
+        var array1 = intArrayOf(9,3,15,20,7)
+        var ret = sMiddle.buildTree(array,array1)
+
+        Log.w(S.TAG,"ret:")
+
     }
 
     private fun test114() {

@@ -36,15 +36,16 @@ class Traversal {
     /**
      * 树转换成数组
      */
-    fun treeToArray() {
+    fun treeToArray(root:TreeNode?): Array<Int?> {
         //生成一棵树。数组没有元素情况，本例不考虑
-        val arr = arrayOf(45, 34, 5, 12, 2, null, 3, 33, null, 76, 8, null, null, null, 44)
-        val root = generateTreeFromArray(arr, 0)
+//        val arr = arrayOf(45, 34, 5, 12, 2, null, 3, 33, null, 76, 8, null, null, null, 44)
+//        val root = generateTreeFromArray(arr, 0)
         //根据depth，计算数组size
         val arraySize = Math.pow(2.0, root!!.depth.toDouble()).toInt() - 1
         val dst = arrayOfNulls<Int>(arraySize)
         //再将node转换成对应的数组,根据index填充
         generateArrayFromTree(dst, root)
+        return  dst
         println(Arrays.toString(dst)) //打印验证
     }
 

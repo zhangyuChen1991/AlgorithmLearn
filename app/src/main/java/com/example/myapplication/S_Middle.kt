@@ -460,6 +460,24 @@ class S_Middle {
         return sb.toString()
     }
 
+    fun arrayStr(nums: Array<Int?>): String {
+        var sb = java.lang.StringBuilder()
+        for (i in 0 until nums.size) {
+            if (i == 0) {
+                sb.append("[")
+            }
+            sb.append("${nums[i]}")
+            if (i < nums.size - 1) {
+                sb.append(", ")
+            }
+            if (i == nums.size - 1) {
+                sb.append("]")
+            }
+
+        }
+        return sb.toString()
+    }
+
     fun arrayArrayStr(nums: Array<IntArray>): String {
         var sb = java.lang.StringBuilder()
         for (i in 0 until nums.size) {
@@ -1704,9 +1722,9 @@ class S_Middle {
      * 102. 二叉树的层序遍历
      *
      * 输入：root = [3,9,20,null,null,15,7]
-       输出：[[3],[9,20],[15,7]]
+    输出：[[3],[9,20],[15,7]]
 
-      思路：一层一层的遍历，用一个currList存当前这一层，从root开始，再用一个nextList存下一层;下一层(nextList)的值就是currList的所有左右子节点的集合，遍历之后nextList就变成currList，一轮一轮的遍历，直到currList为空。
+    思路：一层一层的遍历，用一个currList存当前这一层，从root开始，再用一个nextList存下一层;下一层(nextList)的值就是currList的所有左右子节点的集合，遍历之后nextList就变成currList，一轮一轮的遍历，直到currList为空。
      */
     fun levelOrder(root: Traversal.TreeNode?): List<List<Int>> {
         var ret = ArrayList<ArrayList<Int>>()
@@ -1715,10 +1733,10 @@ class S_Middle {
         var currDeepthList = ArrayList<Traversal.TreeNode>()
         currDeepthList.add(root)
 
-        while (!currDeepthList.isEmpty()){
+        while (!currDeepthList.isEmpty()) {
             var currValues = ArrayList<Int>()
 
-            for (i in currDeepthList.indices){
+            for (i in currDeepthList.indices) {
                 currValues.add(currDeepthList[i].`val`)
 
                 currDeepthList[i].left?.let {
@@ -1745,30 +1763,75 @@ class S_Middle {
     展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
     展开后的单链表应该与二叉树 先序遍历 顺序相同。
 
-     思路: 就是先序遍历，遍历的节点都存在list里面，然后list[i]指向list[i+1]就行了
+    思路: 就是先序遍历，遍历的节点都存在list里面，然后list[i]指向list[i+1]就行了
      */
     fun flatten(root: Traversal.TreeNode?): Unit {
 
         var nodeList = ArrayList<Traversal.TreeNode>()
-        flatten(root,nodeList)
-        for (i in 0 until  nodeList.size - 1){
+        flatten(root, nodeList)
+        for (i in 0 until nodeList.size - 1) {
             nodeList[i].left = null
-            nodeList[i].right = nodeList[i+1]
+            nodeList[i].right = nodeList[i + 1]
         }
-        Log.w(S.TAG,"ret: ${listStr(nodeList)}")
+        Log.w(S.TAG, "ret: ${listStr(nodeList)}")
 
     }
 
-    fun flatten(root: Traversal.TreeNode?,nodeList:ArrayList<Traversal.TreeNode>): Unit {
+    fun flatten(root: Traversal.TreeNode?, nodeList: ArrayList<Traversal.TreeNode>): Unit {
 
         if (root == null) return
         nodeList.add(root)
         root.left?.let {
-            flatten(it,nodeList)
+            flatten(it, nodeList)
         }
         root.right?.let {
-            flatten(it,nodeList)
+            flatten(it, nodeList)
         }
 
+    }
+
+    /**
+     * 105. 从前序与中序遍历序列构造二叉树
+    给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
+
+
+     思路，关键点是：preorder的第一个元素就是这棵树的根节点，在inorder找到这个根节点，左边就是左子树，右边就是右子树，左右子树再对应到preorder相应的元素，里面左子树的第一个又是左子树的根节点，右子树的第一个又是右子树的根节点，
+    这样形成一个递归处理的逻辑，每次都取到当前的根节点，分出下一层的左右子树，继续递归.
+
+    具体图文看 有道笔记[从前序与中序遍历序列构造二叉树]
+
+     */
+    fun buildTree(preorder: IntArray, inorder: IntArray): Traversal.TreeNode? {
+
+        if (preorder.isEmpty()) return null
+
+        var root = Traversal.TreeNode(preorder[0])
+
+        var inOrderRootIndex = inorder.indexOf(root.`val`)
+
+        var nextLeftInArray : IntArray? = null
+        var nextRightInArray  : IntArray? = null
+
+        var nextLeftPreArray : IntArray? = null
+        var nextRightPreArray: IntArray? = null
+
+        if (inOrderRootIndex > 0) {
+            nextLeftPreArray = preorder.copyOfRange(1, inOrderRootIndex+1)//preorder里下一层的左子树对应的元素位置
+            nextLeftInArray = inorder.copyOfRange(0, inOrderRootIndex)
+        }
+        if (inOrderRootIndex < preorder.size) {
+            nextRightPreArray = preorder.copyOfRange(inOrderRootIndex + 1, preorder.size)//preorder里下一层的右子树对应的元素位置
+            nextRightInArray = inorder.copyOfRange(inOrderRootIndex + 1, inorder.size)
+        }
+
+        nextLeftPreArray?.let {
+            root.left = buildTree(it, nextLeftInArray!!)
+        }
+
+        nextRightPreArray?.let {
+            root.right = buildTree(it, nextRightInArray!!)
+        }
+
+        return root
     }
 }
