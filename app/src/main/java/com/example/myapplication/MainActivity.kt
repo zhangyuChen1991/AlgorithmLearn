@@ -23,12 +23,17 @@ class MainActivity : AppCompatActivity() {
         solution.romanToInt("MCMXCIV")
 
         findViewById<TextView>(R.id.tv).setOnClickListener {
-            test105()
+            test416()
         }
     }
 
     private fun test96() {
         var ret = sMiddle.numTrees(3)
+        Log.w(S.TAG,"ret: ${ret}")
+    }
+    private fun test416() {
+        var array = intArrayOf(1,5,11,5)
+        var ret = sMiddle.canPartition(array)
         Log.w(S.TAG,"ret: ${ret}")
     }
 

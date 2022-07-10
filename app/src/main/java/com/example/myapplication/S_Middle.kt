@@ -1795,7 +1795,7 @@ class S_Middle {
     给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
 
 
-     思路，关键点是：preorder的第一个元素就是这棵树的根节点，在inorder找到这个根节点，左边就是左子树，右边就是右子树，左右子树再对应到preorder相应的元素，里面左子树的第一个又是左子树的根节点，右子树的第一个又是右子树的根节点，
+    思路，关键点是：preorder的第一个元素就是这棵树的根节点，在inorder找到这个根节点，左边就是左子树，右边就是右子树，左右子树再对应到preorder相应的元素，里面左子树的第一个又是左子树的根节点，右子树的第一个又是右子树的根节点，
     这样形成一个递归处理的逻辑，每次都取到当前的根节点，分出下一层的左右子树，继续递归.
 
     具体图文看 有道笔记[从前序与中序遍历序列构造二叉树]
@@ -1809,18 +1809,20 @@ class S_Middle {
 
         var inOrderRootIndex = inorder.indexOf(root.`val`)
 
-        var nextLeftInArray : IntArray? = null
-        var nextRightInArray  : IntArray? = null
+        var nextLeftInArray: IntArray? = null
+        var nextRightInArray: IntArray? = null
 
-        var nextLeftPreArray : IntArray? = null
+        var nextLeftPreArray: IntArray? = null
         var nextRightPreArray: IntArray? = null
 
         if (inOrderRootIndex > 0) {
-            nextLeftPreArray = preorder.copyOfRange(1, inOrderRootIndex+1)//preorder里下一层的左子树对应的元素位置
+            nextLeftPreArray =
+                preorder.copyOfRange(1, inOrderRootIndex + 1)//preorder里下一层的左子树对应的元素位置
             nextLeftInArray = inorder.copyOfRange(0, inOrderRootIndex)
         }
         if (inOrderRootIndex < preorder.size) {
-            nextRightPreArray = preorder.copyOfRange(inOrderRootIndex + 1, preorder.size)//preorder里下一层的右子树对应的元素位置
+            nextRightPreArray =
+                preorder.copyOfRange(inOrderRootIndex + 1, preorder.size)//preorder里下一层的右子树对应的元素位置
             nextRightInArray = inorder.copyOfRange(inOrderRootIndex + 1, inorder.size)
         }
 
@@ -1834,4 +1836,56 @@ class S_Middle {
 
         return root
     }
+
+    /**
+     * 416. 分割等和子集
+     * 给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+     *
+     * 思路：
+     * 先转换一下，问题就是要从数组中取出若干个数，让它的值等于数组数字总和的1/2，数组数字总和如果是奇数，可以直接返回false；
+     * 这里是典型的背包问题处理方式，从前i个数字中取若干个，能否等于目标数target，有两种选择，1.不选第i个数，问题转换成前i-1个数里能否凑出target；2.选中第i个数，问题转换成前i-1个数里能否凑出target-nums[i];
+     * 如果用一个二维数组来记录每个配对的结果，d[i][j]的含义就是从i个数字中取若干个，能否等于目标数j
+     * 得出的方程是
+     * d[i][j] = d[i-1][j] or d[i-1][j-nums[i]]  (j-nums[i]要注意越界)
+     *
+     * 试过了用递归去做会超市(LeetCode的第一次提交是递归的代码)
+     * 这个跟爬楼梯那个类似f(n) = f(n-1) + f(n-2)，就从f(1),f(2)开始算，循环往上加，从最基础的已知的加到目标值
+     * 在这里,从前1个数中凑出目标值j，很容易初始化赋值，那就是，当nums[0]就是j的时候，值为true，其他都是false
+     * d[0][nums[0]]是true(注意越界)，其他都是false
+     * d[0][j]这一列赋值完成之后，后边的d[i][j],d[2][j]都能通过上面的公式算出结果了
+     *
+     * 最后返回d[nums.len][target]的值就行了(就是二维数组最右下角的值)
+     */
+    fun canPartition(nums: IntArray): Boolean {
+        var sum = 0
+        nums.sort()
+        for (i in nums.indices) {
+            sum += nums[i]
+        }
+
+        if (sum % 2 != 0) return false
+
+        var target = sum / 2
+
+        var dp = Array(nums.size) { BooleanArray(target + 1) }
+        if (nums[0] < dp[0].size) {//初始化第一列的值
+            dp[0][nums[0]] = true
+        }
+
+        for (i in 1 until dp.size){
+            var targets = dp[i]
+            for (j in targets.indices){
+
+                if (j - nums[i] == 0){//nums[i]刚好就是目标值，那直接满足条件了
+                    dp[i][j] = true
+                }else if (j - nums[i] > 0){
+                    dp[i][j] = dp[i - 1][j] or dp[i - 1][j - nums[i]]
+                }else{
+                    dp[i][j] = dp[i - 1][j]
+                }
+            }
+        }
+        return dp[nums.size - 1][target]
+    }
+
 }
